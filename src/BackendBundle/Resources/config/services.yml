@@ -1,0 +1,5 @@
+services:
+    indexer:
+        class: BackendBundle\EventListener\Indexer
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
