@@ -1,4 +1,5 @@
-agile-scrum-structure
+Agile Scrum 
 =====================
 
-A Symfony project created on December 22, 2015, 9:55 am.
+
+Agile Scrum is an open source Symfony 3 application to manage agile software projects based in SCRUM.

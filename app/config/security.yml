@@ -3,15 +3,31 @@
 security:
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+            
     providers:
-        in_memory:
-            memory: ~
+        backend:
+            entity: { class: BackendBundle\Entity\User, property: email }
+
+    encoders:
+        backend:
+            class: BackendBundle\Entity\User
+            algorithm: bcrypt
+            cost: 12
 
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+        backend:
+            pattern:    ^/private*
+            form_login:
+                check_path: backend_login_check
+                login_path: backend_login
+                default_target_path: backend_homepage
+                always_use_default_target_path: true
+            logout:
+                path:   backend_logout
+                target: backend_login
+            anonymous: ~
+            provider: backend
+            
 
         main:
             anonymous: ~
@@ -22,3 +38,11 @@ security:
 
             # form_login: ~
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+            
+            
+    access_control:
+        #- { path: '^/[a-z]{2,3}?/private/login', roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: '^/[a-z]{2,3}?/private/*', roles: ROLE_USER_ACTIVE }
+        - { path: ^/private/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/private/*, roles: ROLE_USER_ACTIVE }
+

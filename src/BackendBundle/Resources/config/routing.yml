@@ -1,3 +1,14 @@
 backend_homepage:
     path:     /
     defaults: { _controller: BackendBundle:Default:index }
+    
+backend_login:
+    path:     /login
+    defaults: { _controller: BackendBundle:Security:login }
+    
+backend_login_check:
+    path:   /login_check
+    defaults: { _controller: BackendBundle:Security:loginCheck }
+
+backend_logout:
+    path: /logout

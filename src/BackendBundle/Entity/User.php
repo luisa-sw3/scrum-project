@@ -5,6 +5,7 @@ namespace BackendBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Util\Util;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
@@ -13,7 +14,7 @@ use Util\Util;
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
-class User {
+class User implements UserInterface, \Serializable {
 
     use Consecutive;
 
@@ -63,12 +64,6 @@ class User {
     protected $password;
 
     /**
-     * Pimienta necesaria para configurar la contraseña del usuario
-     * @ORM\Column(name="user_salt", type="string", nullable=true)
-     */
-    protected $salt;
-
-    /**
      * Estado del usuario (0 = Inactivo, 1 = Activo, 2 = Bloqueado)
      * @ORM\Column(name="user_status", type="integer", nullable=true)
      */
@@ -116,9 +111,6 @@ class User {
         return $this->password;
     }
 
-    function getSalt() {
-        return $this->salt;
-    }
 
     function getStatus() {
         return $this->status;
@@ -148,9 +140,7 @@ class User {
         $this->password = $password;
     }
 
-    function setSalt($salt) {
-        $this->salt = $salt;
-    }
+ 
 
     function setStatus($status) {
         $this->status = $status;
@@ -188,6 +178,48 @@ class User {
         if ($this->getCreationDate() === null) {
             $this->setCreationDate(Util::getCurrentDate());
         }
+    }
+
+    public function eraseCredentials() {
+        
+    }
+
+    public function getRoles() {
+        $role = array();
+        switch ($this->getStatus()) {
+            case self::STATUS_ACTIVE:
+                $role = array('ROLE_USER_ACTIVE');
+                break;
+            case self::STATUS_INACTIVE:
+                $role = array('ROLE_USER_INACTIVE');
+                break;
+            case self::STATUS_LOCKED:
+                $role = array('ROLE_USER_LOCKED');
+                break;
+            default:
+                break;
+        }
+        return $role;
+    }
+
+    public function getUsername() {
+        return $this->getEmail();
+    }
+
+    public function serialize() {
+        return serialize(array(
+            $this->id,
+        ));
+    }
+
+    public function unserialize($serialized) {
+        list (
+                $this->id,
+                ) = unserialize($serialized);
+    }
+
+    public function getSalt() {
+        return '';
     }
 
 }
