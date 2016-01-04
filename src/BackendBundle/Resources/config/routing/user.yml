@@ -1,0 +1,8 @@
+backend_user_edit_profile:
+    path:     /editProfile
+    defaults: { _controller: BackendBundle:User:editProfile }
+
+backend_user_update_profile:
+    path:     /updateProfile
+    defaults: { _controller: BackendBundle:User:updateProfile }
+    methods: [POST]

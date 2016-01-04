@@ -63,26 +63,7 @@ backend:
         profile_updated: "Perfíl Actualizado"
         name: "Nombre"
         lastname: "Apellido"
-        
-    license:
-        edit: "Editar Licencia"
-        key: "Llave de Licencia"
-        start_date: "Fecha de Inicio"
-        status: "Estado de Licencia"
-        status_active: "Activa"
-        status_inactive: "Inactiva"
-        status_expired: "Expirada"
-        generate_key: "Generar Llave"
-        update_success_message: "Licencia actualizada con éxito"
-        domain: "Dominio"
-        ip_address: "Dirección Ip"
-        server_directory: "Ruta de Instalación"
-        issue_date: "Fecha de Expedición"
-        generate_key_question: "Si genera una nueva llave de licencia el cliente perderá el acceso a la aplicación. Esta seguro de generar una nueva llave ?"
-        
-    addon:
-        addons: "Complementos"
-        expiration_date: "Fecha de Expiración"
+        cellphone: "Cellphone"
      
     
   

@@ -62,27 +62,5 @@ backend:
         profile_updated: "Profile updated successfully"
         name: "Name"
         lastname: "Lastname"
-        
-    license:
-        edit: "Edit License"
-        key: "License Key"
-        start_date: "Starting Date"
-        status: "License Status"
-        status_active: "Active"
-        status_inactive: "Inactive"
-        status_expired: "Expired"
-        generate_key: "Generate Key"
-        update_success_message: "License updated successfully"
-        domain: "Domain"
-        ip_address: "Ip Address"
-        server_directory: "Instalation Directory"
-        issue_date: "Issue Date"
-        generate_key_question: "If you generate a new key, the client will not have access to current aplication. Are you sure ?"
-        
-    addon:
-        addons: "Addons"
-        expiration_date: "Expiration Date"
-        
-     
-        
+        cellphone: "Cellphone"
     

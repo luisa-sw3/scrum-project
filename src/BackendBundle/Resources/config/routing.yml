@@ -16,3 +16,7 @@ backend_logout:
 backend_design_example:
     resource: "@BackendBundle/Resources/config/routing/designExample.yml"
     prefix:   /designExample
+    
+backend_users:
+    resource: "@BackendBundle/Resources/config/routing/user.yml"
+    prefix:   /users
