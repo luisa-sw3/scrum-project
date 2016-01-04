@@ -1,0 +1,27 @@
+backend_dashboard:
+    path:     /dashboard
+    defaults: { _controller: BackendBundle:Default:dashboard }
+
+backend_charts:
+    path:     /charts
+    defaults: { _controller: BackendBundle:Default:charts }
+
+backend_tables:
+    path:     /tables
+    defaults: { _controller: BackendBundle:Default:tables }
+    
+backend_forms:
+    path:     /forms
+    defaults: { _controller: BackendBundle:Default:forms }
+
+backend_bootstrap_elements:
+    path:     /bootstrapElements
+    defaults: { _controller: BackendBundle:Default:bootstrapElements }
+
+backend_bootstrap_grid:
+    path:     /bootstrapGrid
+    defaults: { _controller: BackendBundle:Default:bootstrapGrid }
+    
+backend_blank_page:
+    path:     /blankPage
+    defaults: { _controller: BackendBundle:Default:blankPage }

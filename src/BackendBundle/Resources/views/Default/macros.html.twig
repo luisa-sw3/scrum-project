@@ -1,0 +1,38 @@
+{% macro showMessage(key, type) %}
+    {# success info danger warning #}
+    {% for message in app.session.flashbag.get(key) %}
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="alert alert-{{type}} alert-dismissable alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <i class="fa fa-info-circle"></i>  {{message|raw}}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endmacro %}
+
+{% macro breadcrum(items)%}
+    <ol class="breadcrumb">
+        {% if items is empty %}
+            <li class="active">
+                <i class="fa fa-home"></i> {{'backend.global.home'|trans}}
+            </li>
+        {% else %}
+            <li class="active">
+                <a href="{{path('backend_homepage')}}"><i class="fa fa-home"></i> {{'backend.global.home'|trans}}</a>
+            </li>
+        {% endif %}
+        
+        {% for item in items %}
+            <li {% if loop.last %}class="active"{% endif %}>
+                {% if item.url is defined and item.url is not empty and item.url != '#' %}
+                    <a href="{{item.url}}"><i class="{{item.icon}}"></i> {{item.text}}</a>
+                {% else %}
+                    <i class="{{item.icon}}"></i> {{item.text}}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ol>
+{% endmacro %}
+    

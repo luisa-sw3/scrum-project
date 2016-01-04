@@ -19,7 +19,6 @@ class SecurityController extends Controller {
 
         return $this->render(
                         'BackendBundle:Security:login.html.twig', array(
-                    // last username entered by the user
                     'last_username' => $lastUsername,
                     'error' => $error,
                         )

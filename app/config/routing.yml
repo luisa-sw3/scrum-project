@@ -4,6 +4,12 @@ frontend:
 
 backend:
     resource: "@BackendBundle/Resources/config/routing.yml"
-    prefix:   /private
+    prefix:    /{_locale}/private
 
+backend_redirect:
+    path: /private/login
+    defaults:
+        _controller: BackendBundle:Default:redirect
+        route: backend_homepage
+        permanent: true
 

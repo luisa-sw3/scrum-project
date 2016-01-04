@@ -12,3 +12,7 @@ backend_login_check:
 
 backend_logout:
     path: /logout
+    
+backend_design_example:
+    resource: "@BackendBundle/Resources/config/routing/designExample.yml"
+    prefix:   /designExample

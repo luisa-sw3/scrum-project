@@ -16,7 +16,7 @@ security:
 
     firewalls:
         backend:
-            pattern:    ^/private*
+            pattern:    '^/[a-z]{2,3}?/private/*'
             form_login:
                 check_path: backend_login_check
                 login_path: backend_login
@@ -41,8 +41,6 @@ security:
             
             
     access_control:
-        #- { path: '^/[a-z]{2,3}?/private/login', roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        #- { path: '^/[a-z]{2,3}?/private/*', roles: ROLE_USER_ACTIVE }
-        - { path: ^/private/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/private/*, roles: ROLE_USER_ACTIVE }
+        - { path: '^/[a-z]{2,3}?/private/login', roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: '^/[a-z]{2,3}?/private/*', roles: ROLE_USER_ACTIVE }
 
