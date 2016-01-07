@@ -36,6 +36,10 @@ class UserProfileType extends AbstractType {
                     'required' => false,
                     'label' => $this->translator->trans('backend.user.cellphone')
                 ))
+                ->add('biography', Type\TextareaType::class, array(
+                    'required' => false,
+                    'label' => $this->translator->trans('backend.user.biography')
+                ))
                 ->add('password', Type\RepeatedType::class, array(
                     'first_options' => array('label' => $this->translator->trans('backend.user.password'), 'attr' => array('minlength' => 3, 'maxlength' => 15)),
                     'second_options' => array('label' => $this->translator->trans('backend.user.confirm_password'), 'attr' => array('minlength' => 3, 'maxlength' => 15)),
@@ -44,6 +48,9 @@ class UserProfileType extends AbstractType {
                     'invalid_message' => $this->translator->trans('backend.user.password_not_match'),
                     'options' => array('label' => 'Password.'),
                 ))
+                ->add('profileImage', Type\FileType::class, array(
+                    'label' => $this->translator->trans('backend.user.profile_image'),
+                    'required' => false))
                 ->add('submit', Type\SubmitType::class, array(
                     'label' => $this->translator->trans('backend.global.save_changes'),
                 ))

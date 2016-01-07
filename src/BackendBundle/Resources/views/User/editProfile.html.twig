@@ -38,8 +38,12 @@
                     {{ form_widget(form.cellphone, {'attr':{'class':'form-control only_numbers'}}) }}
                     {{ form_errors(form.cellphone) }}
                 </div>
-
                 
+                <div class="form-group">
+                    {{ form_label(form.biography)}}
+                    {{ form_widget(form.biography, {'attr':{'class':'form-control', 'rows':'4'}}) }}
+                    {{ form_errors(form.biography) }}
+                </div>
             </div>
             <div class="col-lg-6">
                 <div class="form-group">
@@ -57,12 +61,20 @@
                     {{ form_label(form.password.second)}}
                     {{ form_widget(form.password.second, {'attr':{'class':'form-control'}}) }}
                 </div>
+                
+                <div class="form-group">
+                    {{ form_label(form.profileImage)}}
+                    {{ form_widget(form.profileImage) }}
+                    {{ form_errors(form.profileImage) }}
+                </div>
+                <div class="form-group">
+                    <img width="50%" class="thumbnail" src="{{ asset('uploads/users/' ~ app.user.profileImagePath) }}" />
+                </div>
+                
             </div>
             <div class="col-lg-12">
                 {{ form_widget(form._token) }} 
-                
                 {{ form_widget(form.submit, {'attr':{'class':'btn btn-primary pull-right'}}) }} 
-{#                <button type="submit" class="btn btn-primary pull-right">{{'backend.global.save_changes'|trans}}</button>#}
             </div>
         {{ form_end(form) }}
     </div>
@@ -74,4 +86,6 @@
 
     $("#masterlicensor_backendbundle_userprofile_type_password_first").val('');
 
+    singleHtmlEditor('textarea', 200);
+    
 {% endblock %}

@@ -70,10 +70,16 @@ class User implements UserInterface, \Serializable {
     protected $status;
 
     /**
-     * Ruta del archivo de la imagen del perfil del usuario
-     * @ORM\Column(name="user_photo_path", type="string", nullable=true)
+     * Atributo para almacenar temporalmente el archivo de imagen de perfil
+     * @Assert\File(mimeTypes={ "image/jpg", "image/jpeg", "image/png" })
      */
-    protected $photoPath;
+    protected $profileImage;
+    
+    /**
+     * Nombre del archivo de la imagen del perfil del usuario
+     * @ORM\Column(name="user_profile_image", type="string", nullable=true)
+     */
+    protected $profileImagePath;
 
     /**
      * Fecha de creacion del usuario en el sistema
@@ -111,13 +117,8 @@ class User implements UserInterface, \Serializable {
         return $this->password;
     }
 
-
     function getStatus() {
         return $this->status;
-    }
-
-    function getPhotoPath() {
-        return $this->photoPath;
     }
 
     function setName($name) {
@@ -140,14 +141,8 @@ class User implements UserInterface, \Serializable {
         $this->password = $password;
     }
 
- 
-
     function setStatus($status) {
         $this->status = $status;
-    }
-
-    function setPhotoPath($photoPath) {
-        $this->photoPath = $photoPath;
     }
 
     function getCreationDate() {
@@ -164,6 +159,22 @@ class User implements UserInterface, \Serializable {
 
     function setBiography($biography) {
         $this->biography = $biography;
+    }
+
+    function getProfileImage() {
+        return $this->profileImage;
+    }
+
+    function setProfileImage($profileImage) {
+        $this->profileImage = $profileImage;
+    }
+    
+    function getProfileImagePath() {
+        return $this->profileImagePath;
+    }
+
+    function setProfileImagePath($profileImagePath) {
+        $this->profileImagePath = $profileImagePath;
     }
 
     public function __toString() {

@@ -59,6 +59,8 @@ backend:
         password_not_match: "Password don't match"
         email: "Email"
         username: "Username"
+        biography: "Biography"
+        profile_image: "Profile Image"
         profile_updated: "Profile updated successfully"
         name: "Name"
         lastname: "Lastname"

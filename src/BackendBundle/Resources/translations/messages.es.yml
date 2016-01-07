@@ -60,6 +60,8 @@ backend:
         password_not_match: "Las contraseñas no coinciden"
         email: "Correo electrónico"
         username: "Nombre de usuario"
+        biography: "Biografia / Perfil"
+        profile_image: "Foto de Perfíl"
         profile_updated: "Perfíl Actualizado"
         name: "Nombre"
         lastname: "Apellido"

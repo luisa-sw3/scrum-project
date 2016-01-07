@@ -45,6 +45,15 @@ class UserController extends Controller {
                 $user->setPassword($password);
             }
 
+            //verificamos si se sube la imagen de perfil
+            $file = $user->getProfileImage();
+            if ($file) {
+                $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+                $fileDir = $this->container->getParameter('kernel.root_dir') . '/../web/uploads/users';
+                $file->move($fileDir, $fileName);
+                $user->setProfileImagePath($fileName);
+            }
+
             $em->persist($user);
             $em->flush();
 
