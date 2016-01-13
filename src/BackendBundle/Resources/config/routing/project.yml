@@ -1,0 +1,24 @@
+backend_projects:
+    path:     /
+    defaults: { _controller: "BackendBundle:Project:index" }
+    methods:  GET
+
+backend_projects_show:
+    path:     /{id}/show
+    defaults: { _controller: "BackendBundle:Project:show" }
+    methods:  GET
+
+backend_projects_new:
+    path:     /new
+    defaults: { _controller: "BackendBundle:Project:new" }
+    methods:  [GET, POST]
+
+backend_projects_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BackendBundle:Project:edit" }
+    methods:  [GET, POST]
+
+backend_projects_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BackendBundle:Project:delete" }
+    methods:  DELETE

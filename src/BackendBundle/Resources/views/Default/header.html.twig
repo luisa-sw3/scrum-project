@@ -105,9 +105,12 @@
         </li>
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{ app.user }} <b class="caret"></b></a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu" style="width: 170px;">
                 <li>
                     <a href="{{ path('backend_user_edit_profile') }}"><i class="fa fa-fw fa-user"></i> {{ 'backend.user.edit_profile'|trans }}</a>
+                </li>
+                <li>
+                    <a href="{{ path('backend_settings_edit') }}"><i class="fa fa-fw fa-cogs"></i> {{ 'backend.setting.settings'|trans }}</a>
                 </li>
                 {#<li>
                     <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>

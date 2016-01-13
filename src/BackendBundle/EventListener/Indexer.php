@@ -20,16 +20,20 @@ class Indexer {
 
         $entityManager = $args->getEntityManager();
 
-        $order = array('consecutive' => 'DESC');
+        $reflectedClass = new \ReflectionClass($className);
 
-        $lastItem = $entityManager->getRepository($className)->findOneBy(array(), $order);
-        if ($lastItem != null) {
-            $entity->setConsecutive($lastItem->getConsecutive() + 1);
-        } else {
-            $entity->setConsecutive(1);
+        if ($reflectedClass->hasProperty('consecutive')) {
+            $order = array('consecutive' => 'DESC');
+
+            $lastItem = $entityManager->getRepository($className)->findOneBy(array(), $order);
+            if ($lastItem != null) {
+                $entity->setConsecutive($lastItem->getConsecutive() + 1);
+            } else {
+                $entity->setConsecutive(1);
+            }
+
+            $entityManager->flush();
         }
-
-        $entityManager->flush();
     }
 
 }

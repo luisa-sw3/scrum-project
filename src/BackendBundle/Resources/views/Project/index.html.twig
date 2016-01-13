@@ -1,0 +1,66 @@
+{% extends 'BackendBundle:Default:main.html.twig' %}
+{% block title %}{{'backend.project.projects'|trans}}{% endblock %}
+
+{% block content %}
+    
+    <!-- Page Heading -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                {{'backend.project.projects'|trans}}
+                <a href="{{ path('backend_projects_new') }}" class="btn btn-primary pull-right">{{'backend.project.new'|trans}}</a>
+            </h1>
+            {% set item1 = {'text': 'backend.project.projects'|trans, 'icon':'fa fa-archive'} %}
+            {% set items = [item1] %}
+            {{ filters.breadcrum(items) }}
+        </div>
+    </div>
+    <!-- /.row -->
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>{{ 'backend.project.name'|trans }}</th>
+                    <th>{{ 'backend.project.description'|trans }}</th>
+                    <th>{{ 'backend.project.creation_date'|trans }}</th>
+                    <th>{{ 'backend.project.start_date'|trans }}</th>
+                    <th>{{ 'backend.project.estimated_date'|trans }}</th>
+                    <th>{{ 'backend.global.options'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% set dateFormat = app_settings.getSettings.dateFormat %}
+            {% for project in projects %}
+                <tr>
+                    <td>{{ project.name }}</td>
+                    <td>{{ project.description }}</td>
+                    <td>
+                        {% if project.creationDate %}
+                            {{ project.creationDate|date(dateFormat) }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if project.startDate %}
+                            {{ project.startDate|date(dateFormat) }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if project.estimatedDate %}
+                            {{ project.estimatedDate|date(dateFormat) }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a class="btn btn-default btn-sm" href="{{ path('backend_projects_show', { 'id': project.id }) }}">
+                            <i class="fa fa-eye" title=""></i>
+                        </a>
+                        <a class="btn btn-default btn-sm" href="{{ path('backend_projects_edit', { 'id': project.id }) }}">
+                            <i class="fa fa-pencil" title=""></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

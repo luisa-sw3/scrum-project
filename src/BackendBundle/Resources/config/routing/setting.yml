@@ -1,0 +1,8 @@
+backend_settings_edit:
+    path:     /edit
+    defaults: { _controller: BackendBundle:Settings:edit }
+
+backend_settings_update:
+    path:     /update
+    defaults: { _controller: BackendBundle:Settings:update }
+    methods: [POST]

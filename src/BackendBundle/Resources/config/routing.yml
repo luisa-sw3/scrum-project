@@ -20,3 +20,11 @@ backend_design_example:
 backend_users:
     resource: "@BackendBundle/Resources/config/routing/user.yml"
     prefix:   /users
+    
+backend_projects:
+        resource: "@BackendBundle/Resources/config/routing/project.yml"
+        prefix:   /projects
+        
+backend_settings:
+        resource: "@BackendBundle/Resources/config/routing/setting.yml"
+        prefix:   /settings

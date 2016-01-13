@@ -4,9 +4,23 @@ services:
         tags:
             - { name: doctrine.event_listener, event: postPersist }
     
+    app_settings:
+        class: BackendBundle\Services\AppSettings
+        arguments: 
+            entityManager: "@doctrine.orm.entity_manager"
+    
+    
     #servicio para pasarle el container a los formualrios (traduccion)
     backend.form.type.user.profile:
         class: BackendBundle\Form\UserProfileType
+        arguments:
+            - "@service_container"
+        tags:
+            - { name: form.type }
+     
+    #servicio para los settings de la aplicacion
+    backend.form.type.setting:
+        class: BackendBundle\Form\SettingType
         arguments:
             - "@service_container"
         tags:

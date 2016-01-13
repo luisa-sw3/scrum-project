@@ -66,6 +66,21 @@ backend:
         name: "Nombre"
         lastname: "Apellido"
         cellphone: "Cellphone"
+        
+    project:
+        projects: "Proyectos"
+        new: "Nuevo Proyecto"
+        view_projects: "Ver Proyectos"
+        name: "Nombre del Proyecto"
+        description: "Descripción"
+        creation_date: "Fecha de Creación"
+        start_date: "Fecha de Inicio"
+        estimated_date: "Fecha Estimada"
+        
+    setting:
+        settings: "Configuraciones"
+        date_format: "Formato de Fecha"
+        settings_updated: "Configuraciones actualizadas"
      
     
   

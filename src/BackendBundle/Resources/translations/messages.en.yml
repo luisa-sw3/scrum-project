@@ -66,3 +66,17 @@ backend:
         lastname: "Lastname"
         cellphone: "Cellphone"
     
+    project:
+        projects: "Projects"
+        new: "New Project"
+        view_projects: "View Projects"
+        name: "Project Name"
+        description: "Description"
+        creation_date: "Creation Date"
+        start_date: "Start Date"
+        estimated_date: "Estimated Date"
+        
+    setting:
+        settings: "Settings"
+        date_format: "Date Format"
+        settings_updated: "Settings updated"
