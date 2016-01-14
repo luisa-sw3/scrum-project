@@ -29,6 +29,11 @@ backend:
         logout: "Logout"
         save_changes: "Save Changes"
         language: "Language"
+        id: "ID"
+        consecutive: "Consecutive"
+        year: "Year"
+        month: "Month"
+        day: "Day"
         
     client:
         new: "New Client"
@@ -69,12 +74,19 @@ backend:
     project:
         projects: "Projects"
         new: "New Project"
+        edit: "Edit Project"
+        delete: "Delete Project"
+        details: "Project Details"
         view_projects: "View Projects"
         name: "Project Name"
         description: "Description"
         creation_date: "Creation Date"
         start_date: "Start Date"
         estimated_date: "Estimated Date"
+        creation_success_message: "Project created successfully"
+        update_success_message: "Project updated successfully"
+        delete_success_message: "Project deleted successfully"
+        
         
     setting:
         settings: "Settings"

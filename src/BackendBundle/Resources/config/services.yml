@@ -25,3 +25,11 @@ services:
             - "@service_container"
         tags:
             - { name: form.type }
+    
+    #servicio para formulario de proyectos de la aplicacion
+    backend.form.type.project:
+        class: BackendBundle\Form\ProjectType
+        arguments:
+            - "@service_container"
+        tags:
+            - { name: form.type }

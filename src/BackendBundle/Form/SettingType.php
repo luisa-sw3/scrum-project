@@ -28,9 +28,14 @@ class SettingType extends AbstractType {
                 ->add('dateFormat', Type\ChoiceType::class, array(
                     'required' => true,
                     'label' => $this->translator->trans('backend.setting.date_format'),
-                    'choices' => array(Settings::DATE_FORMAT_1 => Settings::DATE_FORMAT_1,
+                    'choices' => array(
+                        Settings::DATE_FORMAT_1 => Settings::DATE_FORMAT_1,
                         Settings::DATE_FORMAT_2 => Settings::DATE_FORMAT_2,
-                        Settings::DATE_FORMAT_3 => Settings::DATE_FORMAT_3)
+                        Settings::DATE_FORMAT_3 => Settings::DATE_FORMAT_3,
+                        Settings::DATE_FORMAT_4 => Settings::DATE_FORMAT_4,
+                        Settings::DATE_FORMAT_5 => Settings::DATE_FORMAT_5,
+                        Settings::DATE_FORMAT_6 => Settings::DATE_FORMAT_6
+                    )
                 ))
                 ->add('hourFormat', Type\ChoiceType::class, array(
                     'required' => true,

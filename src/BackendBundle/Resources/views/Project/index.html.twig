@@ -16,7 +16,9 @@
         </div>
     </div>
     <!-- /.row -->
-
+    {{ filters.showMessage('messageSuccess', 'success')}}
+    {{ filters.showMessage('messageError', 'danger')}}
+    
     <div class="table-responsive">
         <table class="table table-bordered table-hover">
             <thead>
@@ -34,7 +36,7 @@
             {% for project in projects %}
                 <tr>
                     <td>{{ project.name }}</td>
-                    <td>{{ project.description }}</td>
+                    <td>{{ project.description|raw }}</td>
                     <td>
                         {% if project.creationDate %}
                             {{ project.creationDate|date(dateFormat) }}
@@ -51,11 +53,11 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a class="btn btn-default btn-sm" href="{{ path('backend_projects_show', { 'id': project.id }) }}">
-                            <i class="fa fa-eye" title=""></i>
+                        <a class="btn btn-default btn-sm" title="{{ 'backend.project.details'|trans }}" href="{{ path('backend_projects_show', { 'id': project.id }) }}">
+                            <i class="fa fa-eye"></i>
                         </a>
-                        <a class="btn btn-default btn-sm" href="{{ path('backend_projects_edit', { 'id': project.id }) }}">
-                            <i class="fa fa-pencil" title=""></i>
+                        <a class="btn btn-default btn-sm" title="{{ 'backend.project.edit'|trans }}" href="{{ path('backend_projects_edit', { 'id': project.id }) }}">
+                            <i class="fa fa-pencil"></i>
                         </a>
                     </td>
                 </tr>

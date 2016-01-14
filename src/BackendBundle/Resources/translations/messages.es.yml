@@ -29,7 +29,11 @@ backend:
         logout: "Salir"
         save_changes: "Guardar Cambios"
         language: "Lenguaje"
-        
+        id: "ID"
+        consecutive: "Consecutivo"
+        year: "Año"
+        month: "Mes"
+        day: "Dia"
     
     client:
         new: "Nuevo Cliente"
@@ -70,12 +74,18 @@ backend:
     project:
         projects: "Proyectos"
         new: "Nuevo Proyecto"
+        edit: "Editar Proyecto"
+        delete: "Eliminar Projecto"
+        details: "Detalles del Proyecto"
         view_projects: "Ver Proyectos"
         name: "Nombre del Proyecto"
         description: "Descripción"
         creation_date: "Fecha de Creación"
         start_date: "Fecha de Inicio"
         estimated_date: "Fecha Estimada"
+        creation_success_message: "Proyecto creado exitosamente"
+        update_success_message: "Proyecto actualizado exitosamente"
+        delete_success_message: "Proyecto eliminado exitosamente"
         
     setting:
         settings: "Configuraciones"

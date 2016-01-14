@@ -15,7 +15,7 @@ class ProjectController extends Controller
 {
     /**
      * Lists all Project entities.
-     *
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
      */
     public function indexAction()
     {
@@ -31,7 +31,7 @@ class ProjectController extends Controller
 
     /**
      * Creates a new Project entity.
-     *
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
      */
     public function newAction(Request $request)
     {
@@ -41,10 +41,13 @@ class ProjectController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            
+            $project->setUserOwner($this->getUser());
             $em->persist($project);
             $em->flush();
-
-            return $this->redirectToRoute('backend_projects_show', array('id' => $project->getId()));
+            
+            $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.project.creation_success_message'));
+            return $this->redirectToRoute('backend_projects');
         }
 
         return $this->render('BackendBundle:Project:new.html.twig', array(
@@ -55,7 +58,7 @@ class ProjectController extends Controller
 
     /**
      * Finds and displays a Project entity.
-     *
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
      */
     public function showAction(Project $project)
     {
@@ -69,7 +72,7 @@ class ProjectController extends Controller
 
     /**
      * Displays a form to edit an existing Project entity.
-     *
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
      */
     public function editAction(Request $request, Project $project)
     {
@@ -82,7 +85,8 @@ class ProjectController extends Controller
             $em->persist($project);
             $em->flush();
 
-            return $this->redirectToRoute('backend_projects_edit', array('id' => $project->getId()));
+            $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.project.update_success_message'));
+            return $this->redirectToRoute('backend_projects');
         }
 
         return $this->render('BackendBundle:Project:edit.html.twig', array(
@@ -94,7 +98,7 @@ class ProjectController extends Controller
 
     /**
      * Deletes a Project entity.
-     *
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
      */
     public function deleteAction(Request $request, Project $project)
     {
@@ -106,15 +110,15 @@ class ProjectController extends Controller
             $em->remove($project);
             $em->flush();
         }
-
+        
+        $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.project.delete_success_message'));
         return $this->redirectToRoute('backend_projects');
     }
 
     /**
      * Creates a form to delete a Project entity.
-     *
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
      * @param Project $project The Project entity
-     *
      * @return \Symfony\Component\Form\Form The form
      */
     private function createDeleteForm(Project $project)
