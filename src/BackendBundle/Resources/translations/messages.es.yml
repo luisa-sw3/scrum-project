@@ -110,7 +110,11 @@ backend:
         assignation_date: "Fecha de Asignación"
         designed_role: "Rol designado"
         unassign_user: "Desasignar este usuario del proyecto"
-        empty_list: "Aún no se han asignado usuarios a este projecto"
+        empty_list: "Este projecto aún no tiene colaboradores asignados"
+        add_collaborator: "Agregar Colaborador"
+        email_name_lastname: "Correo, nombre o apellido..."
+        send_invitation: "Enviar Invitación"
+        message_invitation_send: "Invitación enviada exitosamente"
      
     
   

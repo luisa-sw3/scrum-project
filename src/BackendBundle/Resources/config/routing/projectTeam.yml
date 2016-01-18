@@ -2,3 +2,8 @@ backend_project_team:
     path:     /
     defaults: { _controller: "BackendBundle:ProjectTeam:index" }
     methods:  GET
+
+backend_project_team_add:
+    path:     /add
+    defaults: { _controller: "BackendBundle:ProjectTeam:add" }
+    methods:  [GET, POST]

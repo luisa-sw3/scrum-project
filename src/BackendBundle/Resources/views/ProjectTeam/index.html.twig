@@ -1,5 +1,5 @@
 {% extends 'BackendBundle:Default:main.html.twig' %}
-{% block title %}{{'backend.project.projects'|trans}}{% endblock %}
+{% block title %}{{'backend.user_project.project_team'|trans}}{% endblock %}
 
 {% block content %}
     
@@ -8,7 +8,7 @@
         <div class="col-lg-12">
             <h1 class="page-header">
                 {{'backend.user_project.project_team'|trans}}
-                <a href="{{ path('backend_projects_new') }}" class="btn btn-primary pull-right">{{'backend.project.new'|trans}}</a>
+                <a href="{{ path('backend_project_team_add',{'id':project.id}) }}" class="btn btn-primary pull-right fancybox fancybox.iframe">{{'backend.user_project.add_collaborator'|trans}}</a>
             </h1>
             {% set item1 = {'text': 'backend.project.projects'|trans, 'url':path('backend_projects'),'icon':'fa fa-archive'} %}
             {% set item2 = {'text': project.name, 'url':path('backend_projects_show',{'id':project.id}),'icon':'fa fa-eye'} %}

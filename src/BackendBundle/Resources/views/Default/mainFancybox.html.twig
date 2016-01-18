@@ -29,11 +29,11 @@
     <![endif]-->
 </head>
 
-<body>
+<body style="margin-top: 0px; background-color: transparent;">
     {% import 'BackendBundle:Default:macros.html.twig' as filters %}
-    <div id="wrapper">
+    <div id="wrapper" style="padding-left: 0px;">
         <!-- Navigation -->
-        {% include 'BackendBundle:Default:header.html.twig' %}
+{#        {% include 'BackendBundle:Default:header.html.twig' %}#}
         <div id="page-wrapper">
             <div class="container-fluid">
                 {% block content %}

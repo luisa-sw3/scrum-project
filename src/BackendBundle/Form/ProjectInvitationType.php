@@ -8,7 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type as Type;
 use Symfony\Component\DependencyInjection\Container;
 
-class RoleType extends AbstractType {
+class ProjectInvitationType extends AbstractType {
 
     private $container;
     private $translator;
@@ -24,13 +24,14 @@ class RoleType extends AbstractType {
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-                ->add('name', Type\TextType::class, array(
-                    'required' => true,
-                    'label' => $this->translator->trans('backend.user_role.name')
-                ))
-                ->add('description', Type\TextareaType::class, array(
+                ->add('userId', Type\HiddenType::class, array(
                     'required' => false,
-                    'label' => $this->translator->trans('backend.user_role.description')
+                    'mapped' => false,
+                ))
+                ->add('email', Type\TextType::class, array(
+                    'required' => true,
+                    'mapped' => false,
+                    'label' => $this->translator->trans('backend.user_project.email_name_lastname')
                 ))
         ;
     }
@@ -40,7 +41,7 @@ class RoleType extends AbstractType {
      */
     public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'BackendBundle\Entity\Role'
+            'data_class' => 'BackendBundle\Entity\ProjectInvitation'
         ));
     }
 

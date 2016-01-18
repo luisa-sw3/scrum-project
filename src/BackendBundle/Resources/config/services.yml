@@ -41,3 +41,11 @@ services:
             - "@service_container"
         tags:
             - { name: form.type }
+
+    #servicio para formulario de invitaciones a proyectos
+    backend.form.type.project.proyect_invitation:
+        class: BackendBundle\Form\ProjectInvitationType
+        arguments:
+            - "@service_container"
+        tags:
+            - { name: form.type }

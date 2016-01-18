@@ -111,4 +111,9 @@ backend:
         assignation_date: "Assignation Date"
         designed_role: "Designed Role"
         unassign_user: "Unassign user from Project"
-        empty_list: "No users assigned yet"
+        empty_list: "This repository doesn’t have any collaborators yet"
+        add_collaborator: "Add Collaborator"
+        email_name_lastname: "Email, name or lastname..."
+        send_invitation: "Send Invitation"
+        message_invitation_send: "Invitation send successfully"
+        
