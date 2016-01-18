@@ -1,0 +1,49 @@
+{% extends 'BackendBundle:Default:main.html.twig' %}
+{% block title %}{{'backend.user_role.user_roles'|trans}}{% endblock %}
+
+{% block content %}
+    
+    <!-- Page Heading -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                {{'backend.user_role.user_roles'|trans}}
+                <a href="{{ path('backend_settings_user_roles_new') }}" class="btn btn-primary pull-right">{{'backend.user_role.new'|trans}}</a>
+            </h1>
+            {% set item1 = {'text': 'backend.setting.settings'|trans, 'url':path('backend_settings'), 'icon':'fa fa-cog'} %}
+            {% set item2 = {'text': 'backend.user_role.user_roles'|trans, 'icon':'fa fa-users'} %}
+            {% set items = [item1, item2] %}
+            {{ filters.breadcrum(items) }}
+        </div>
+    </div>
+    <!-- /.row -->
+    {{ filters.showMessage('messageSuccess', 'success')}}
+    {{ filters.showMessage('messageError', 'danger')}}
+    
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>{{ 'backend.user_role.name'|trans }}</th>
+                    <th>{{ 'backend.user_role.description'|trans }}</th>
+                    <th>{{ 'backend.global.options'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for role in roles %}
+                <tr>
+                    <td>{{ role.name }}</td>
+                    <td>{{ role.description | raw }}</td>
+                    <td>
+                        {% if role.isManuallyAdded %}
+                            <a class="btn btn-default btn-sm" title="{{ 'backend.user_role.edit'|trans }}" href="{{ path('backend_settings_user_roles_edit',{'id':role.id}) }}">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

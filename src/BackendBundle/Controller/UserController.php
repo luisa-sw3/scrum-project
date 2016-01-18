@@ -8,6 +8,11 @@ use BackendBundle\Form\UserProfileType;
 
 class UserController extends Controller {
 
+    /**
+     * Permite desplegar el formulario de edicion del perfil del usuario logueado
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 26/12/2015
+     * @return type
+     */
     public function editProfileAction() {
 
         $user = $this->getUser();
@@ -19,6 +24,12 @@ class UserController extends Controller {
         ));
     }
 
+    /**
+     * Permite validar y almacenar los cambios en el perfil del usuario logueado
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 26/12/2015
+     * @param Request $request
+     * @return type
+     */
     public function updateProfileAction(Request $request) {
 
         $user = $this->getUser();

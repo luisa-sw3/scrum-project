@@ -35,6 +35,12 @@ class Role {
      * @ORM\Column(name="role_description", type="text", nullable=true)
      */
     protected $description;
+    
+    /**
+     * Boolean para saber si el rol fue añadido manualmente
+     * @ORM\Column(name="role_is_manually_added", type="boolean", nullable=true)
+     */
+    protected $isManuallyAdded;
 
     function getId() {
         return $this->id;
@@ -54,6 +60,14 @@ class Role {
 
     function setDescription($description) {
         $this->description = $description;
+    }
+    
+    function getIsManuallyAdded() {
+        return $this->isManuallyAdded;
+    }
+
+    function setIsManuallyAdded($isManuallyAdded) {
+        $this->isManuallyAdded = $isManuallyAdded;
     }
 
     public function __toString() {

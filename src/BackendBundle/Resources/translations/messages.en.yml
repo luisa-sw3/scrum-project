@@ -86,9 +86,29 @@ backend:
         creation_success_message: "Project created successfully"
         update_success_message: "Project updated successfully"
         delete_success_message: "Project deleted successfully"
+        not_found_message: "Project not found"
         
         
     setting:
         settings: "Settings"
+        general_settings: "General Settings"
         date_format: "Date Format"
+        hour_format: "Hour Format"
         settings_updated: "Settings updated"
+        
+    user_role:
+        user_roles: "User Roles"
+        name: "Role Name"
+        description: "Role Description"
+        new: "New Role"
+        edit: "Edit Role"
+        creation_success_message: "Role created successfully"
+        update_success_message: "Role updated successfully"
+        not_found_message: "Role not found"
+    
+    user_project:
+        project_team: "Project Team"
+        assignation_date: "Assignation Date"
+        designed_role: "Designed Role"
+        unassign_user: "Unassign user from Project"
+        empty_list: "No users assigned yet"

@@ -22,3 +22,7 @@ backend_projects_delete:
     path:     /{id}/delete
     defaults: { _controller: "BackendBundle:Project:delete" }
     methods:  DELETE
+    
+backend_project_team:
+        resource: "@BackendBundle/Resources/config/routing/projectTeam.yml"
+        prefix:   /{id}/projectTeam

@@ -8,6 +8,11 @@ use BackendBundle\Entity as Entity;
 
 class SecurityController extends Controller {
 
+    /**
+     * Metodo encargado de validar la autenticacion de usuarios en el backend
+     * @param Request $request
+     * @return type
+     */
     public function loginAction(Request $request) {
         $authenticationUtils = $this->get('security.authentication_utils');
 

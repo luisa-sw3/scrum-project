@@ -26,6 +26,7 @@ class ProjectController extends Controller
 
         return $this->render('BackendBundle:Project:index.html.twig', array(
             'projects' => $projects,
+            'menu' => 'menu_projects'
         ));
     }
 
@@ -53,6 +54,7 @@ class ProjectController extends Controller
         return $this->render('BackendBundle:Project:new.html.twig', array(
             'project' => $project,
             'form' => $form->createView(),
+            'menu' => 'menu_projects'
         ));
     }
 
@@ -67,6 +69,7 @@ class ProjectController extends Controller
         return $this->render('BackendBundle:Project:show.html.twig', array(
             'project' => $project,
             'delete_form' => $deleteForm->createView(),
+            'menu' => 'menu_projects'
         ));
     }
 
@@ -93,6 +96,7 @@ class ProjectController extends Controller
             'project' => $project,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'menu' => 'menu_projects'
         ));
     }
 

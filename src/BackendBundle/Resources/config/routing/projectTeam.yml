@@ -1,0 +1,4 @@
+backend_project_team:
+    path:     /
+    defaults: { _controller: "BackendBundle:ProjectTeam:index" }
+    methods:  GET

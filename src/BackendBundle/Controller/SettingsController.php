@@ -9,6 +9,19 @@ use BackendBundle\Entity\Settings;
 
 class SettingsController extends Controller {
 
+    
+    /**
+     * Permite obtener la pantalla de inicio del menu de configuraciones
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
+     * @return type
+     */
+    public function indexAction() {
+
+        return $this->render('BackendBundle:Settings:index.html.twig', array(
+            'menu' => 'menu_settings'
+        ));
+    }
+    
     /**
      * Permite desplegar el formulario para la edicion de las configuraciones
      * globales de la aplicacion
@@ -29,6 +42,7 @@ class SettingsController extends Controller {
         return $this->render('BackendBundle:Settings:edit.html.twig', array(
                     'settings' => $settings,
                     'form' => $form->createView(),
+                    'menu' => 'menu_settings'
         ));
     }
 
@@ -57,12 +71,13 @@ class SettingsController extends Controller {
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.setting.settings_updated'));
-            return $this->redirectToRoute('backend_homepage');
+            return $this->redirectToRoute('backend_settings');
         }
 
         return $this->render('BackendBundle:Settings:edit.html.twig', array(
                     'settings' => $settings,
                     'form' => $form->createView(),
+                    'menu' => 'menu_settings'
         ));
     }
 

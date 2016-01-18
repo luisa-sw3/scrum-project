@@ -33,3 +33,11 @@ services:
             - "@service_container"
         tags:
             - { name: form.type }
+            
+    #servicio para formulario de roles de usuario de la aplicacion
+    backend.form.type.user.role:
+        class: BackendBundle\Form\RoleType
+        arguments:
+            - "@service_container"
+        tags:
+            - { name: form.type }

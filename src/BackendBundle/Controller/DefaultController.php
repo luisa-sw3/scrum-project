@@ -4,15 +4,19 @@ namespace BackendBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use BackendBundle\Entity as Entity;
 
 class DefaultController extends Controller {
 
+    /**
+     * Permite desplegar la home page del backend
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/12/2015
+     * @return type
+     */
     public function indexAction() {
 
-        $em = $this->getDoctrine()->getManager();
-
-        return $this->render('BackendBundle:Default:index.html.twig');
+        return $this->render('BackendBundle:Default:index.html.twig', array(
+            'menu' => 'menu_home'
+        ));
     }
 
     /**
