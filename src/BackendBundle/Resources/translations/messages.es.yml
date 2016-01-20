@@ -75,6 +75,7 @@ backend:
         message_email_exist: "Ya existe una cuenta registrada con el correo ingresado"
         message_account_created_1: "Cuenta creada exitosamente. Hemos enviado un correo electronico a "
         message_account_created_2: ", por favor revice su bandeja de entrada y presione click sobre el enlace para confirmar su cuenta."
+        confirmed_account_message: "Cuenta confirmada exitosamente"
         
     project:
         projects: "Proyectos"

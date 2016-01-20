@@ -75,7 +75,7 @@ class UserType extends AbstractType {
                             'maxlength' => 15,
                             'placeholder' => $this->translator->trans('backend.user.confirm_password'), 
                             )),
-                    'required' => false,
+                    'required' => true,
                     'type' => Type\PasswordType::class,
                     'invalid_message' => $this->translator->trans('backend.user.password_not_match'),
                     'options' => array('label' => 'Password.'),

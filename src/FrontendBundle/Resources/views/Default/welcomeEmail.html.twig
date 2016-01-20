@@ -19,7 +19,7 @@
                 
                 <p>{{ 'backend.welcome_email.clic_message'|trans }}</p>
                 
-                <a href="{{app.request.getSchemeAndHttpHost()~path('backend_login')}}">{{ 'backend.welcome_email.confirm_account'|trans }}</a>
+                <a href="{{app.request.getSchemeAndHttpHost()~path('backend_login',{'confirmAccount':userId})}}">{{ 'backend.welcome_email.confirm_account'|trans }}</a>
                 
                 <p>{{ 'backend.welcome_email.footer'|trans }}</p>
             </div>

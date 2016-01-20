@@ -93,7 +93,8 @@ class DefaultController extends Controller {
                 ->setTo($user->getEmail())
                 ->setBody(
                 $this->renderView(
-                        'FrontendBundle:Default:welcomeEmail.html.twig', array('user' => $user)
+                        'FrontendBundle:Default:welcomeEmail.html.twig', array('user' => $user,
+                            'userId' => base64_encode($user->getId()))
                 ), 'text/html'
                 )
         ;

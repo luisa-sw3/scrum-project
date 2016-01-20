@@ -75,6 +75,7 @@ backend:
         message_email_exist: "Already exists an account with this email"
         message_account_created_1: "Account created successfully. We have sent an email to "
         message_account_created_2: ", please review your inbox and press click on the link to confirm your account."
+        confirmed_account_message: "Account confirmed successfully"
     
     project:
         projects: "Projects"
