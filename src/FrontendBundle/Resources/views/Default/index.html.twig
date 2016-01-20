@@ -1,15 +1,16 @@
 {% extends 'FrontendBundle:Default:main.html.twig'  %}
 
 {% block content_header %}
-    <header class="intro-header" style="background-image: url('{{asset('bundles/frontend/img/home-bg.jpg')}}')">
+{#    <header class="intro-header" style="background-image: url('{{asset('bundles/frontend/img/home-bg.jpg')}}')">#}
+      <header class="intro-header" style="background-image: url('{{asset('bundles/frontend/img/scrum1.jpg')}}'); height: 500px;">
         <div class="container">
 
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="site-heading">
-                        <h1>Clean Blog</h1>
-                        <hr class="small">
-                        <span class="subheading">A Clean Blog Theme by Start Bootstrap</span>
+                        <h1 style="text-shadow: 3px 3px darkcyan;">Project Management and Scrum Software</h1>
+{#                        <hr class="small">#}
+                        <span class="subheading">&nbsp;</span>
                     </div>
                 </div>
             </div>
@@ -19,56 +20,53 @@
 {% endblock %}
 
 {% block content %}
-    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+    
+    {{ filters.showMessage('messageFrontendSuccess', 'success')}}
+    {{ filters.showMessage('messageFrontendError', 'danger')}}
+    
+    
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 up-block">
         <div class="post-preview">
-            <a href="post.html">
-                <h2 class="post-title">
-                    Man must explore, and this is exploration at its greatest
-                </h2>
-                <h3 class="post-subtitle">
-                    Problems look mighty small from 150 miles up
-                </h3>
-            </a>
-            <p class="post-meta">Posted by <a href="#">Start Bootstrap</a> on September 24, 2014</p>
+            <h2 class="post-title">
+                Intuitive Workflow for Agile Projects
+            </h2>
+            <p>
+                Agile SCRUM addresses the needs of each scrum role and facilitates the ceremonies of the scrum process by exposing simple interfaces for managing the scrum artifacts.
+            </p>
         </div>
         <hr>
         <div class="post-preview">
-            <a href="post.html">
-                <h2 class="post-title">
-                    I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.
-                </h2>
-            </a>
-            <p class="post-meta">Posted by <a href="#">Start Bootstrap</a> on September 18, 2014</p>
+            <h2 class="post-title">
+                Organize your Product Backlog efficiently
+            </h2>
+            <p>
+                Create User Stories, group them into higher level themes, and prioritize each story based on business value.  At any time, see an overview of your product’s ongoing progress.
+            </p>
         </div>
         <hr>
         <div class="post-preview">
-            <a href="post.html">
-                <h2 class="post-title">
-                    Science has not yet mastered prophecy
-                </h2>
-                <h3 class="post-subtitle">
-                    We predict too much for the next year and yet far too little for the next ten.
-                </h3>
-            </a>
-            <p class="post-meta">Posted by <a href="#">Start Bootstrap</a> on August 24, 2014</p>
+            
+            <h2 class="post-title">
+                Simple & Scalable
+            </h2>
+            <p>
+                Agile SCRUM is the perfect tool for managing my development team. It’s quick, it’s simple, it’s scalable
+            </p>
         </div>
         <hr>
         <div class="post-preview">
-            <a href="post.html">
-                <h2 class="post-title">
-                    Failure is not an option
-                </h2>
-                <h3 class="post-subtitle">
-                    Many say exploration is part of our destiny, but it’s actually our duty to future generations.
-                </h3>
-            </a>
-            <p class="post-meta">Posted by <a href="#">Start Bootstrap</a> on July 8, 2014</p>
+            <h2 class="post-title">
+                See your daily progress, no matter where you are
+            </h2>
+            <p>
+                Monitor the status of tasks on your Scrumboard in real-time.  Observe delays, impediments and progress throughout the day without having to refresh your browser.  Agilo is the ideal tool for distributed teams.
+            </p>
         </div>
         <hr>
         <!-- Pager -->
         <ul class="pager">
             <li class="next">
-                <a href="#">Older Posts &rarr;</a>
+                <a href="{{path('frontend_features')}}">View Features &rarr;</a>
             </li>
         </ul>
     </div>

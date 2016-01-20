@@ -2,14 +2,15 @@ frontend_homepage:
     path:     /
     defaults: { _controller: FrontendBundle:Default:index }
 
-frontend_about:
-    path:     /about
-    defaults: { _controller: FrontendBundle:Default:about }
+frontend_features:
+    path:     /features
+    defaults: { _controller: FrontendBundle:Default:features }
 
-frontend_sample_post:
-    path:     /samplePost
-    defaults: { _controller: FrontendBundle:Default:samplePost }
+frontend_why_agile_scrum:
+    path:     /whyAgileScrum
+    defaults: { _controller: FrontendBundle:Default:whyAgileScrum }
 
-frontend_contact:
-    path:     /contact
-    defaults: { _controller: FrontendBundle:Default:contact }
+frontend_create_account:
+    path:     /createAccount
+    defaults: { _controller: FrontendBundle:Default:createAccount }
+    methods: [GET, POST]

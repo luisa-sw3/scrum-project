@@ -61,7 +61,9 @@ backend:
         edit_profile: "Edit Profile"
         password: "Password"
         confirm_password: "Confirm Password"
-        password_not_match: "Password don't match"
+        confirm_email: "Confirm Email"
+        password_not_match: "Passwords don't match"
+        email_not_match: "Emails don't match"
         email: "Email"
         username: "Username"
         biography: "Biography"
@@ -70,6 +72,9 @@ backend:
         name: "Name"
         lastname: "Lastname"
         cellphone: "Cellphone"
+        message_email_exist: "Already exists an account with this email"
+        message_account_created_1: "Account created successfully. We have sent an email to "
+        message_account_created_2: ", please review your inbox and press click on the link to confirm your account."
     
     project:
         projects: "Projects"
@@ -116,4 +121,13 @@ backend:
         email_name_lastname: "Email, name or lastname..."
         send_invitation: "Send Invitation"
         message_invitation_send: "Invitation send successfully"
+        
+    welcome_email:
+        subject: "Welcome to Agile SCRUM"
+        title: "Welcome to Agile SCRUM"
+        hello: "Hi"
+        thanks: "thanks for registering with us."
+        clic_message: "Click on the below link to confirm your account:"
+        confirm_account: "Confirm Account"
+        footer: "Best Regards, Agile SCRUM Team"
         

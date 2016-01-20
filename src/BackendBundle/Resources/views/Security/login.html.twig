@@ -33,6 +33,11 @@
 <body style="background-color: #FFF;">
       
     <section class="container" style="width: 30%; margin: auto; margin-top: 10%;">
+        
+        <a href="{{path('frontend_homepage')}}" style="margin-left: 25%;">
+            <img src="{{asset('bundles/backend/images/logo.png')}}"/>
+        </a>
+        
         <h2>Login</h2>
         {% if error %}
             <div class="alert alert-danger alert-dismissable">

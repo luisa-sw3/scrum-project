@@ -93,6 +93,12 @@ class User implements UserInterface, \Serializable {
      */
     protected $biography;
 
+    /**
+     * Boolean para saber si el usuario ya confirmo su cuenta de usuario o no
+     * @ORM\Column(name="user_is_account_confirmed", type="boolean", nullable=true)
+     */
+    protected $isAccountConfirmed;
+    
     function getId() {
         return $this->id;
     }
@@ -175,6 +181,14 @@ class User implements UserInterface, \Serializable {
 
     function setProfileImagePath($profileImagePath) {
         $this->profileImagePath = $profileImagePath;
+    }
+
+    function getIsAccountConfirmed() {
+        return $this->isAccountConfirmed;
+    }
+
+    function setIsAccountConfirmed($isAccountConfirmed) {
+        $this->isAccountConfirmed = $isAccountConfirmed;
     }
 
     public function __toString() {

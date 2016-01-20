@@ -1,4 +1,8 @@
 services:
-#    frontend.example:
-#        class: FrontendBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    #servicio para pasarle el container a los formualrios (traduccion)
+    frontend.form.type.user.create_account:
+        class: FrontendBundle\Form\UserType
+        arguments:
+            - "@service_container"
+        tags:
+            - { name: form.type }
