@@ -63,5 +63,12 @@ class ProjectType extends AbstractType {
             'data_class' => 'BackendBundle\Entity\Project'
         ));
     }
+    
+    /**
+     * @return string
+     */
+    public function getName() {
+        return 'backendbundle_project_type';
+    }
 
 }

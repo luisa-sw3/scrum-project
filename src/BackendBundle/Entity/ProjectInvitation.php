@@ -3,7 +3,6 @@
 namespace BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Util\Util;
 
 /**
@@ -75,11 +74,17 @@ class ProjectInvitation {
      * @ORM\Column(name="prin_status", type="integer", nullable=true)
      */
     protected $status;
+    
+     /**
+     * Usuario quien ingresa la invitacion al sistema
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="prin_user_owner_id", referencedColumnName="user_id", nullable=true)
+     */
+    protected $userOwner;
 
     function getId() {
         return $this->id;
     }
-
 
     function getDate() {
         return $this->date;
@@ -135,6 +140,14 @@ class ProjectInvitation {
 
     function setCanceledDate($canceledDate) {
         $this->canceledDate = $canceledDate;
+    }
+    
+    function getUserOwner() {
+        return $this->userOwner;
+    }
+
+    function setUserOwner($userOwner) {
+        $this->userOwner = $userOwner;
     }
 
     public function __toString() {

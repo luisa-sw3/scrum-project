@@ -7,3 +7,8 @@ backend_project_team_add:
     path:     /add
     defaults: { _controller: "BackendBundle:ProjectTeam:add" }
     methods:  [GET, POST]
+    
+backend_project_team_delete_user:
+    path:     /deleteUser
+    defaults: { _controller: "BackendBundle:ProjectTeam:deleteUserProject" }
+    methods:  [GET, POST]

@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * User
  * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 23/12/2015
  * @ORM\Table(name="user")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="BackendBundle\Entity\UserRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class User implements UserInterface, \Serializable {
@@ -51,7 +51,7 @@ class User implements UserInterface, \Serializable {
 
     /**
      * Correo electrónico del usuario
-     * @ORM\Column(name="user_email", type="string", length=100, nullable=false)
+     * @ORM\Column(name="user_email", type="string", length=100, nullable=false, unique=true)
      * @Assert\NotBlank()
      * @Assert\Email()
      */
@@ -74,7 +74,7 @@ class User implements UserInterface, \Serializable {
      * @Assert\File(mimeTypes={ "image/jpg", "image/jpeg", "image/png" })
      */
     protected $profileImage;
-    
+
     /**
      * Nombre del archivo de la imagen del perfil del usuario
      * @ORM\Column(name="user_profile_image", type="string", nullable=true)
@@ -98,7 +98,7 @@ class User implements UserInterface, \Serializable {
      * @ORM\Column(name="user_is_account_confirmed", type="boolean", nullable=true)
      */
     protected $isAccountConfirmed;
-    
+
     function getId() {
         return $this->id;
     }
@@ -174,7 +174,7 @@ class User implements UserInterface, \Serializable {
     function setProfileImage($profileImage) {
         $this->profileImage = $profileImage;
     }
-    
+
     function getProfileImagePath() {
         return $this->profileImagePath;
     }
@@ -202,6 +202,9 @@ class User implements UserInterface, \Serializable {
     public function setDefaults() {
         if ($this->getCreationDate() === null) {
             $this->setCreationDate(Util::getCurrentDate());
+        }
+        if ($this->getIsAccountConfirmed() === null) {
+            $this->setIsAccountConfirmed(false);
         }
     }
 

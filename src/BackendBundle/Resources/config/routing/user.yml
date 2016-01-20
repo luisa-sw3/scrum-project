@@ -6,3 +6,12 @@ backend_user_update_profile:
     path:     /updateProfile
     defaults: { _controller: BackendBundle:User:updateProfile }
     methods: [POST]
+    
+backend_user_search_users_autocomplete:
+    path:     /searchUsers
+    defaults: { _controller: "BackendBundle:User:searchUsersAutocomplete" }
+    
+backend_user_delete_invitation:
+    path:     /deleteInvitation
+    defaults: { _controller: "BackendBundle:ProjectTeam:deleteInvitation" }
+    methods: POST

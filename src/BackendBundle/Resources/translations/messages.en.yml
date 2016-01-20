@@ -34,6 +34,7 @@ backend:
         year: "Year"
         month: "Month"
         day: "Day"
+        date: "Date"
         
     client:
         new: "New Client"
@@ -76,6 +77,7 @@ backend:
         message_account_created_1: "Account created successfully. We have sent an email to "
         message_account_created_2: ", please review your inbox and press click on the link to confirm your account."
         confirmed_account_message: "Account confirmed successfully"
+        not_found_message: "User not found"
     
     project:
         projects: "Projects"
@@ -111,17 +113,33 @@ backend:
         creation_success_message: "Role created successfully"
         update_success_message: "Role updated successfully"
         not_found_message: "Role not found"
+        select_role: "Select Role..."
     
     user_project:
         project_team: "Project Team"
+        active_members: "Active Members"
         assignation_date: "Assignation Date"
         designed_role: "Designed Role"
-        unassign_user: "Unassign user from Project"
+        unassign_user: "Remove from Project"
         empty_list: "This repository doesn’t have any collaborators yet"
-        add_collaborator: "Add Collaborator"
+        invite_collaborator: "Invite Collaborator"
         email_name_lastname: "Email, name or lastname..."
         send_invitation: "Send Invitation"
         message_invitation_send: "Invitation send successfully"
+        not_a_member: " isn’t an Agile SCRUM member"
+        not_a_project_member: " isn’t member from this project"
+        invite_as: "Invite as"
+        already_assigned_message: "This user is already assigned to this project"
+        error_cancel_assign: "Error while canceling user assignation"
+        cancel_warning: "Are you sure you want to remove this user from the project?"
+        
+    project_invitation:
+        pending_invitations: "Pending Invitations"
+        empty_list: "No pending invitations"
+        cancel_invitation: "Cancel Invitation"
+        cancel_warning: "Are you sure you want to cancel this invitation?"
+        error_canceling: "Error while canceling invitation"
+        not_found_message: "Invitation not found"
         
     welcome_email:
         subject: "Welcome to Agile SCRUM"

@@ -6,6 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type as Type;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\DependencyInjection\Container;
 
 class ProjectInvitationType extends AbstractType {
@@ -33,6 +35,15 @@ class ProjectInvitationType extends AbstractType {
                     'mapped' => false,
                     'label' => $this->translator->trans('backend.user_project.email_name_lastname')
                 ))
+                ->add('role', EntityType::class, array(
+                    'class' => 'BackendBundle:Role',
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('r')
+                                ->orderBy('r.name', 'ASC');
+                    },
+                    'label' => $this->translator->trans('backend.user_project.invite_as'),
+                    'placeholder' => $this->translator->trans('backend.user_role.select_role'),
+                ))
         ;
     }
 
@@ -43,6 +54,13 @@ class ProjectInvitationType extends AbstractType {
         $resolver->setDefaults(array(
             'data_class' => 'BackendBundle\Entity\ProjectInvitation'
         ));
+    }
+
+    /**
+     * @return string
+     */
+    public function getName() {
+        return 'backendbundle_project_invitation_type';
     }
 
 }

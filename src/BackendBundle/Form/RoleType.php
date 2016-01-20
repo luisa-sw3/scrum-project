@@ -43,5 +43,12 @@ class RoleType extends AbstractType {
             'data_class' => 'BackendBundle\Entity\Role'
         ));
     }
+    
+    /**
+     * @return string
+     */
+    public function getName() {
+        return 'backendbundle_role_type';
+    }
 
 }

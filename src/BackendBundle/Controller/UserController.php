@@ -4,6 +4,7 @@ namespace BackendBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use BackendBundle\Form\UserProfileType;
 
 class UserController extends Controller {
@@ -76,6 +77,45 @@ class UserController extends Controller {
                     'user' => $user,
                     'form' => $form->createView(),
         ));
+    }
+
+    /**
+     * Esta funcion permite realizar una busqueda de usuarios que se pueden invitar a un
+     * proyecto determinado mediante un autocompletar
+     * @param Request $request datos de la solicitud
+     * @return JsonResponse
+     */
+    public function searchUsersAutocompleteAction(Request $request) {
+
+        //palabra buscada
+        $originalTerm = $request->query->get('term');
+        $term = mb_convert_case('%' . $originalTerm . '%', MB_CASE_TITLE, "UTF-8");
+
+        $projectId = null;
+
+        if (!empty($request->get('projectId'))) {
+            $projectId = $request->get('projectId');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $users = $em->getRepository('BackendBundle:User')->findUsersAutocomplete($term, $projectId);
+
+        if (empty($users)) {
+
+            if (!$projectId) {
+                $noMemberMessage = "* " . $originalTerm . $this->get('translator')->trans('backend.user_project.not_a_member');
+            } else {
+                $noMemberMessage = "* " . $originalTerm . $this->get('translator')->trans('backend.user_project.not_a_project_member');
+            }
+            $emptyItem['id'] = 0;
+            $emptyItem['label'] = $noMemberMessage;
+            $emptyItem['value'] = $noMemberMessage;
+
+            $users[0] = $emptyItem;
+        }
+
+        $response = new JsonResponse($users);
+        return $response;
     }
 
 }
