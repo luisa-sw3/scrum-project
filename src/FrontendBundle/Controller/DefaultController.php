@@ -43,7 +43,7 @@ class DefaultController extends Controller {
 
             //verificamos que no exista un usuario con el email ingresado
             $existUser = $em->getRepository('BackendBundle:User')->findOneByEmail($user->getEmail());
-            if ($existUser) {
+            if (!$existUser) {
 
                 // verificamos si cambiaron o no la contraseña
                 $plainPassword = $user->getPassword();
@@ -60,7 +60,7 @@ class DefaultController extends Controller {
                 $user->setStatus(Entity\User::STATUS_ACTIVE);
 
                 $em->persist($user);
-                //$em->flush();
+                $em->flush();
 
                 $message = $this->get('translator')->trans('backend.user.message_account_created_1');
                 $message .= $user->getEmail();
