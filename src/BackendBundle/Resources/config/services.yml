@@ -9,6 +9,16 @@ services:
         arguments: 
             entityManager: "@doctrine.orm.entity_manager"
     
+#    email_manager:
+#        class: BackendBundle\Services\EmailManager
+#        arguments: [@request_stack, @service_container, @doctrine.orm.entity_manager]
+
+    email_manager:
+        class: BackendBundle\Services\EmailManager
+        arguments: 
+            requestStack:   "@request_stack"
+            container:      "@service_container"
+            entityManager:  "@doctrine.orm.entity_manager"
     
     #servicio para pasarle el container a los formualrios (traduccion)
     backend.form.type.user.profile:

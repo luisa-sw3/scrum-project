@@ -90,6 +90,9 @@ class ProjectTeamController extends Controller {
                     $em->persist($projectInvitation);
                     $em->flush();
 
+                    //enviamos el correo de notificacion
+                    $this->get('email_manager')->sendProjectInvitationEmail($projectInvitation);
+                    
                     $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.user_project.message_invitation_send'));
                     $closeFancy = true;
                 } else {
@@ -153,6 +156,7 @@ class ProjectTeamController extends Controller {
 
         try {
             $invitation->setStatus(Entity\ProjectInvitation::STATUS_CANCELED);
+            $invitation->setCanceledDate(Util::getCurrentDate());
             $em->persist($invitation);
             $em->flush();
         } catch (\Exception $exc) {

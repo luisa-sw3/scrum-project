@@ -140,13 +140,19 @@ backend:
         cancel_warning: "Are you sure you want to cancel this invitation?"
         error_canceling: "Error while canceling invitation"
         not_found_message: "Invitation not found"
+       
+    email:
+        hello: "Hi"
+        footer: "Best Regards, Agile SCRUM Team"
         
     welcome_email:
         subject: "Welcome to Agile SCRUM"
         title: "Welcome to Agile SCRUM"
-        hello: "Hi"
         thanks: "thanks for registering with us."
         clic_message: "Click on the below link to confirm your account:"
         confirm_account: "Confirm Account"
-        footer: "Best Regards, Agile SCRUM Team"
         
+    project_invitation_email:
+        subject: "New Proyect Invitation"
+        invitation_description: "You have a new project invitation:"
+        clic_message: "Click here to accept or reject this request"

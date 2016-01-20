@@ -67,7 +67,7 @@ class DefaultController extends Controller {
                 $message .= $this->get('translator')->trans('backend.user.message_account_created_2');
                 $this->get('session')->getFlashBag()->add('messageFrontendSuccess', $message);
 
-                $this->sendWelcomeEmail($user);
+                $this->get('email_manager')->sendWelcomeEmail($user);
 
                 return $this->redirectToRoute('frontend_homepage');
             } else {
@@ -78,27 +78,6 @@ class DefaultController extends Controller {
         return $this->render('FrontendBundle:Default:createAccount.html.twig', array(
                     'form' => $form->createView(),
         ));
-    }
-
-    /**
-     * Esta funcion permite enviar el correo de bienvenida cuando un usuario se
-     * registra en la aplicacion
-     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 19/01/2016
-     * @param type $user
-     */
-    private function sendWelcomeEmail($user) {
-        $message = \Swift_Message::newInstance()
-                ->setSubject($this->get('translator')->trans('backend.welcome_email.subject'))
-                ->setFrom('myagilescrum@gmail.com')
-                ->setTo($user->getEmail())
-                ->setBody(
-                $this->renderView(
-                        'FrontendBundle:Default:welcomeEmail.html.twig', array('user' => $user,
-                            'userId' => base64_encode($user->getId()))
-                ), 'text/html'
-                )
-        ;
-        $this->get('mailer')->send($message);
     }
 
 }

@@ -15,13 +15,13 @@
             <div class="container-fluid">
                 <h1>{{ 'backend.welcome_email.subject'|trans }}</h1>
                 
-                <p>{{ 'backend.welcome_email.hello'|trans }} {{user.name}}, {{ 'backend.welcome_email.thanks'|trans }}</p>
+                <p>{{ 'backend.email.hello'|trans }} {{user.name}}, {{ 'backend.welcome_email.thanks'|trans }}</p>
                 
                 <p>{{ 'backend.welcome_email.clic_message'|trans }}</p>
                 
                 <a href="{{app.request.getSchemeAndHttpHost()~path('backend_login',{'confirmAccount':userId})}}">{{ 'backend.welcome_email.confirm_account'|trans }}</a>
                 
-                <p>{{ 'backend.welcome_email.footer'|trans }}</p>
+                <p>{{ 'backend.email.footer'|trans }}</p>
             </div>
         </div>
     </div>
