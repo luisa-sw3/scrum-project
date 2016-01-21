@@ -156,3 +156,7 @@ backend:
         subject: "New Proyect Invitation"
         invitation_description: "You have a new project invitation:"
         clic_message: "Click here to accept or reject this request"
+        
+    notifications:
+        no_pending_invitations: "No pending invitations"
+        invitation_to: "New invitation to"

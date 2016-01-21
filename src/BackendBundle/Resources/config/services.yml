@@ -8,6 +8,7 @@ services:
         class: BackendBundle\Services\AppSettings
         arguments: 
             entityManager: "@doctrine.orm.entity_manager"
+            tokenStorage: "@security.token_storage"
     
 #    email_manager:
 #        class: BackendBundle\Services\EmailManager

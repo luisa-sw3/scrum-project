@@ -156,6 +156,10 @@ backend:
         invitation_description: "Tienes una nueva invitación para participar en un proyecto:"
         clic_message: "Clic aquí para aceptar o rechazar esta solicitud"
         
+    notifications:
+        no_pending_invitations: "Sin invitaciones pendientes"
+        invitation_to: "Nueva invitación para"
+        
      
     
   

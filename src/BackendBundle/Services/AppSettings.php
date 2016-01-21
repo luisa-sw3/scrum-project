@@ -3,14 +3,20 @@
 namespace BackendBundle\Services;
 
 use Doctrine\ORM\EntityManager;
-use BackendBundle\Entity\Settings;
+use BackendBundle\Entity as Entity;
 
 class AppSettings {
 
     private $em;
+    private $tokenStorage;
+    private $user;
 
-    public function __construct(EntityManager $em) {
+    public function __construct(EntityManager $em, $tokenStorage) {
         $this->em = $em;
+        $this->tokenStorage = $tokenStorage;
+        if ($this->tokenStorage->getToken()) {
+            $this->user = $this->tokenStorage->getToken()->getUser();
+        }
     }
 
     /**
@@ -22,14 +28,29 @@ class AppSettings {
         $settings = $this->em->getRepository('BackendBundle:Settings')->findOneBy(array(), array());
 
         if (!$settings) {
-            $settings = new Settings();
-            $settings->setDateFormat(Settings::DATE_FORMAT_1);
-            $settings->setHourFormat(Settings::HOUR_FORMAT_1);
+            $settings = new Entity\Settings();
+            $settings->setDateFormat(Entity\Settings::DATE_FORMAT_1);
+            $settings->setHourFormat(Entity\Settings::HOUR_FORMAT_1);
             $this->em->persist($settings);
             $this->em->flush();
         }
-
         return $settings;
+    }
+
+    /**
+     * Permite obtener el listado de invitaciones pendientes a proyectos
+     * para el usuario logueado
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 20/01/2016
+     * @return array[Entity\ProjectInvitation] listado de invitaciones pendientes
+     */
+    public function getPendingInvitations() {
+        $pendingInvitations = array();
+        if ($this->user) {
+            $search = array('user' => $this->user->getId(), 'status' => Entity\ProjectInvitation::STATUS_ACTIVE);
+            $order = array('date' => 'ASC');
+            $pendingInvitations = $this->em->getRepository('BackendBundle:ProjectInvitation')->findBy($search, $order);
+        }
+        return $pendingInvitations;
     }
 
 }
