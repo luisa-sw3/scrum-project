@@ -22,6 +22,7 @@ class AppSettings {
     /**
      * Permite obtener una instancia con las configuraciones del proyecto
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
+     * @return \BackendBundle\Entity\Settings instancia de las configuraciones
      */
     public function getSettings() {
 

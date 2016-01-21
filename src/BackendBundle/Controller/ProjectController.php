@@ -5,8 +5,8 @@ namespace BackendBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use BackendBundle\Entity\Project;
 use BackendBundle\Form\ProjectType;
+use BackendBundle\Entity as Entity;
 
 /**
  * Project controller.
@@ -36,7 +36,7 @@ class ProjectController extends Controller
      */
     public function newAction(Request $request)
     {
-        $project = new Project();
+        $project = new Entity\Project();
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
 
@@ -45,6 +45,13 @@ class ProjectController extends Controller
             
             $project->setUserOwner($this->getUser());
             $em->persist($project);
+            
+            //asociamos el usuario al proyecto que acaba de crear
+            $userProject = new Entity\UserProject();
+            $userProject->setProject($project);
+            $userProject->setUser($this->getUser());
+            $em->persist($userProject);
+            
             $em->flush();
             
             $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.project.creation_success_message'));
@@ -62,7 +69,7 @@ class ProjectController extends Controller
      * Finds and displays a Project entity.
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
      */
-    public function showAction(Project $project)
+    public function showAction(Entity\Project $project)
     {
         $deleteForm = $this->createDeleteForm($project);
 
@@ -77,7 +84,7 @@ class ProjectController extends Controller
      * Displays a form to edit an existing Project entity.
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
      */
-    public function editAction(Request $request, Project $project)
+    public function editAction(Request $request, Entity\Project $project)
     {
         $deleteForm = $this->createDeleteForm($project);
         $editForm = $this->createForm(ProjectType::class, $project);
@@ -104,7 +111,7 @@ class ProjectController extends Controller
      * Deletes a Project entity.
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
      */
-    public function deleteAction(Request $request, Project $project)
+    public function deleteAction(Request $request, Entity\Project $project)
     {
         $form = $this->createDeleteForm($project);
         $form->handleRequest($request);
@@ -122,10 +129,10 @@ class ProjectController extends Controller
     /**
      * Creates a form to delete a Project entity.
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
-     * @param Project $project The Project entity
+     * @param Entity\Project $project The Project entity
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Project $project)
+    private function createDeleteForm(Entity\Project $project)
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('backend_projects_delete', array('id' => $project->getId())))

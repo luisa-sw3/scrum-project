@@ -44,7 +44,7 @@
                             {{ userProject.user.email }}
                         </td>
                         <td>
-                            {{ userProject.assignationDate(dateFormat) }}
+                            {{ userProject.assignationDate|date(dateFormat) }}
                         </td>
                         <td>
                             {{ userProject.role }}
