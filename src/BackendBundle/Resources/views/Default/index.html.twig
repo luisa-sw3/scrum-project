@@ -25,7 +25,7 @@
                             <i class="fa fa-archive fa-5x"></i>
                         </div>
                         <div class="col-xs-9 text-right">
-                            <div class="huge">{#{{client_service.getCountClients()}}#}10</div>
+                            <div class="huge">{{ app_settings.getProjectsByUser()|length }}</div>
                             <div>{{'backend.project.projects'|trans}}</div>
                         </div>
                     </div>

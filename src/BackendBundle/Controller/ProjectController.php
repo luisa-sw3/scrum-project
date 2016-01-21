@@ -21,8 +21,7 @@ class ProjectController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
-        $search = array('userOwner' => $this->getUser()->getId());
-        $projects = $em->getRepository('BackendBundle:Project')->findBy($search);
+        $projects = $em->getRepository('BackendBundle:Project')->findProjectsByUser($this->getUser()->getId());
 
         return $this->render('BackendBundle:Project:index.html.twig', array(
             'projects' => $projects,

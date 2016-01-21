@@ -10,7 +10,7 @@ use Util\Util;
  * Project
  * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 23/12/2015
  * @ORM\Table(name="project")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="BackendBundle\Entity\ProjectRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class Project {

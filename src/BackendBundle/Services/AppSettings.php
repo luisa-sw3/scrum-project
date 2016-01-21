@@ -53,5 +53,20 @@ class AppSettings {
         }
         return $pendingInvitations;
     }
+    
+    /**
+     * Permite obtener el listado de projectos que tiene un usuario asociado
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 21/01/2016
+     * @return array[Entity\UserProject] listado de proyectos
+     */
+    public function getProjectsByUser() {
+        $projects = array();
+        if ($this->user) {
+            $search = array('user' => $this->user->getId());
+            $order = array('assignationDate' => 'DESC');
+            $projects = $this->em->getRepository('BackendBundle:UserProject')->findBy($search, $order);
+        }
+        return $projects;
+    }
 
 }
