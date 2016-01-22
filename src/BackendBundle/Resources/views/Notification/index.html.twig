@@ -1,0 +1,110 @@
+{% extends 'BackendBundle:Default:main.html.twig' %}
+{% block title %}{{'backend.notification.notifications'|trans}}{% endblock %}
+
+{% block content %}
+    
+    <!-- Page Heading -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                {{'backend.notification.notifications'|trans}}
+                <a href="{{ app.request.headers.get('referer') }}" class="btn btn-default pull-right">{{'backend.global.back'|trans}}</a>
+            </h1>
+            {% set item1 = {'text': 'backend.notification.notifications'|trans, 'icon':'fa fa-info-circle'} %}
+            {% set items = [item1] %}
+            {{ filters.breadcrum(items) }}
+        </div>
+    </div>
+    <!-- /.row -->
+    {{ filters.showMessage('messageSuccess', 'success')}}
+    {{ filters.showMessage('messageError', 'danger')}}
+    
+    <div class="table-responsive">
+        <legend>{{'backend.project_invitation.pending_invitations'|trans}}</legend>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>{{ 'backend.global.date'|trans }}</th>
+                    <th>{{ 'backend.project.name'|trans }}</th>
+                    <th>{{ 'backend.user_project.designed_role'|trans }}</th>
+                    <th>{{ 'backend.project_invitation.invited_by'|trans }}</th>
+                    <th>{{ 'backend.global.options'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% set dateFormat = app_settings.getSettings.fullDateFormat %}
+            {% for invitation in invitations %}
+                <tr>
+                    <td>{{ invitation.date|date(dateFormat) }}</td>
+                    <td>{{ invitation.project.name }}</td>
+                    <td>{{ invitation.role.name }}</td>
+                    <td>{{ invitation.userOwner }}</td>
+                    <td>
+                        <a class="btn btn-success btn-sm" title="{{ 'backend.project_invitation.accept'|trans }}" href="{{ path('backend_notifications_accept',{'id':invitation.id}) }}">
+                            <i class="fa fa-check"></i>
+                        </a>
+                        <a class="btn btn-danger btn-sm reject-invitation" invitation-id="{{invitation.id}}" title="{{ 'backend.project_invitation.reject'|trans }}" href="javascript:void(0);">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">{{ 'backend.project_invitation.empty_list'|trans }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {# Codigo para rechazar invitaciones pendientes #}
+    $(".reject-invitation").click(function () {
+        var object = $(this);
+        var invitationId = object.attr('invitation-id');
+
+        bootbox.confirm({
+            message: "{{'backend.project_invitation.reject_warning'|trans}}",
+            buttons: {
+                'cancel': {
+                    label: '{{'backend.global.cancel' | trans}}',
+                    className: 'btn-default'
+                },
+                'confirm': {
+                    label: '{{'backend.project_invitation.reject' | trans}}',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+
+                if (result == true)
+                {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{path('backend_notifications_reject')}}",
+                        dataType: 'json',
+                        data: {invitationId: invitationId},
+                        success: function (r)
+                        {
+                            if (r.result == '__OK__') {
+                                window.location.reload();
+                            } else {
+                                bootbox.alert(r.msg);
+                            }
+                        },
+                        error: function (r)
+                        {
+                            bootbox.alert("{{'backend.global.unknown_error'|trans}}")
+                        }
+                    })
+                }
+            }
+        });
+    });
+    
+    
+    {% if rejectInvitation > 0 %}
+        $( ".reject-invitation[invitation-id='{{rejectInvitation}}']" ).trigger('click');
+    {% endif %}
+{% endblock %}

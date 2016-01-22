@@ -1,0 +1,11 @@
+backend_notifications:
+    path:     /
+    defaults: { _controller: BackendBundle:Notification:index }
+
+backend_notifications_accept:
+    path:     /{id}/accept
+    defaults: { _controller: BackendBundle:Notification:accept }
+    
+backend_notifications_reject:
+    path:     /reject
+    defaults: { _controller: BackendBundle:Notification:reject }

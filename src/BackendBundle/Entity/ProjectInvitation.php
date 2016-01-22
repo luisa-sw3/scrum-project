@@ -22,6 +22,7 @@ class ProjectInvitation {
     const STATUS_CANCELED = 0;
     const STATUS_ACTIVE = 1;
     const STATUS_ACCEPTED = 2;
+    const STATUS_REJECTED = 3;
     
     /**
      * @ORM\Id

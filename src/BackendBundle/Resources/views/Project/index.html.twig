@@ -64,6 +64,10 @@
                         </a>
                     </td>
                 </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">{{'backend.project.empty_list'|trans}}</td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>

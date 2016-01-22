@@ -28,3 +28,7 @@ backend_projects:
 backend_settings:
         resource: "@BackendBundle/Resources/config/routing/setting.yml"
         prefix:   /settings
+        
+backend_notifications:
+        resource: "@BackendBundle/Resources/config/routing/notification.yml"
+        prefix:   /notifications

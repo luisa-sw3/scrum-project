@@ -71,18 +71,20 @@
             
             <ul class="dropdown-menu alert-dropdown" style="width: 220px;">
                 {% for invitation in invitations %}    
-                    <li>
-                        <a href="#">{{'backend.notifications.invitation_to'|trans}} :<strong><br>{{ invitation.project.name }}</strong>  <span class="label label-default"></span></a>
+                    <li class="notification">
+                        <a href="#">{{'backend.project_invitation.invitation_to'|trans}} :<strong><br>{{ invitation.project.name }}</strong></a>
+                        <a href="{{ path('backend_notifications_accept',{'id':invitation.id}) }}" class="option"><span class="label label-success">{{'backend.global.accept'|trans}}</span></a>
+                        <a href="{{ path('backend_notifications',{'rejectInvitation':invitation.id}) }}" class="option"><span class="label label-danger">{{'backend.global.reject'|trans}}</span></a>
                     </li>
                 {% else %}
                     <li>
-                        <a href="#">{{'backend.notifications.no_pending_invitations'|trans}}</a>
+                        <a href="#">{{'backend.project_invitation.no_pending_invitations'|trans}}</a>
                     </li>
                 {% endfor %}
-                {#<li class="divider"> hey</li>
+                <li class="divider"></li>
                 <li>
-                    <a href="#">View All</a>
-                </li>#}
+                    <a href="{{ path('backend_notifications') }}">{{'backend.project_invitation.view_all'|trans}}</a>
+                </li>
             </ul>
         </li>
         

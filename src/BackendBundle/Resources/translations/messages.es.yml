@@ -35,28 +35,8 @@ backend:
         month: "Mes"
         day: "Dia"
         date: "Fecha"
-    
-    client:
-        new: "Nuevo Cliente"
-        edit: "Editar Cliente"
-        clients: "Clientes"
-        view_clients: "Ver Clientes"
-        name: "Nombre Completo"
-        company_name: "Compañía/ Empresa"
-        phone: "Teléfono"
-        email: "Correo Electrónico"
-        country: "País"
-        city: "Ciudad"
-        observations: "Observaciones"
-        status: "Estado"
-        status_active: "Activo"
-        status_inactive: "Inactivo"
-        status_locked: "Bloqueado"
-        empty_list: "Ningún cliente"
-        not_found: "Cliente no encontrado"
-        creation_success_message: "Cliente creado exitosamente"
-        update_success_message: "Cliente actualizado exitosamente"
-        client_data: "Datos del Cliente"
+        accept: "Aceptar"
+        reject: "Rechazar"
         
     user:
         edit_profile: "Editar Perfil"
@@ -95,6 +75,7 @@ backend:
         update_success_message: "Proyecto actualizado exitosamente"
         delete_success_message: "Proyecto eliminado exitosamente"
         not_found_message: "Proyecto no encontrado"
+        empty_list: "Ningun proyecto"
         
     setting:
         settings: "Configuraciones"
@@ -137,8 +118,18 @@ backend:
         empty_list: "No hay invitaciones pendientes"
         cancel_invitation: "Cancelar Invitación"
         cancel_warning: "Estas seguro que deseas cancelar esta invitación?"
+        reject_warning: "Estas seguro que deseas rechazar esta invitación?"
         error_canceling: "Error cancelando la invitación"
+        error_rejecting: "Error rechazando la invitación"
         not_found_message: "Invitación no encontrada"
+        no_pending_invitations: "Sin invitaciones pendientes"
+        invitation_to: "Nueva invitación para"
+        view_all: "Ver todas"
+        invited_by: "Invitado por"
+        accept: "Aceptar Invitación"
+        reject: "Rechazar Invitación"
+        invitation_not_found: "Invitación no encontrada"
+        invitation_accepted_message: "Invitación aceptada exitosamente"
       
     email:
         hello: "Hola"
@@ -156,9 +147,9 @@ backend:
         invitation_description: "Tienes una nueva invitación para participar en un proyecto:"
         clic_message: "Clic aquí para aceptar o rechazar esta solicitud"
         
-    notifications:
-        no_pending_invitations: "Sin invitaciones pendientes"
-        invitation_to: "Nueva invitación para"
+    notification:
+        notifications: "Notificaciones"
+        
         
      
     

@@ -35,28 +35,8 @@ backend:
         month: "Month"
         day: "Day"
         date: "Date"
-        
-    client:
-        new: "New Client"
-        edit: "Edit Client"
-        clients: "Clients"
-        view_clients: "View Clients"
-        name: "Full Name"
-        company_name: "Company Name"
-        phone: "Phone"
-        email: "Email"
-        country: "Country"
-        city: "City"
-        observations: "Observations"
-        status: "Status"
-        status_active: "Active"
-        status_inactive: "Inactive"
-        status_locked: "Locked"
-        empty_list: "No clients"
-        not_found: "Client not found"
-        creation_success_message: "Client created successfully"
-        update_success_message: "Client updated successfully"
-        client_data: "Client Data"
+        accept: "Accept"
+        reject: "Reject"
     
     user:
         edit_profile: "Edit Profile"
@@ -95,7 +75,7 @@ backend:
         update_success_message: "Project updated successfully"
         delete_success_message: "Project deleted successfully"
         not_found_message: "Project not found"
-        
+        empty_list: "No projects"
         
     setting:
         settings: "Settings"
@@ -138,8 +118,18 @@ backend:
         empty_list: "No pending invitations"
         cancel_invitation: "Cancel Invitation"
         cancel_warning: "Are you sure you want to cancel this invitation?"
+        reject_warning: "Are you sure you want to reject this invitation?"
         error_canceling: "Error while canceling invitation"
+        error_rejecting: "Error while rejecting invitation"
         not_found_message: "Invitation not found"
+        no_pending_invitations: "No pending invitations"
+        invitation_to: "New invitation to"
+        view_all: "View All"
+        invited_by: "Invited by"
+        accept: "Accept Invitation"
+        reject: "Reject Invitation"
+        invitation_not_found: "Invitation not found"
+        invitation_accepted_message: "Invitation accepted successfully"
        
     email:
         hello: "Hi"
@@ -157,6 +147,6 @@ backend:
         invitation_description: "You have a new project invitation:"
         clic_message: "Click here to accept or reject this request"
         
-    notifications:
-        no_pending_invitations: "No pending invitations"
-        invitation_to: "New invitation to"
+    notification:
+        notifications: "Notifications"
+        

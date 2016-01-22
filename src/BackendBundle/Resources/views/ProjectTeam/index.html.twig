@@ -50,7 +50,7 @@
                             {{ userProject.role }}
                         </td>
                         <td>
-                            <a class="btn btn-default btn-sm cancel-assign" user-project-id="{{userProject.id}}" title="{{ 'backend.user_project.unassign_user'|trans }}" href="javascript:void(0);">
+                            <a class="btn btn-danger btn-sm cancel-assign" user-project-id="{{userProject.id}}" title="{{ 'backend.user_project.unassign_user'|trans }}" href="javascript:void(0);">
                                 <i class="fa fa-close"></i>
                             </a>
                         </td>
@@ -93,7 +93,7 @@
                             {{ invitation.role }}
                         </td>
                         <td>
-                            <a class="btn btn-default btn-sm cancel-invitation" invitation-id="{{invitation.id}}" title="{{ 'backend.project_invitation.cancel_invitation'|trans }}" href="javascript:void(0);">
+                            <a class="btn btn-danger btn-sm cancel-invitation" invitation-id="{{invitation.id}}" title="{{ 'backend.project_invitation.cancel_invitation'|trans }}" href="javascript:void(0);">
                                 <i class="fa fa-close"></i>
                             </a>
                         </td>
@@ -131,7 +131,7 @@
                     },
                     'confirm': {
                         label: '{{'backend.global.delete' | trans}}',
-                        className: 'btn-primary'
+                        className: 'btn-danger'
                     }
                 },
                 callback: function (result) {
@@ -175,7 +175,7 @@
                     },
                     'confirm': {
                         label: '{{'backend.user_project.unassign_user' | trans}}',
-                        className: 'btn-primary'
+                        className: 'btn-danger'
                     }
                 },
                 callback: function (result) {
