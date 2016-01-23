@@ -41,6 +41,13 @@ class Role {
      * @ORM\Column(name="role_is_manually_added", type="boolean", nullable=true)
      */
     protected $isManuallyAdded;
+    
+    /**
+     * Proyecto al que pertenece el Rol
+     * @ORM\ManyToOne(targetEntity="Project")
+     * @ORM\JoinColumn(name="role_project_id", referencedColumnName="proj_id", nullable=true)
+     */
+    protected $project;
 
     function getId() {
         return $this->id;
@@ -68,6 +75,14 @@ class Role {
 
     function setIsManuallyAdded($isManuallyAdded) {
         $this->isManuallyAdded = $isManuallyAdded;
+    }
+    
+    function getProject() {
+        return $this->project;
+    }
+
+    function setProject($project) {
+        $this->project = $project;
     }
 
     public function __toString() {

@@ -92,6 +92,7 @@ backend:
         update_success_message: "Role updated successfully"
         not_found_message: "Role not found"
         select_role: "Select Role..."
+        no_roles: "No roles in project yet"
     
     user_project:
         project_team: "Project Team"
@@ -111,7 +112,7 @@ backend:
         error_cancel_assign: "Error while canceling user assignation"
         cancel_warning: "Are you sure you want to remove this user from the project?"
         error_edit_role: "Error while updating user role"
-        
+      
     project_invitation:
         pending_invitations: "Pending Invitations"
         empty_list: "No pending invitations"

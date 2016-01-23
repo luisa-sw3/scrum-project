@@ -1,14 +1,14 @@
-backend_settings_user_roles:
+backend_projects_roles:
     path:     /
     defaults: { _controller: "BackendBundle:UserRole:index" }
     methods:  GET
     
-backend_settings_user_roles_new:
+backend_projects_roles_new:
     path:     /new
     defaults: { _controller: "BackendBundle:UserRole:new" }
     methods:  [GET, POST]
     
-backend_settings_user_roles_edit:
+backend_projects_roles_edit:
     path:     /{id}/edit
     defaults: { _controller: "BackendBundle:UserRole:edit" }
     methods:  [GET, POST]

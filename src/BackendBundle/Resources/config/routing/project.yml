@@ -23,6 +23,10 @@ backend_projects_delete:
     defaults: { _controller: "BackendBundle:Project:delete" }
     methods:  DELETE
     
+backend_projects_roles:
+        resource: "@BackendBundle/Resources/config/routing/proyectRoles.yml"
+        prefix:   /{projectId}/roles    
+
 backend_project_team:
         resource: "@BackendBundle/Resources/config/routing/projectTeam.yml"
         prefix:   /{id}/projectTeam

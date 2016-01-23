@@ -13,12 +13,14 @@ class EditUserRoleType extends AbstractType {
 
     private $container;
     private $translator;
+    protected $projectId;
     
     const FORM_PREFIX = 'backendbundle_user_project_role_type'; 
 
     public function __construct(Container $container) {
         $this->container = $container;
         $this->translator = $this->container->get('translator');
+        $this->projectId = 'd77b362c-c0a2-11e5-a099-0f99d2511fa6';
     }
 
     /**
@@ -26,11 +28,13 @@ class EditUserRoleType extends AbstractType {
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
+        
         $builder
                 ->add('role', EntityType::class, array(
                     'class' => 'BackendBundle:Role',
-                    'query_builder' => function (EntityRepository $er) {
+                    'query_builder' => function (EntityRepository $er){
                         return $er->createQueryBuilder('r')
+                                //->where("r.project = '".$this->projectId."'")
                                 ->orderBy('r.name', 'ASC');
                     },
                     'label' => $this->translator->trans('backend.user_project.designed_role'),

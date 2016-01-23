@@ -92,6 +92,7 @@ backend:
         update_success_message: "Rol actualizado exitosamente"
         not_found_message: "Rol no encontrado"
         select_role: "Seleccione el Rol..."
+        no_roles: "Aún no hay roles para este proyecto"
         
     user_project:
         project_team: "Equipo del Proyecto"

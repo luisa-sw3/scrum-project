@@ -1,4 +1,4 @@
-{% extends 'BackendBundle:Default:mainFancybox.html.twig' %}
+{% extends 'BackendBundle:Default:main.html.twig' %}
 {% block title %}{{'backend.user_role.new'|trans}}{% endblock %}
 
 {% block content %}
@@ -8,16 +8,18 @@
                 {{'backend.user_role.new'|trans}}
                 <a href="{{ app.request.headers.get('referer') }}" class="btn btn-default pull-right">{{'backend.global.back'|trans}}</a>
             </h1>
-            {% set item1 = {'text': 'backend.setting.settings'|trans, 'url':path('backend_settings'), 'icon':'fa fa-cog'} %}
-            {% set item2 = {'text': 'backend.user_role.user_roles'|trans, 'url':path('backend_settings_user_roles'), 'icon':'fa fa-users'} %}
-            {% set item3 = {'text': 'backend.user_role.new'|trans, 'icon':'fa fa-star-o'} %}
-            {% set items = [item1, item2, item3] %}
+            
+            {% set item1 = {'text': 'backend.project.projects'|trans, 'url':path('backend_projects'),'icon':'fa fa-archive'} %}
+            {% set item2 = {'text': project.name, 'url':path('backend_projects_show',{'id':project.id}),'icon':'fa fa-eye'} %}
+            {% set item3 = {'text': 'backend.user_role.user_roles'|trans, 'url':path('backend_projects_roles',{'projectId':project.id}), 'icon':'fa fa-users'} %}
+            {% set item4 = {'text': 'backend.user_role.new'|trans, 'icon':'fa fa-star-o'} %}
+            {% set items = [item1, item2, item3, item4] %}
             {{ filters.breadcrum(items) }}
         </div>
     </div>
         
     <div class="row">
-        {{ form_start(form, {'action': path('backend_settings_user_roles_new'), 'method': 'POST'}) }}
+        {{ form_start(form, {'action': path('backend_projects_roles_new',{'projectId':project.id}), 'method': 'POST'}) }}
             <div class="col-lg-6">
                 <div class="form-group">
                     {{ form_label(form.name)}}

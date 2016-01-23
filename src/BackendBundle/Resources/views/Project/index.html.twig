@@ -60,6 +60,9 @@
                         <a class="btn btn-default btn-sm" title="{{ 'backend.project.edit'|trans }}" href="{{ path('backend_projects_edit', { 'id': project.id }) }}">
                             <i class="fa fa-pencil"></i>
                         </a>
+                        <a class="btn btn-default btn-sm" title="{{ 'backend.user_role.user_roles'|trans }}" href="{{ path('backend_projects_roles', { 'projectId': project.id }) }}">
+                            <i class="fa fa-user"></i>
+                        </a>
                         <a class="btn btn-default btn-sm" title="{{ 'backend.user_project.project_team'|trans }}" href="{{ path('backend_project_team', { 'id': project.id }) }}">
                             <i class="fa fa-users"></i>
                         </a>
