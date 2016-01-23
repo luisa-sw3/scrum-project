@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use BackendBundle\Entity as Entity;
 use BackendBundle\Form\ProjectInvitationType;
+use BackendBundle\Form\EditUserRoleType;
 use Util\Util;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -35,6 +36,18 @@ class ProjectTeamController extends Controller {
         //buscamos los usuarios que ya estan asignados al proyecto
         $users = $em->getRepository('BackendBundle:UserProject')->findBy($search, $order);
 
+        $forms = array();
+        $i = 0;
+        foreach ($users as $user) {
+            
+            $form = $this->container
+                    ->get('form.factory')
+                    ->createNamedBuilder(EditUserRoleType::FORM_PREFIX . $i, EditUserRoleType::class, $user)
+                    ->getForm()
+                    ->createView();
+            array_push($forms, $form);
+            $i++;
+        }
 
         //buscamos las invitaciones que aun no han confirmado
         $search = array('project' => $project->getId(), 'status' => Entity\ProjectInvitation::STATUS_ACTIVE);
@@ -43,6 +56,7 @@ class ProjectTeamController extends Controller {
 
         return $this->render('BackendBundle:ProjectTeam:index.html.twig', array(
                     'users' => $users,
+                    'forms' => $forms,
                     'invitations' => $invitations,
                     'project' => $project,
                     'menu' => 'menu_projects'
@@ -92,7 +106,7 @@ class ProjectTeamController extends Controller {
 
                     //enviamos el correo de notificacion
                     $this->get('email_manager')->sendProjectInvitationEmail($projectInvitation);
-                    
+
                     $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.user_project.message_invitation_send'));
                     $closeFancy = true;
                 } else {
@@ -182,7 +196,7 @@ class ProjectTeamController extends Controller {
         $response['msg'] = "";
 
         $userProject = $em->getRepository('BackendBundle:UserProject')->find($userProjectId);
-        if (!$userProject) {
+        if (!$userProject || ($userProject && $userProject->getProject()->getId() != $id)) {
             $response['result'] = "__KO__";
             $response['msg'] = $this->get('translator')->trans('backend.user.not_found_message');
             return new JsonResponse($response);
@@ -194,6 +208,49 @@ class ProjectTeamController extends Controller {
         } catch (\Exception $exc) {
             $response['result'] = "__KO__";
             $response['msg'] = $this->get('translator')->trans('backend.user_project.error_cancel_assign');
+        }
+
+        return new JsonResponse($response);
+    }
+    
+    
+    /**
+     * Esta funcion permite editar el que el usuario tiene asignado en un proyecto
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 23/01/2016
+     * @param Request $request datos de la solicitud
+     * @param string $id identificador del proyecto
+     * @return JsonResponse JSON con mensaje de respuesta
+     */
+    public function editUserRoleAction(Request $request, $id) {
+
+        $em = $this->getDoctrine()->getManager();
+        $userProjectId = $request->request->get('userProjectId');
+        $roleId = $request->request->get('roleId');
+
+        $response['result'] = "__OK__";
+        $response['msg'] = "";
+
+        $userProject = $em->getRepository('BackendBundle:UserProject')->find($userProjectId);
+        if (!$userProject || ($userProject && $userProject->getProject()->getId() != $id)) {
+            $response['result'] = "__KO__";
+            $response['msg'] = $this->get('translator')->trans('backend.user.not_found_message');
+            return new JsonResponse($response);
+        }
+        
+        $role = $em->getRepository('BackendBundle:Role')->find($roleId);
+        if (!$role) {
+            $response['result'] = "__KO__";
+            $response['msg'] = $this->get('translator')->trans('backend.user_role.not_found_message');
+            return new JsonResponse($response);
+        }
+
+        try {
+            $userProject->setRole($role);
+            $em->persist($userProject);
+            $em->flush();
+        } catch (\Exception $exc) {
+            $response['result'] = "__KO__";
+            $response['msg'] = $this->get('translator')->trans('backend.user_project.error_edit_role');
         }
 
         return new JsonResponse($response);

@@ -12,3 +12,8 @@ backend_project_team_delete_user:
     path:     /deleteUser
     defaults: { _controller: "BackendBundle:ProjectTeam:deleteUserProject" }
     methods:  [GET, POST]
+    
+backend_project_team_user_edit_role:
+    path:     /editRole
+    defaults: { _controller: "BackendBundle:ProjectTeam:editUserRole" }
+    methods:  [POST]

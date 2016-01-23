@@ -112,6 +112,7 @@ backend:
         already_assigned_message: "This user is already assigned to this project"
         error_cancel_assign: "Error while canceling user assignation"
         cancel_warning: "Are you sure you want to remove this user from the project?"
+        error_edit_role: "Error while updating user role"
         
     project_invitation:
         pending_invitations: "Pending Invitations"

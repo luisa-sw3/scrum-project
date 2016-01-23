@@ -112,6 +112,7 @@ backend:
         already_assigned_message: "Este usuario ya se encuentra asignado a este proyecto"
         error_cancel_assign: "Error al cancelar la asignación del usuario"
         cancel_warning: "Estas seguro que deseas eliminar este usuario del proyecto?"
+        error_edit_role: "Error al cambiar el rol del usuario"
         
     project_invitation:
         pending_invitations: "Invitaciones Pendientes"

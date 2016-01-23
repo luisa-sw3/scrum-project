@@ -47,7 +47,15 @@
                             {{ userProject.assignationDate|date(dateFormat) }}
                         </td>
                         <td>
-                            {{ userProject.role }}
+                            {% if forms[loop.index-1] is defined %}
+                                <div class="col-xs-10">
+                                    {{form_widget(forms[loop.index-1].role, {'attr':{'class':'form-control edit-role','user-project':userProject.id}})}}
+                                </div>
+                                <div class="col-xs-2">
+                                    <i class="fa fa-spinner fa-lg" style="display: none;"></i>
+                                    <i class="fa fa-check fa-lg" style="display: none;"></i>
+                                </div>
+                            {% endif %}
                         </td>
                         <td>
                             <a class="btn btn-danger btn-sm cancel-assign" user-project-id="{{userProject.id}}" title="{{ 'backend.user_project.unassign_user'|trans }}" href="javascript:void(0);">
@@ -155,12 +163,12 @@
                             {
                                 bootbox.alert("{{'backend.global.unknown_error'|trans}}")
                             }
-                        })
+                        });
                     }
                 }
             });
         });
-        
+
         {# Codigo para cancelar asignaciones a proyectos #}
         $(".cancel-assign").click(function () {
             var object = $(this);
@@ -204,4 +212,41 @@
                 }
             });
         });
+
+
+        {# Codigo para permitir la edicion de los roles de los usuarios en el proyecto #}
+        $(".edit-role").change(function () {
+            var object = $(this);
+            var userProjectId = object.attr('user-project');
+            var roleId = object.val();
+
+            var check = object.closest('div').next().find('.fa-check');
+            var spinner = object.closest('div').next().find('.fa-spinner');
+
+            spinner.css('display', '');
+            check.css('display', 'none');
+            $.ajax({
+                type: 'POST',
+                url: "{{path('backend_project_team_user_edit_role',{'id':project.id})}}",
+                dataType: 'json',
+                data: {userProjectId: userProjectId, roleId: roleId},
+                success: function (r)
+                {
+                    spinner.css('display', 'none');
+                    if (r.result == '__OK__') {
+                        check.css('display', '');
+                        check.fadeOut(1200);
+                    } else {
+                        bootbox.alert(r.msg);
+                    }
+                },
+                error: function (r)
+                {
+                    spinner.css('display', 'none');
+                    bootbox.alert("{{'backend.global.unknown_error'|trans}}")
+                }
+            });
+
+        });
+
     {% endblock %}

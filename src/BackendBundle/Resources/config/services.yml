@@ -60,3 +60,11 @@ services:
             - "@service_container"
         tags:
             - { name: form.type }
+            
+    #servicio para formulario de roles de usuario en un proyecto
+    backend.form.type.user_role:
+        class: BackendBundle\Form\EditUserRoleType
+        arguments:
+            - "@service_container"
+        tags:
+            - { name: form.type }
