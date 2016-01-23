@@ -15,6 +15,9 @@
         </div>
     </div>
 
+    {% set dateFormat = project.settings.dateFormat %}
+    {% set fullDateFormat = project.settings.fullDateFormat %}
+        
     <div class="table-responsive">
         <table class="table table-hover">
             <tbody>
@@ -32,15 +35,15 @@
                 </tr>
                 <tr>
                     <th>{{ 'backend.project.creation_date'|trans }}</th>
-                    <td>{% if project.creationDate %}{{ project.creationDate|date(app_settings.getSettings().fullDateFormat) }}{% endif %}</td>
+                    <td>{% if project.creationDate %}{{ project.creationDate|date(fullDateFormat) }}{% endif %}</td>
                 </tr>
                 <tr>
                     <th>{{ 'backend.project.start_date'|trans }}</th>
-                    <td>{% if project.startDate %}{{ project.startDate|date(app_settings.getSettings().dateFormat) }}{% endif %}</td>
+                    <td>{% if project.startDate %}{{ project.startDate|date(dateFormat) }}{% endif %}</td>
                 </tr>
                 <tr>
                     <th>{{ 'backend.project.estimated_date'|trans }}</th>
-                    <td>{% if project.estimatedDate %}{{ project.estimatedDate|date(app_settings.getSettings().dateFormat) }}{% endif %}</td>
+                    <td>{% if project.estimatedDate %}{{ project.estimatedDate|date(dateFormat) }}{% endif %}</td>
                 </tr>
                 <tr>
                     <th>{{ 'backend.global.consecutive'|trans }}</th>

@@ -63,6 +63,13 @@ class Project {
      */
     protected $userOwner;
     
+    /**
+     * Configuraciones del proyecto
+     * @ORM\ManyToOne(targetEntity="Settings")
+     * @ORM\JoinColumn(name="proj_settings_id", referencedColumnName="sett_id", nullable=true)
+     */
+    protected $settings;
+    
     function getId() {
         return $this->id;
     }
@@ -113,6 +120,14 @@ class Project {
 
     function setUserOwner(User $userOwner) {
         $this->userOwner = $userOwner;
+    }
+    
+    function getSettings() {
+        return $this->settings;
+    }
+
+    function setSettings($settings) {
+        $this->settings = $settings;
     }
 
     public function __toString() {

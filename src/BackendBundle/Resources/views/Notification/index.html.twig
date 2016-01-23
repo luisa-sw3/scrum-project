@@ -32,7 +32,7 @@
                 </tr>
             </thead>
             <tbody>
-            {% set dateFormat = app_settings.getSettings.fullDateFormat %}
+            {% set dateFormat = app_settings.getDefaultDateFormat() %}
             {% for invitation in invitations %}
                 <tr>
                     <td>{{ invitation.date|date(dateFormat) }}</td>

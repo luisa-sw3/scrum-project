@@ -79,10 +79,8 @@ backend:
         
     setting:
         settings: "Configuraciones"
-        general_settings: "Configuraciones Generales"
         date_format: "Formato de Fecha"
         hour_format: "Formato de Hora"
-        settings_updated: "Configuraciones actualizadas"
         
     user_role:
         user_roles: "Roles de Usuario"

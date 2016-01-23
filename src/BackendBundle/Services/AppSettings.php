@@ -20,25 +20,6 @@ class AppSettings {
     }
 
     /**
-     * Permite obtener una instancia con las configuraciones del proyecto
-     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
-     * @return \BackendBundle\Entity\Settings instancia de las configuraciones
-     */
-    public function getSettings() {
-
-        $settings = $this->em->getRepository('BackendBundle:Settings')->findOneBy(array(), array());
-
-        if (!$settings) {
-            $settings = new Entity\Settings();
-            $settings->setDateFormat(Entity\Settings::DATE_FORMAT_1);
-            $settings->setHourFormat(Entity\Settings::HOUR_FORMAT_1);
-            $this->em->persist($settings);
-            $this->em->flush();
-        }
-        return $settings;
-    }
-
-    /**
      * Permite obtener el listado de invitaciones pendientes a proyectos
      * para el usuario logueado
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 20/01/2016
@@ -53,7 +34,7 @@ class AppSettings {
         }
         return $pendingInvitations;
     }
-    
+
     /**
      * Permite obtener el listado de projectos que tiene un usuario asociado
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 21/01/2016
@@ -67,6 +48,18 @@ class AppSettings {
             $projects = $this->em->getRepository('BackendBundle:UserProject')->findBy($search, $order);
         }
         return $projects;
+    }
+
+    public function getDefaultDateFormat() {
+        return Entity\Settings::DATE_FORMAT_1;
+    }
+    
+    public function getDefaultHourFormat() {
+        return Entity\Settings::HOUR_FORMAT_1;
+    }
+    
+    public function getDefaultFullDateFormat() {
+        return Entity\Settings::DATE_FORMAT_1.' '.Entity\Settings::DATE_FORMAT_1;
     }
 
 }

@@ -32,8 +32,9 @@
                 </tr>
             </thead>
             <tbody>
-            {% set dateFormat = app_settings.getSettings.dateFormat %}
+            
             {% for project in projects %}
+                {% set dateFormat = project.settings.dateFormat %}
                 <tr>
                     <td>{{ project.name }}</td>
                     <td>{{ project.description|raw }}</td>

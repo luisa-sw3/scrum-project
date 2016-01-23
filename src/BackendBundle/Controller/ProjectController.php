@@ -5,6 +5,7 @@ namespace BackendBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use BackendBundle\Form\ProjectType;
+use BackendBundle\Form\SettingType;
 use BackendBundle\Entity as Entity;
 
 /**
@@ -36,9 +37,17 @@ class ProjectController extends Controller {
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
 
+        $settings = new Entity\Settings();
+        $settingsForm = $this->createForm(SettingType::class, $settings);
+        $settingsForm->handleRequest($request);
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
+            //creamos las configuraciones del proyecto
+            $em->persist($settings);
+            
+            $project->setSettings($settings);
             $project->setUserOwner($this->getUser());
             $em->persist($project);
 
@@ -57,6 +66,7 @@ class ProjectController extends Controller {
         return $this->render('BackendBundle:Project:new.html.twig', array(
                     'project' => $project,
                     'form' => $form->createView(),
+                    'settings_form' => $settingsForm->createView(),
                     'menu' => 'menu_projects'
         ));
     }
@@ -84,6 +94,9 @@ class ProjectController extends Controller {
         $editForm = $this->createForm(ProjectType::class, $project);
         $editForm->handleRequest($request);
 
+        $settingsForm = $this->createForm(SettingType::class, $project->getSettings());
+        $settingsForm->handleRequest($request);
+        
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($project);
@@ -96,6 +109,7 @@ class ProjectController extends Controller {
         return $this->render('BackendBundle:Project:edit.html.twig', array(
                     'project' => $project,
                     'edit_form' => $editForm->createView(),
+                    'settings_form' => $settingsForm->createView(),
                     'delete_form' => $deleteForm->createView(),
                     'menu' => 'menu_projects'
         ));

@@ -7,6 +7,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type as Type;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
+use BackendBundle\Entity as Entity;
 
 class ProjectType extends AbstractType {
 
@@ -23,6 +26,17 @@ class ProjectType extends AbstractType {
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
+
+        $project = null;
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($builder) {
+            $form = $event->getForm();
+            $data = $event->getData();
+
+            if ($data instanceof Entity\Project) {
+                $project = $data;
+            }
+        });
+
         $builder
                 ->add('name', Type\TextType::class, array(
                     'required' => true,
@@ -40,7 +54,7 @@ class ProjectType extends AbstractType {
                         'month' => $this->translator->trans('backend.global.month'),
                         'day' => $this->translator->trans('backend.global.day')
                     ),
-                    'format' => $this->container->get('app_settings')->getSettings()->getPHPDateFormat(),
+                    'format' => ($project != null ? $project->getSettings()->getPHPDateFormat() : 'y-M-d'),
                 ))
                 ->add('estimatedDate', Type\DateType::class, array(
                     'required' => false,
@@ -50,7 +64,7 @@ class ProjectType extends AbstractType {
                         'month' => $this->translator->trans('backend.global.month'),
                         'day' => $this->translator->trans('backend.global.day')
                     ),
-                    'format' => $this->container->get('app_settings')->getSettings()->getPHPDateFormat(),
+                    'format' => ($project != null ? $project->getSettings()->getPHPDateFormat() : 'y-M-d'),
                 ))
         ;
     }
@@ -63,7 +77,7 @@ class ProjectType extends AbstractType {
             'data_class' => 'BackendBundle\Entity\Project'
         ));
     }
-    
+
     /**
      * @return string
      */

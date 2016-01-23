@@ -21,7 +21,7 @@
     {{ filters.showMessage('messageSuccess', 'success')}}
     {{ filters.showMessage('messageError', 'danger')}}
 
-    {% set dateFormat = app_settings.getSettings.dateFormat %}
+    {% set dateFormat = project.getSettings.dateFormat %}
     <div class="table-responsive">
         <legend>{{'backend.user_project.active_members'|trans}}</legend>
         <table class="table table-bordered table-hover">
@@ -86,7 +86,6 @@
                 </tr>
             </thead>
             <tbody>
-                {% set dateFormat = app_settings.getSettings.dateFormat %}
                 {% for invitation in invitations %}
                     <tr>
                         <td>{{ invitation.user.name }}</td>
