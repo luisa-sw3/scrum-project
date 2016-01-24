@@ -78,6 +78,7 @@ class ProjectTeamController extends Controller {
         }
 
         $projectInvitation = new Entity\ProjectInvitation();
+        $projectInvitation->setProject($project);
         $form = $this->createForm(ProjectInvitationType::class, $projectInvitation);
         $form->handleRequest($request);
 

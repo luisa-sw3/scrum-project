@@ -9,6 +9,9 @@ use Symfony\Component\Form\Extension\Core\Type as Type;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
+use BackendBundle\Entity\ProjectInvitation;
 
 class ProjectInvitationType extends AbstractType {
 
@@ -25,6 +28,27 @@ class ProjectInvitationType extends AbstractType {
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $data = $event->getData();
+            $form = $event->getForm();
+
+            if ($data instanceof ProjectInvitation) {
+                $project = $data->getProject();
+
+                $form->add('role', EntityType::class, array(
+                    'class' => 'BackendBundle:Role',
+                    'query_builder' => function (EntityRepository $er) use ($project) {
+                        return $er->createQueryBuilder('r')
+                                        ->where(($project != null ? "r.project = '" . $project->getId() . "'" : '1=1'))
+                                        ->orderBy('r.name', 'ASC');
+                    },
+                    'label' => $this->translator->trans('backend.user_project.invite_as'),
+                    'placeholder' => $this->translator->trans('backend.user_role.select_role'),
+                ));
+            }
+        });
+
         $builder
                 ->add('userId', Type\HiddenType::class, array(
                     'required' => false,
@@ -34,15 +58,6 @@ class ProjectInvitationType extends AbstractType {
                     'required' => true,
                     'mapped' => false,
                     'label' => $this->translator->trans('backend.user_project.email_name_lastname')
-                ))
-                ->add('role', EntityType::class, array(
-                    'class' => 'BackendBundle:Role',
-                    'query_builder' => function (EntityRepository $er) {
-                        return $er->createQueryBuilder('r')
-                                ->orderBy('r.name', 'ASC');
-                    },
-                    'label' => $this->translator->trans('backend.user_project.invite_as'),
-                    'placeholder' => $this->translator->trans('backend.user_role.select_role'),
                 ))
         ;
     }

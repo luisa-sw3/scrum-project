@@ -8,14 +8,17 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use BackendBundle\Entity\UserProject;
 
 class EditUserRoleType extends AbstractType {
 
     private $container;
     private $translator;
     protected $projectId;
-    
-    const FORM_PREFIX = 'backendbundle_user_project_role_type'; 
+
+    const FORM_PREFIX = 'backendbundle_user_project_role_type';
 
     public function __construct(Container $container) {
         $this->container = $container;
@@ -28,19 +31,29 @@ class EditUserRoleType extends AbstractType {
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        
-        $builder
-                ->add('role', EntityType::class, array(
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $data = $event->getData();
+            $form = $event->getForm();
+
+            if ($data instanceof UserProject) {
+
+                $project = $data->getProject();
+
+                $form->add('role', EntityType::class, array(
                     'class' => 'BackendBundle:Role',
-                    'query_builder' => function (EntityRepository $er){
+                    'query_builder' => function (EntityRepository $er) use ($project) {
                         return $er->createQueryBuilder('r')
-                                //->where("r.project = '".$this->projectId."'")
-                                ->orderBy('r.name', 'ASC');
+                                        ->where(($project != null ? "r.project = '" . $project->getId() . "'" : '1=1'))
+                                        ->orderBy('r.name', 'ASC');
                     },
                     'label' => $this->translator->trans('backend.user_project.designed_role'),
                     'placeholder' => $this->translator->trans('backend.user_role.select_role'),
-                ))
-        ;
+                ));
+            }
+        });
+
+        //$builder->add();
     }
 
     /**
