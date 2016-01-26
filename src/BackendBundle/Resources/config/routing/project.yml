@@ -30,3 +30,7 @@ backend_projects_roles:
 backend_project_team:
         resource: "@BackendBundle/Resources/config/routing/projectTeam.yml"
         prefix:   /{id}/projectTeam
+        
+backend_project_product_backlog:
+        resource: "@BackendBundle/Resources/config/routing/productBacklog.yml"
+        prefix:   /{id}/productBacklog

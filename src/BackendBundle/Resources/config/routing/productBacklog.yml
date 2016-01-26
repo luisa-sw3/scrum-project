@@ -1,0 +1,19 @@
+backend_project_product_backlog:
+    path:     /
+    defaults: { _controller: "BackendBundle:Item:productBacklog" }
+    methods:  GET
+
+backend_project_product_backlog_new:
+    path:     /new
+    defaults: { _controller: "BackendBundle:Item:new" }
+    methods:  [GET, POST]
+    
+backend_project_product_backlog_edit:
+    path:     /edit
+    defaults: { _controller: "BackendBundle:Item:edit" }
+    methods:  [GET, POST]
+    
+backend_project_product_backlog_delete:
+    path:     /delete
+    defaults: { _controller: "BackendBundle:Item:delete" }
+    methods:  [POST]

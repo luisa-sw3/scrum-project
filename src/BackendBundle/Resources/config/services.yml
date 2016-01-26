@@ -68,3 +68,11 @@ services:
             - "@service_container"
         tags:
             - { name: form.type }
+            
+    #servicio para formulario de items del backlog de un proyecto
+    backend.form.type.item:
+        class: BackendBundle\Form\ItemType
+        arguments:
+            - "@service_container"
+        tags:
+            - { name: form.type }

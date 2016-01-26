@@ -1,0 +1,68 @@
+{% extends 'BackendBundle:Default:main.html.twig' %}
+{% block title %}{{'backend.backlog.product_backlog'|trans}}{% endblock %}
+
+{% block content %}
+    
+    <!-- Page Heading -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                {{'backend.backlog.product_backlog'|trans}}
+                <a href="{{path('backend_project_product_backlog_new',{'id':project.id})}}" class="btn btn-primary pull-right">{{'backend.item.new'|trans}}</a>
+            </h1>
+            
+            {% set item1 = {'text': 'backend.project.projects'|trans, 'url':path('backend_projects'),'icon':'fa fa-archive'} %}
+            {% set item2 = {'text': project.name, 'url':path('backend_projects_show',{'id':project.id}),'icon':'fa fa-eye'} %}
+            {% set item3 = {'text': 'backend.backlog.product_backlog'|trans, 'icon':'fa fa-list'} %}
+            {% set items = [item1, item2, item3] %}
+            {{ filters.breadcrum(items) }}
+        </div>
+    </div>
+    <!-- /.row -->
+    {{ filters.showMessage('messageSuccess', 'success')}}
+    {{ filters.showMessage('messageError', 'danger')}}
+    
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>{{ 'backend.item.title'|trans }}</th>
+                    <th>{{ 'backend.item.description'|trans }}</th>
+                    <th>{{ 'backend.global.creation_date'|trans }}</th>
+                    <th>{{ 'backend.item.priority'|trans }}</th>
+                    <th>{{ 'backend.global.options'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+            
+            {% for item in backlog %}
+                {% set dateFormat = project.settings.dateFormat %}
+                <tr>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.description|raw }}</td>
+                    <td>
+                        {% if item.creationDate %}
+                            {{ item.creationDate|date(dateFormat) }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ item.priority|default(0) }}
+                    </td>
+                    <td>
+                        <a class="btn btn-default btn-sm" title="{{ 'backend.project.details'|trans }}" href="#">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                        <a class="btn btn-default btn-sm" title="{{ 'backend.project.edit'|trans }}" href="#">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">{{'backend.backlog.empty_list'|trans}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

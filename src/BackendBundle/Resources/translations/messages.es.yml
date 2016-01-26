@@ -74,6 +74,7 @@ backend:
         creation_success_message: "Proyecto creado exitosamente"
         update_success_message: "Proyecto actualizado exitosamente"
         delete_success_message: "Proyecto eliminado exitosamente"
+        delete_unable_message: "Este proyecto no puede ser eliminado"
         not_found_message: "Proyecto no encontrado"
         empty_list: "Ningun proyecto"
         
@@ -93,9 +94,11 @@ backend:
         not_found_message: "Rol no encontrado"
         select_role: "Seleccione el Rol..."
         no_roles: "Aún no hay roles para este proyecto"
+        roles: "Roles"
         
     user_project:
         project_team: "Equipo del Proyecto"
+        project_team_roles: "Equipo del Proyecto & Roles"
         active_members: "Miembros Activos"
         assignation_date: "Fecha de Asignación"
         designed_role: "Rol designado"
@@ -149,6 +152,21 @@ backend:
         
     notification:
         notifications: "Notificaciones"
+        
+    item:
+        new: "Nuevo Item"
+        title: "Título"
+        description: "Descripción"
+        type: "Tipo"
+        priority: "Prioridad"
+        creation_success_message: "Item creado exitosamente"
+        update_success_message: "Item actualizado exitosamente"
+        delete_success_message: "Item eliminado exitosamente"
+        delete_unable_message: "Este item no puede ser eliminado"
+        
+    backlog:
+        product_backlog: "Pila del Producto"
+        empty_list: "Ningun elemento en la pila del producto"
         
         
      

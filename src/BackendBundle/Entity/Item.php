@@ -76,7 +76,7 @@ class Item {
     protected $type;
 
     /**
-     * Estado del item (1 = Nuevo, 2 = En Imnvestigacion, 3 = Confirmado, etc..)
+     * Estado del item (1 = Nuevo, 2 = En Investigacion, 3 = Confirmado, etc..)
      * @ORM\Column(name="item_status", type="integer", nullable=true)
      */
     protected $status;

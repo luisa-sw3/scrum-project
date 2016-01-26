@@ -74,6 +74,7 @@ backend:
         creation_success_message: "Project created successfully"
         update_success_message: "Project updated successfully"
         delete_success_message: "Project deleted successfully"
+        delete_unable_message: "Project can't de deleted"
         not_found_message: "Project not found"
         empty_list: "No projects"
         
@@ -93,9 +94,11 @@ backend:
         not_found_message: "Role not found"
         select_role: "Select Role..."
         no_roles: "No roles in project yet"
+        roles: "Roles"
     
     user_project:
         project_team: "Project Team"
+        project_team_roles: "Project Team & Roles"
         active_members: "Active Members"
         assignation_date: "Assignation Date"
         designed_role: "Designed Role"
@@ -149,4 +152,19 @@ backend:
         
     notification:
         notifications: "Notifications"
+        
+    item:
+        new: "New Item"
+        title: "Title"
+        description: "Description"
+        type: "Type"
+        priority: "Priority"
+        creation_success_message: "Item created successfully"
+        update_success_message: "Item updated successfully"
+        delete_success_message: "Item deleted successfully"
+        delete_unable_message: "Item can't de deleted"
+        
+    backlog:
+        product_backlog: "Product Backlog"
+        empty_list: "No items in product backlog"
         
