@@ -2,10 +2,10 @@ backend_projects:
     path:     /
     defaults: { _controller: "BackendBundle:Project:index" }
     methods:  GET
-
-backend_projects_show:
-    path:     /{id}/show
-    defaults: { _controller: "BackendBundle:Project:show" }
+    
+backend_projects_view:
+    path:     /{id}/view
+    defaults: { _controller: "BackendBundle:Project:view" }
     methods:  GET
 
 backend_projects_new:

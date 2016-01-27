@@ -30,7 +30,7 @@ class UserRoleController extends Controller {
         return $this->render('BackendBundle:Settings/Roles:index.html.twig', array(
                     'roles' => $roles,
                     'project' => $project,
-                    'menu' => 'menu_projects'
+                    'menu' => 'menu_project_team'
         ));
     }
 
@@ -64,7 +64,7 @@ class UserRoleController extends Controller {
                     'role' => $role,
                     'project' => $project,
                     'form' => $form->createView(),
-                    'menu' => 'menu_projects'
+                    'menu' => 'menu_project_team'
         ));
     }
 
@@ -100,7 +100,7 @@ class UserRoleController extends Controller {
                     'role' => $role,
                     'project' => $project,
                     'edit_form' => $editForm->createView(),
-                    'menu' => 'menu_projects'
+                    'menu' => 'menu_project_team'
         ));
     }
 

@@ -10,7 +10,7 @@
             </h1>
             
             {% set item1 = {'text': 'backend.project.projects'|trans, 'url':path('backend_projects'),'icon':'fa fa-archive'} %}
-            {% set item2 = {'text': project.name, 'url':path('backend_projects_show',{'id':project.id}),'icon':'fa fa-eye'} %}
+            {% set item2 = {'text': project.name, 'url':path('backend_projects_view',{'id':project.id}),'icon':'fa fa-dashboard'} %}
             {% set item3 = {'text': 'backend.backlog.product_backlog'|trans, 'url':path('backend_project_product_backlog',{'id':project.id}), 'icon':'fa fa-list'} %}
             {% set item4 = {'text': 'backend.item.new'|trans, 'icon':'fa fa-star-o'} %}
             {% set items = [item1, item2, item3, item4] %}
@@ -36,6 +36,23 @@
                     {{ form_widget(form.priority, {'attr':{'class':'form-control'}}) }}
                     {{ form_errors(form.priority) }}
                 </div>
+                <div class="form-group">
+                    {{ form_label(form.status)}}
+                    {{ form_widget(form.status, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(form.status) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.estimatedHours)}}
+                    {{ form_widget(form.estimatedHours, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(form.estimatedHours) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.designedUser)}}
+                    {{ form_widget(form.designedUser, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(form.designedUser) }}
+                </div>
+            </div>
+            <div class="col-lg-6">
                 <div class="form-group">
                     {{ form_label(form.description)}}
                     {{ form_widget(form.description, {'attr':{'class':'form-control'}}) }}

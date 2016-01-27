@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                {{'backend.project.new'|trans}}
+                {{'backend.project.view'|trans}}
                 <a href="{{ app.request.headers.get('referer') }}" class="btn btn-default pull-right">{{'backend.global.back'|trans}}</a>
             </h1>
             {% set item1 = {'text': 'backend.project.projects'|trans, 'url': path('backend_projects'), 'icon':'fa fa-archive'} %}
@@ -53,6 +53,8 @@
         </table>
     </div>
 
+    
+                
     <div class="container-buttons">
         <a class="btn btn-default btn-sm" href="{{ path('backend_projects') }}">{{'backend.global.back'|trans}}</a>
     

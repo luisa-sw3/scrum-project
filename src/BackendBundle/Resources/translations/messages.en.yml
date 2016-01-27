@@ -37,6 +37,7 @@ backend:
         date: "Date"
         accept: "Accept"
         reject: "Reject"
+        owner: "Created by"
     
     user:
         edit_profile: "Edit Profile"
@@ -62,6 +63,7 @@ backend:
     project:
         projects: "Projects"
         new: "New Project"
+        view: "View Project"
         edit: "Edit Project"
         delete: "Delete Project"
         details: "Project Details"
@@ -77,6 +79,8 @@ backend:
         delete_unable_message: "Project can't de deleted"
         not_found_message: "Project not found"
         empty_list: "No projects"
+        settings: "Settings"
+        dashboard: "Dashboard"
         
     setting:
         settings: "Settings"
@@ -158,13 +162,43 @@ backend:
         title: "Title"
         description: "Description"
         type: "Type"
+        status: "Status"
         priority: "Priority"
+        estimated_hours: "Estimated Hours"
+        designed_user: "Designed User"
         creation_success_message: "Item created successfully"
         update_success_message: "Item updated successfully"
         delete_success_message: "Item deleted successfully"
         delete_unable_message: "Item can't de deleted"
         
+        type_user_history: "User History"
+        type_feature: "Feature"
+        type_task: "Task"
+        type_bug: "Bug"
+        type_improvement: "Improvement"
+        type_change_request: "Change Request"
+        type_idea: "Idea"
+        type_investigation: "Investigation"
+        
+        status_new: "New"
+        status_investigating: "Investigating"
+        status_confirmed: "Confirmed"
+        status_not_a_bug: "Not a bug"
+        status_being_worked_on: "Being worked on"
+        status_near_completion: "Near completion"
+        status_ready_for_testing: "Ready for testing"
+        status_testing: "Testing"
+        status_canceled: "Canceled"
+        status_postponed: "Postponed"
+        status_done: "Done"
+        status_fixed: "Fixed"
+        
     backlog:
         product_backlog: "Product Backlog"
         empty_list: "No items in product backlog"
         
+    sprint:
+        sprints: "Sprints"
+        
+    report: 
+        reports: "Reports"

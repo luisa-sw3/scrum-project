@@ -60,7 +60,7 @@ class ProjectController extends Controller {
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.project.creation_success_message'));
-            return $this->redirectToRoute('backend_projects');
+            return $this->redirectToRoute('backend_projects_view', array('id' => $project->getId()));
         }
 
         return $this->render('BackendBundle:Project:new.html.twig', array(
@@ -75,12 +75,10 @@ class ProjectController extends Controller {
      * Finds and displays a Project entity.
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
      */
-    public function showAction(Entity\Project $project) {
-        $deleteForm = $this->createDeleteForm($project);
+    public function viewAction(Entity\Project $project) {
 
-        return $this->render('BackendBundle:Project:show.html.twig', array(
+        return $this->render('BackendBundle:Project:view.html.twig', array(
                     'project' => $project,
-                    'delete_form' => $deleteForm->createView(),
                     'menu' => 'menu_projects'
         ));
     }
@@ -103,7 +101,7 @@ class ProjectController extends Controller {
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.project.update_success_message'));
-            return $this->redirectToRoute('backend_projects');
+            return $this->redirectToRoute('backend_projects_view', array('id' => $project->getId()));
         }
 
         return $this->render('BackendBundle:Project:edit.html.twig', array(
@@ -111,7 +109,7 @@ class ProjectController extends Controller {
                     'edit_form' => $editForm->createView(),
                     'settings_form' => $settingsForm->createView(),
                     'delete_form' => $deleteForm->createView(),
-                    'menu' => 'menu_projects'
+                    'menu' => 'menu_project_settings'
         ));
     }
 
@@ -130,7 +128,7 @@ class ProjectController extends Controller {
                 $em->flush();
             } catch (\Exception $exc) {
                 $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.delete_unable_message'));
-                return $this->redirectToRoute('backend_projects');
+                return $this->redirectToRoute('backend_projects_view', array('id' => $project->getId()));
             }
         }
 

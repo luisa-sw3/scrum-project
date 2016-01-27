@@ -37,6 +37,7 @@ backend:
         date: "Fecha"
         accept: "Aceptar"
         reject: "Rechazar"
+        owner: "Creado por"
         
     user:
         edit_profile: "Editar Perfil"
@@ -62,6 +63,7 @@ backend:
     project:
         projects: "Proyectos"
         new: "Nuevo Proyecto"
+        view: "Ver Proyecto"
         edit: "Editar Proyecto"
         delete: "Eliminar Projecto"
         details: "Detalles del Proyecto"
@@ -77,6 +79,8 @@ backend:
         delete_unable_message: "Este proyecto no puede ser eliminado"
         not_found_message: "Proyecto no encontrado"
         empty_list: "Ningun proyecto"
+        settings: "Configuraciones"
+        dashboard: "Dashboard"
         
     setting:
         settings: "Configuraciones"
@@ -158,17 +162,46 @@ backend:
         title: "Título"
         description: "Descripción"
         type: "Tipo"
+        status: "Estado"
         priority: "Prioridad"
+        estimated_hours: "Horas estimadas"
+        designed_user: "Usuario designado"
         creation_success_message: "Item creado exitosamente"
         update_success_message: "Item actualizado exitosamente"
         delete_success_message: "Item eliminado exitosamente"
         delete_unable_message: "Este item no puede ser eliminado"
         
+        type_user_history: "Historia de Usuario"
+        type_feature: "Característica / Funcionalidad"
+        type_task: "Tarea"
+        type_bug: "Error"
+        type_improvement: "Mejora"
+        type_change_request: "Solicitud de Cambio"
+        type_idea: "Idea"
+        type_investigation: "Investigación"
+        
+        status_new: "Nuevo"
+        status_investigating: "Investigando"
+        status_confirmed: "Confirmado"
+        status_not_a_bug: "No es un error"
+        status_being_worked_on: "Trabajo iniciado"
+        status_near_completion: "Cerca de terminar"
+        status_ready_for_testing: "Listo para pruebas"
+        status_testing: "Probando"
+        status_canceled: "Cancelado"
+        status_postponed: "Postpuesto"
+        status_done: "Realizado"
+        status_fixed: "Corregido"
+        
     backlog:
         product_backlog: "Pila del Producto"
         empty_list: "Ningun elemento en la pila del producto"
         
+    sprint:
+        sprints: "Sprints"
         
+    report: 
+        reports: "Reportes"
      
     
   

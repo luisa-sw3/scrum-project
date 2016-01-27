@@ -12,7 +12,7 @@
             </h1>
             
             {% set item1 = {'text': 'backend.project.projects'|trans, 'url':path('backend_projects'),'icon':'fa fa-archive'} %}
-            {% set item2 = {'text': project.name, 'url':path('backend_projects_show',{'id':project.id}),'icon':'fa fa-eye'} %}
+            {% set item2 = {'text': project.name, 'url':path('backend_projects_view',{'id':project.id}),'icon':'fa fa-dashboard'} %}
             {% set item3 = {'text': 'backend.backlog.product_backlog'|trans, 'icon':'fa fa-list'} %}
             {% set items = [item1, item2, item3] %}
             {{ filters.breadcrum(items) }}

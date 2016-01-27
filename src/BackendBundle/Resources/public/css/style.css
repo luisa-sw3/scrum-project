@@ -26,3 +26,11 @@ and open the template in the editor.
     display: inline !important;
 }
 
+#project-menu li.active a {
+    color: #fff !important;
+}
+
+#project-menu li.active {
+    background-color: #000 !important;
+}
+

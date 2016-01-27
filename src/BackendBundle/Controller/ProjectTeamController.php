@@ -59,7 +59,7 @@ class ProjectTeamController extends Controller {
                     'forms' => $forms,
                     'invitations' => $invitations,
                     'project' => $project,
-                    'menu' => 'menu_projects'
+                    'menu' => 'menu_project_team'
         ));
     }
 
@@ -121,7 +121,7 @@ class ProjectTeamController extends Controller {
         return $this->render('BackendBundle:ProjectTeam:addCollaborator.html.twig', array(
                     'project' => $project,
                     'form' => $form->createView(),
-                    'menu' => 'menu_projects',
+                    'menu' => 'menu_project_team',
                     'closeFancy' => $closeFancy
         ));
     }

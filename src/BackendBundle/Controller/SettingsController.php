@@ -15,7 +15,7 @@ class SettingsController extends Controller {
     public function indexAction() {
 
         return $this->render('BackendBundle:Settings:index.html.twig', array(
-            'menu' => 'menu_settings'
+            'menu' => 'menu_project_settings'
         ));
     }
 }

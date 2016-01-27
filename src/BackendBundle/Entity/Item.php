@@ -21,11 +21,14 @@ class Item {
      * Constantes para los tipos de items que se pueden crear
      */
     const TYPE_USER_HISTORY = 1;
-    const TYPE_TASK = 2;
-    const TYPE_BUG = 3;
-    const TYPE_IMPROVEMENT = 4;
-    const TYPE_IDEA = 5;
-
+    const TYPE_FEATURE = 2;
+    const TYPE_TASK = 3;
+    const TYPE_BUG = 4;
+    const TYPE_IMPROVEMENT = 5;
+    const TYPE_CHANGE_REQUEST = 6;
+    const TYPE_IDEA = 7;
+    const TYPE_INVESTIGATION = 8;
+    
     /**
      * Constantes para los estados de los items
      */
@@ -37,7 +40,7 @@ class Item {
     const STATUS_NEAR_COMPLETION = 6;
     const STATUS_READY_FOR_TESTING = 7;
     const STATUS_TESTING = 8;
-    const STATUS_CLOSED = 9;
+    const STATUS_CANCELED = 9;
     const STATUS_POSTPONED = 10;
     const STATUS_DONE = 11;
     const STATUS_FIXED = 12;
@@ -125,7 +128,7 @@ class Item {
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="item_designed_user_id", referencedColumnName="user_id", nullable=true)
      */
-    protected $userDesigned;
+    protected $designedUser;
     
     /**
      * Item al cual puede estar relacionado como item dependiente
@@ -182,8 +185,8 @@ class Item {
         return $this->sprint;
     }
 
-    function getUserDesigned() {
-        return $this->userDesigned;
+    function getDesignedUser() {
+        return $this->designedUser;
     }
 
     function getParent() {
@@ -234,14 +237,13 @@ class Item {
         $this->sprint = $sprint;
     }
 
-    function setUserDesigned(User $userDesigned = null) {
-        $this->userDesigned = $userDesigned;
+    function setDesignedUser(User $designedUser = null) {
+        $this->designedUser = $designedUser;
     }
 
     function setParent(Item $parent = null) {
         $this->parent = $parent;
     }
-
     
     public function __toString() {
         return $this->getTitle();
@@ -259,5 +261,109 @@ class Item {
             $this->setStatus(self::STATUS_NEW);
         }
     }
+    
+    /**
+     * Permite obtener el nombre de la variable de idioma correspondiente
+     * al tipo del item
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 26/01/2016
+     * @param integer $type
+     * @return string
+     */
+    public function getTextType($type = null){
+        
+        if(!$type){
+            $type = $this->getType();
+        }
+        
+        $langVar = '';
+        switch ($type) {
+            case self::TYPE_USER_HISTORY:
+                $langVar = 'backend.item.type_user_history';
+                break;
+            case self::TYPE_FEATURE:
+                $langVar = 'backend.item.type_feature';
+                break;
+            case self::TYPE_TASK:
+                $langVar = 'backend.item.type_task';
+                break;
+            case self::TYPE_BUG:
+                $langVar = 'backend.item.type_bug';
+                break;
+            case self::TYPE_IMPROVEMENT:
+                $langVar = 'backend.item.type_improvement';
+                break;
+            case self::TYPE_CHANGE_REQUEST:
+                $langVar = 'backend.item.type_change_request';
+                break;
+            case self::TYPE_IDEA:
+                $langVar = 'backend.item.type_idea';
+                break;
+            case self::TYPE_INVESTIGATION:
+                $langVar = 'backend.item.type_investigation';
+                break;
+            default:
+                break;
+        }
+        return $langVar;
+    }
+    
+    /**
+     * Permite obtener el nombre de la variable de idioma correspondiente
+     * al estado del item
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 26/01/2016
+     * @param integer $status
+     * @return string
+     */
+    public function getTextStatus($status = null){
+        
+        if(!$status){
+            $status = $this->getStatus();
+        }
+        
+        $langVar = '';
+        switch ($status) {
+            case self::STATUS_NEW:
+                $langVar = 'backend.item.status_new';
+                break;
+            case self::STATUS_INVESTIGATING:
+                $langVar = 'backend.item.status_investigating';
+                break;
+            case self::STATUS_CONFIRMED:
+                $langVar = 'backend.item.status_confirmed';
+                break;
+            case self::STATUS_NOT_A_BUG:
+                $langVar = 'backend.item.status_not_a_bug';
+                break;
+            case self::STATUS_BEING_WORKED_ON:
+                $langVar = 'backend.item.status_being_worked_on';
+                break;
+            case self::STATUS_NEAR_COMPLETION:
+                $langVar = 'backend.item.status_near_completion';
+                break;
+            case self::STATUS_READY_FOR_TESTING:
+                $langVar = 'backend.item.status_ready_for_testing';
+                break;
+            case self::STATUS_TESTING:
+                $langVar = 'backend.item.status_testing';
+                break;
+            case self::STATUS_CANCELED:
+                $langVar = 'backend.item.status_canceled';
+                break;
+            case self::STATUS_POSTPONED:
+                $langVar = 'backend.item.status_postponed';
+                break;
+            case self::STATUS_DONE:
+                $langVar = 'backend.item.status_done';
+                break;
+            case self::STATUS_FIXED:
+                $langVar = 'backend.item.status_fixed';
+                break;
+            default:
+                break;
+        }
+        return $langVar;
+    }
+    
+    
 
 }

@@ -4,35 +4,57 @@
         <li {% if menu is defined and menu == 'menu_home'%}class="active"{% endif %}>
             <a href="{{ path('backend_homepage') }}"><i class="fa fa-fw fa-home"></i> {{ 'backend.global.home'|trans }}</a>
         </li>
-        <li {% if menu is defined and menu == 'menu_projects'%}class="active"{% endif %}>
-            <a href="{{ path('backend_projects') }}"><i class="fa fa-fw fa-archive"></i> {{ 'backend.project.projects'|trans }}</a>
-        </li>
-        <li>
-            <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Template Examples <i class="fa fa-fw fa-caret-down"></i></a>
-            <ul id="demo" class="collapse">
-                <li>
-                    <a href="{{ path('backend_dashboard') }}"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
-                </li>
-                <li>
-                    <a href="{{ path('backend_blank_page') }}"><i class="fa fa-fw fa-file"></i> Blank Page</a>
-                </li>
-                <li>
-                    <a href="{{ path('backend_charts') }}"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
-                </li>
-                <li>
-                    <a href="{{ path('backend_tables') }}"><i class="fa fa-fw fa-table"></i> Tables</a>
-                </li>
-                <li>
-                    <a href="{{ path('backend_forms') }}"><i class="fa fa-fw fa-edit"></i> Forms</a>
-                </li>
-                <li>
-                    <a href="{{ path('backend_bootstrap_grid') }}"><i class="fa fa-fw fa-wrench"></i> Bootstrap Grid</a>
-                </li>
-                <li>
-                    <a href="{{ path('backend_bootstrap_elements') }}"><i class="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>
-                </li>
-            </ul>
-        </li>
-        
+        {% if project is defined and  project is not empty %}
+            <li {% if menu is defined and menu == 'menu_projects' %}class="active"{% endif %}>
+                <a href="{{ path('backend_projects_view',{'id':project.id}) }}" data-toggle="collapse" data-target="#project-menu"><i class="fa fa-fw fa-dashboard"></i> {{ project }}</a>
+                <ul id="project-menu">
+                    <li {% if menu is defined and menu == 'menu_project_backlog' %}class="active"{% endif %}>
+                        <a href="{{ path('backend_project_product_backlog', { 'id': project.id }) }}"><i class="fa fa-fw fa-list"></i> {{ 'backend.backlog.product_backlog'|trans }}</a>
+                    </li>
+                    <li {% if menu is defined and menu == 'menu_project_sprints' %}class="active"{% endif %}>
+                        <a href="#"><i class="fa fa-fw fa-rotate-right"></i> {{ 'backend.sprint.sprints'|trans }}</a>
+                    </li>
+                    <li {% if menu is defined and menu == 'menu_project_reports' %}class="active"{% endif %}>
+                        <a href="#"><i class="fa fa-fw fa-list"></i> {{ 'backend.report.reports'|trans }}</a>
+                    </li>
+                    <li {% if menu is defined and menu == 'menu_project_team' %}class="active"{% endif %}>
+                        <a href="{{ path('backend_project_team', { 'id': project.id }) }}"><i class="fa fa-fw fa-users"></i> {{ 'backend.user_project.project_team'|trans }}</a>
+                    </li>
+                    <li {% if menu is defined and menu == 'menu_project_settings' %}class="active"{% endif %}>
+                        <a href="{{ path('backend_projects_edit', { 'id': project.id }) }}"><i class="fa fa-fw fa-cogs"></i> {{ 'backend.project.settings'|trans }}</a>
+                    </li>
+                </ul>
+            </li>
+        {% else %}
+            <li {% if menu is defined and menu == 'menu_projects'%}class="active"{% endif %}>
+                <a href="{{ path('backend_projects') }}"><i class="fa fa-fw fa-archive"></i> {{ 'backend.project.projects'|trans }}</a>
+            </li>
+            <li>
+                <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Template Examples <i class="fa fa-fw fa-caret-down"></i></a>
+                <ul id="demo" class="collapse">
+                    <li>
+                        <a href="{{ path('backend_dashboard') }}"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('backend_blank_page') }}"><i class="fa fa-fw fa-file"></i> Blank Page</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('backend_charts') }}"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('backend_tables') }}"><i class="fa fa-fw fa-table"></i> Tables</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('backend_forms') }}"><i class="fa fa-fw fa-edit"></i> Forms</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('backend_bootstrap_grid') }}"><i class="fa fa-fw fa-wrench"></i> Bootstrap Grid</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('backend_bootstrap_elements') }}"><i class="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>
+                    </li>
+                </ul>
+            </li>
+        {% endif %}
     </ul>
 </div>

@@ -21,10 +21,10 @@ class NotificationController extends Controller {
         $em = $this->getDoctrine()->getManager();
 
         $rejectInvitation = 0;
-        if(!empty($request->get('rejectInvitation'))) {
+        if (!empty($request->get('rejectInvitation'))) {
             $rejectInvitation = $request->get('rejectInvitation');
         }
-        
+
         $search = array('user' => $this->getUser()->getId(), 'status' => Entity\ProjectInvitation::STATUS_ACTIVE);
         $order = array('date' => 'ASC');
         $invitations = $em->getRepository('BackendBundle:ProjectInvitation')->findBy($search, $order);
@@ -69,7 +69,7 @@ class NotificationController extends Controller {
         $em->flush();
 
         $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.project_invitation.invitation_accepted_message'));
-        return $this->redirectToRoute('backend_projects');
+        return $this->redirectToRoute('backend_projects_view', array('id' => $invitation->getProject()->getId()));
     }
 
     /**
