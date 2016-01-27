@@ -102,7 +102,7 @@ class ItemType extends AbstractType {
                     'required' => true,
                     'label' => $this->translator->trans('backend.item.priority'),
                     'attr' => array(
-                        'min' => 5,
+                        'min' => 0,
                         'max' => 100,
                     )
                 ))
