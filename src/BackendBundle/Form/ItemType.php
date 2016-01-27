@@ -40,7 +40,7 @@ class ItemType extends AbstractType {
             $this->translator->trans($item->getTextType(Item::TYPE_IDEA)) => Item::TYPE_IDEA,
             $this->translator->trans($item->getTextType(Item::TYPE_INVESTIGATION)) => Item::TYPE_INVESTIGATION,
         );
-        
+
         $statusOptions = array(
             $this->translator->trans($item->getTextStatus(Item::STATUS_NEW)) => Item::STATUS_NEW,
             $this->translator->trans($item->getTextStatus(Item::STATUS_INVESTIGATING)) => Item::STATUS_INVESTIGATING,
@@ -78,7 +78,7 @@ class ItemType extends AbstractType {
                 ));
             }
         });
-        
+
         $builder
                 ->add('title', Type\TextType::class, array(
                     'required' => true,
@@ -98,12 +98,16 @@ class ItemType extends AbstractType {
                     'label' => $this->translator->trans('backend.item.status'),
                     'choices' => $statusOptions,
                 ))
-                ->add('priority', Type\NumberType::class, array(
+                ->add('priority', Type\RangeType::class, array(
                     'required' => true,
-                    'label' => $this->translator->trans('backend.item.priority')
+                    'label' => $this->translator->trans('backend.item.priority'),
+                    'attr' => array(
+                        'min' => 5,
+                        'max' => 100,
+                    )
                 ))
                 ->add('estimatedHours', Type\NumberType::class, array(
-                    'required' => true,
+                    'required' => false,
                     'label' => $this->translator->trans('backend.item.estimated_hours')
                 ))
         ;

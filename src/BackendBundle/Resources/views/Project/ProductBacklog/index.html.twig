@@ -52,7 +52,7 @@
                         <a class="btn btn-default btn-sm" title="{{ 'backend.project.details'|trans }}" href="#">
                             <i class="fa fa-eye"></i>
                         </a>
-                        <a class="btn btn-default btn-sm" title="{{ 'backend.project.edit'|trans }}" href="#">
+                        <a class="btn btn-default btn-sm" title="{{ 'backend.project.edit'|trans }}" href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id}) }}">
                             <i class="fa fa-pencil"></i>
                         </a>
                     </td>

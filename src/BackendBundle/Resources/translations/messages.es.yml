@@ -159,6 +159,7 @@ backend:
         
     item:
         new: "Nuevo Item"
+        edit: "Editar Item"
         title: "Título"
         description: "Descripción"
         type: "Tipo"

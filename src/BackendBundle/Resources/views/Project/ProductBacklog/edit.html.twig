@@ -1,0 +1,72 @@
+{% extends 'BackendBundle:Default:main.html.twig' %}
+{% block title %}{{'backend.item.edit'|trans}}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                {{'backend.item.edit'|trans}}
+                <a href="{{ app.request.headers.get('referer') }}" class="btn btn-default pull-right">{{'backend.global.back'|trans}}</a>
+            </h1>
+            
+            {% set item1 = {'text': 'backend.project.projects'|trans, 'url':path('backend_projects'),'icon':'fa fa-archive'} %}
+            {% set item2 = {'text': project.name, 'url':path('backend_projects_view',{'id':project.id}),'icon':'fa fa-dashboard'} %}
+            {% set item3 = {'text': 'backend.backlog.product_backlog'|trans, 'url':path('backend_project_product_backlog',{'id':project.id}), 'icon':'fa fa-list'} %}
+            {% set item4 = {'text': 'backend.item.edit'|trans, 'icon':'fa fa-pencil'} %}
+            {% set items = [item1, item2, item3, item4] %}
+            {{ filters.breadcrum(items) }}
+        </div>
+    </div>
+        
+    <div class="row">
+        {{ form_start(edit_form, {'action': path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id}), 'method': 'POST'}) }}
+            <div class="col-lg-6">
+                <div class="form-group">
+                    {{ form_label(edit_form.type)}}
+                    {{ form_widget(edit_form.type, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(edit_form.type) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(edit_form.title)}}
+                    {{ form_widget(edit_form.title, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(edit_form.title) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(edit_form.priority)}}
+                    {{ form_widget(edit_form.priority, {'attr':{'class':''}}) }}
+                    {{ form_errors(edit_form.priority) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(edit_form.status)}}
+                    {{ form_widget(edit_form.status, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(edit_form.status) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(edit_form.estimatedHours)}}
+                    {{ form_widget(edit_form.estimatedHours, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(edit_form.estimatedHours) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(edit_form.designedUser)}}
+                    {{ form_widget(edit_form.designedUser, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(edit_form.designedUser) }}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    {{ form_label(edit_form.description)}}
+                    {{ form_widget(edit_form.description, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(edit_form.description) }}
+                </div>
+            </div>
+        
+            <div class="col-lg-12">
+                {{ form_widget(edit_form._token) }} 
+                <button type="submit"class="btn btn-primary pull-right">{{ 'backend.global.save_changes'|trans }}</button>
+            </div>
+        {{ form_end(edit_form) }}
+    </div>
+{% endblock %}
+{% block scripts %}
+    singleHtmlEditor('textarea', 200);
+{% endblock %}

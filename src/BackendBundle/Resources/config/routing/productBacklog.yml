@@ -9,7 +9,7 @@ backend_project_product_backlog_new:
     methods:  [GET, POST]
     
 backend_project_product_backlog_edit:
-    path:     /edit
+    path:     /{itemId}/edit
     defaults: { _controller: "BackendBundle:Item:edit" }
     methods:  [GET, POST]
     

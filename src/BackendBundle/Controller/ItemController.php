@@ -4,8 +4,6 @@ namespace BackendBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use BackendBundle\Form\ProjectType;
-use BackendBundle\Form\SettingType;
 use BackendBundle\Form\ItemType;
 use BackendBundle\Entity as Entity;
 
@@ -15,8 +13,11 @@ use BackendBundle\Entity as Entity;
 class ItemController extends Controller {
 
     /**
-     * Permite listar el backlog de un royecto
+     * Permite listar el backlog de un proyecto
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 25/01/2016
+     * @param Request $request
+     * @param string $id identificador del proyecto
+     * @return type
      */
     public function productBacklogAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
@@ -41,8 +42,11 @@ class ItemController extends Controller {
     }
 
     /**
-     * Creates a new Project entity.
-     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
+     * Permite crear un item en el sistema
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 21/01/2016
+     * @param Request $request
+     * @param string $id identificador del proyecto
+     * @return type
      */
     public function newAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
@@ -79,6 +83,42 @@ class ItemController extends Controller {
         ));
     }
 
+    /**
+     * Permite editar la informacion de un item
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 27/01/2016
+     * @param Request $request
+     * @param string $id identificador del proyecto
+     * @param string $itemId identificador del itemm
+     * @return type
+     */
+    public function editAction(Request $request, $id, $itemId) {
+        $em = $this->getDoctrine()->getManager();
+        $item = $em->getRepository('BackendBundle:Item')->find($itemId);
+
+        if (!$item || ($item && $item->getProject()->getId() != $id)) {
+            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.item.not_found_message'));
+            return $this->redirectToRoute('backend_project_product_backlog', array('id' => $id));
+        }
+        
+        $editForm = $this->createForm(ItemType::class, $item);
+        $editForm->handleRequest($request);
+        
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            
+            $em->persist($item);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.item.update_success_message'));
+            return $this->redirectToRoute('backend_project_product_backlog', array('id' => $item->getProject()->getId()));
+        }
+
+        return $this->render('BackendBundle:Project/ProductBacklog:edit.html.twig', array(
+                    'item' => $item,
+                    'project' => $item->getProject(),
+                    'edit_form' => $editForm->createView(),
+                    'menu' => 'menu_project_backlog'
+        ));
+    }
     
 
 }
