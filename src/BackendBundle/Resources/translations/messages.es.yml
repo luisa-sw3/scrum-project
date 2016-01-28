@@ -166,6 +166,7 @@ backend:
         status: "Estado"
         priority: "Prioridad"
         estimated_hours: "Horas estimadas"
+        worked_hours: "Horas trabajadas"
         designed_user: "Usuario designado"
         creation_success_message: "Item creado exitosamente"
         update_success_message: "Item actualizado exitosamente"

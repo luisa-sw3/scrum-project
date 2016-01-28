@@ -27,7 +27,7 @@
             <thead>
                 <tr>
                     <th>{{ 'backend.item.title'|trans }}</th>
-                    <th>{{ 'backend.item.description'|trans }}</th>
+                    <th>{{ 'backend.item.type'|trans }}</th>
                     <th>{{ 'backend.global.creation_date'|trans }}</th>
                     <th>{{ 'backend.item.priority'|trans }}</th>
                     <th>{{ 'backend.global.options'|trans }}</th>
@@ -38,8 +38,10 @@
             {% for item in backlog %}
                 {% set dateFormat = project.settings.dateFormat %}
                 <tr>
-                    <td>{{ item.title }}</td>
-                    <td>{{ item.description|raw }}</td>
+                    <td>
+                        <a href="javascript:void(0);" class="popover-menu" title="{{ item.title }}" content="{{item.description|raw}}">{{ item.title }}</a>
+                    </td>
+                    <td>{{ item.getTextType()|trans }}</td>
                     <td>
                         {% if item.creationDate %}
                             {{ item.creationDate|date(dateFormat) }}
@@ -65,4 +67,8 @@
             </tbody>
         </table>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    
 {% endblock %}

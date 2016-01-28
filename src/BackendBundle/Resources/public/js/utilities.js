@@ -41,6 +41,27 @@ $(document).on("keydown", '.only_numbers', function (e)
     }
 });
 
+/*
+ * Clase para validar solo numeros en el evento key down
+ */
+$(document).on("keydown", '.only_numbers_decimal', function (e)
+{
+    var key;
+    if (window.event) {
+        key = window.event.keyCode;   /*IE*/
+    } else {
+        key = e.which;                /*firefox*/
+    }
+    if (!((key >= 48 && key <= 57) || (key >= 96 && key <= 105) || key == 8 
+            || key == 9 || key == 0 || key == 46 || key == 59 || key == 39 
+            || key == 37 || key == 190)) {
+        return false;
+    }
+    else {
+        return true;
+    }
+});
+
 /**
  * Comas para todos los campos numericos
  */

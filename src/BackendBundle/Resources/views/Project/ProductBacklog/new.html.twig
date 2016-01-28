@@ -22,34 +22,41 @@
         {{ form_start(form, {'action': path('backend_project_product_backlog_new',{'id':project.id}), 'method': 'POST'}) }}
             <div class="col-lg-6">
                 <div class="form-group">
-                    {{ form_label(form.type)}}
+                    {{ form_label(form.type)}}<em>*</em>
                     {{ form_widget(form.type, {'attr':{'class':'form-control'}}) }}
                     {{ form_errors(form.type) }}
                 </div>
                 <div class="form-group">
-                    {{ form_label(form.title)}}
+                    {{ form_label(form.title)}}<em>*</em>
                     {{ form_widget(form.title, {'attr':{'class':'form-control'}}) }}
                     {{ form_errors(form.title) }}
                 </div>
                 <div class="form-group">
-                    {{ form_label(form.priority)}}
-                    {{ form_widget(form.priority, {'attr':{'class':''}}) }}
-                    {{ form_errors(form.priority) }}
+                    <div class="col-xs-11" style="padding-left: 0px;">
+                        {{ form_label(form.priority)}}
+                        {{ form_widget(form.priority, {'attr':{'style':'cursor:pointer;','onchange':'rangevalue.value=value'},}) }}
+                    </div>
+                    <output class="alert alert-box col-xs-1 text-center pull-right no-margin-bottom" id="rangevalue">{{item.priority|default(50)}}</output>
                 </div>
-                <div class="form-group">
+                <div class="form-group col-xs-6 no-padding-left">
+                    {{ form_label(form.designedUser)}}
+                    {{ form_widget(form.designedUser, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(form.designedUser) }}
+                </div>
+                <div class="form-group  col-xs-6 no-padding-right">
                     {{ form_label(form.status)}}
                     {{ form_widget(form.status, {'attr':{'class':'form-control'}}) }}
                     {{ form_errors(form.status) }}
                 </div>
-                <div class="form-group">
+                <div class="form-group col-xs-6 no-padding-left">
                     {{ form_label(form.estimatedHours)}}
-                    {{ form_widget(form.estimatedHours, {'attr':{'class':'form-control'}}) }}
+                    {{ form_widget(form.estimatedHours, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
                     {{ form_errors(form.estimatedHours) }}
                 </div>
-                <div class="form-group">
-                    {{ form_label(form.designedUser)}}
-                    {{ form_widget(form.designedUser, {'attr':{'class':'form-control'}}) }}
-                    {{ form_errors(form.designedUser) }}
+                <div class="form-group  col-xs-6 no-padding-right">
+                    {{ form_label(form.workedHours)}}
+                    {{ form_widget(form.workedHours, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
+                    {{ form_errors(form.workedHours) }}
                 </div>
             </div>
             <div class="col-lg-6">

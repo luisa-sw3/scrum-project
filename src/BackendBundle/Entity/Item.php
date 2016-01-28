@@ -92,9 +92,9 @@ class Item {
     
     /**
      * Tiempo transcurrido en horas para la realizacion del item
-     * @ORM\Column(name="item_transcurred_hours", type="float", nullable=true)
+     * @ORM\Column(name="item_worked_hours", type="float", nullable=true)
      */
-    protected $transcurredHours;
+    protected $workedHours;
     
     /**
      * Prioridad del item (100 = Urgente , 0 = No es prioridad)
@@ -165,8 +165,8 @@ class Item {
         return $this->estimatedHours;
     }
 
-    function getTranscurredHours() {
-        return $this->transcurredHours;
+    function getWorkedHours() {
+        return $this->workedHours;
     }
 
     function getPriority() {
@@ -217,8 +217,8 @@ class Item {
         $this->estimatedHours = $estimatedHours;
     }
 
-    function setTranscurredHours($transcurredHours) {
-        $this->transcurredHours = $transcurredHours;
+    function setWorkedHours($workedHours) {
+        $this->workedHours = $workedHours;
     }
 
     function setPriority($priority) {
@@ -259,6 +259,9 @@ class Item {
         }
         if ($this->getStatus() === null) {
             $this->setStatus(self::STATUS_NEW);
+        }
+        if ($this->getWorkedHours() === null) {
+            $this->setWorkedHours(0);
         }
     }
     

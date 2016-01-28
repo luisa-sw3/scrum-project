@@ -34,3 +34,33 @@ and open the template in the editor.
     background-color: #000 !important;
 }
 
+#rangevalue{
+    font-weight: bold !important;
+    font-size: 16px !important;
+    height: 20px !important;
+}
+
+.no-padding-sides {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+.no-padding-left {
+    padding-left: 0px !important;
+}
+
+.no-padding-right {
+    padding-right: 0px !important;
+}
+
+.no-margin-bottom {
+    margin-bottom: 0px !important;
+}
+
+em {
+    color: #ff0000;
+    font-size: 16px;
+    font-weight: bold;
+    padding-left: 4px;
+    vertical-align: middle;
+}

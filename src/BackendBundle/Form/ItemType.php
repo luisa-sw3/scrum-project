@@ -82,7 +82,10 @@ class ItemType extends AbstractType {
         $builder
                 ->add('title', Type\TextType::class, array(
                     'required' => true,
-                    'label' => $this->translator->trans('backend.item.title')
+                    'label' => $this->translator->trans('backend.item.title'),
+                    'attr' => array(
+                        'maxlength' => 255
+                    )
                 ))
                 ->add('description', Type\TextareaType::class, array(
                     'required' => false,
@@ -108,7 +111,17 @@ class ItemType extends AbstractType {
                 ))
                 ->add('estimatedHours', Type\NumberType::class, array(
                     'required' => false,
-                    'label' => $this->translator->trans('backend.item.estimated_hours')
+                    'label' => $this->translator->trans('backend.item.estimated_hours'),
+                    'attr' => array(
+                        'maxlength' => 4
+                    )
+                ))
+                ->add('workedHours', Type\NumberType::class, array(
+                    'required' => false,
+                    'label' => $this->translator->trans('backend.item.worked_hours'),
+                    'attr' => array(
+                        'maxlength' => 4
+                    )
                 ))
         ;
     }
