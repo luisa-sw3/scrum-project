@@ -18,6 +18,12 @@ and open the template in the editor.
     height: 36px;
 }
 
+.date-selector-sm select {
+    width: 80px;
+    margin-right: 4px;
+    height: 36px;
+}
+
 .container-buttons form {
     display: inline !important;
 }

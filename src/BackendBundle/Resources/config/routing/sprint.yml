@@ -1,0 +1,24 @@
+backend_project_sprints:
+    path:     /
+    defaults: { _controller: "BackendBundle:Sprint:index" }
+    methods:  GET
+
+backend_project_sprints_new:
+    path:     /new
+    defaults: { _controller: "BackendBundle:Sprint:new" }
+    methods:  [GET, POST]
+    
+backend_project_sprints_edit:
+    path:     /{sprintId}/edit
+    defaults: { _controller: "BackendBundle:Sprint:edit" }
+    methods:  [GET, POST]
+    
+backend_project_sprints_delete:
+    path:     /delete
+    defaults: { _controller: "BackendBundle:Sprint:delete" }
+    methods:  [POST]
+    
+backend_project_sprints_backlog:
+    path:     /{sprintId}/sprintBacklog
+    defaults: { _controller: "BackendBundle:Sprint:sprintBacklog" }
+    methods:  GET

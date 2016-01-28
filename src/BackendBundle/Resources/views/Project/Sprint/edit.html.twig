@@ -1,0 +1,62 @@
+{% extends 'BackendBundle:Default:main.html.twig' %}
+{% block title %}{{'backend.sprint.edit'|trans}}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                {{'backend.sprint.edit'|trans}}
+                <a href="{{ app.request.headers.get('referer') }}" class="btn btn-default pull-right">{{'backend.global.back'|trans}}</a>
+            </h1>
+
+            {% set item1 = {'text': 'backend.project.projects'|trans, 'url':path('backend_projects'),'icon':'fa fa-archive'} %}
+            {% set item2 = {'text': project.name, 'url':path('backend_projects_view',{'id':project.id}),'icon':'fa fa-dashboard'} %}
+            {% set item3 = {'text': 'backend.sprint.sprints'|trans, 'url':path('backend_project_sprints',{'id':project.id}), 'icon':'fa fa-rotate-right'} %}
+            {% set item4 = {'text': 'backend.sprint.edit'|trans, 'icon':'fa fa-pencil'} %}
+            {% set items = [item1, item2, item3, item4] %}
+            {{ filters.breadcrum(items) }}
+        </div>
+    </div>
+
+    <div class="row">
+        {{ form_start(edit_form, {'action': path('backend_project_sprints_edit',{'id':project.id, 'sprintId':sprint.id}), 'method': 'POST'}) }}
+        <div class="col-lg-7">
+                <div class="form-group">
+                    {{ form_label(edit_form.name)}}<em>*</em>
+                    {{ form_widget(edit_form.name, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(edit_form.name) }}
+                </div>
+                <div class="form-group col-xs-6 no-padding-left">
+                    {{ form_label(edit_form.startDate)}}
+                    {{ form_widget(edit_form.startDate, {'attr':{'class':'date-selector-sm'}}) }}
+                    {{ form_errors(edit_form.startDate) }}
+                </div>
+                <div class="form-group  col-xs-6 no-padding-right">
+                    {{ form_label(edit_form.estimatedDate)}}
+                    {{ form_widget(edit_form.estimatedDate, {'attr':{'class':'date-selector-sm'}}) }}
+                    {{ form_errors(edit_form.estimatedDate) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(edit_form.isWorkingWeekends)}}
+                    {{ form_widget(edit_form.isWorkingWeekends, {'attr':{'class':''}}) }}
+                    {{ form_errors(edit_form.isWorkingWeekends) }}
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="form-group">
+                    {{ form_label(edit_form.description)}}
+                    {{ form_widget(edit_form.description, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(edit_form.description) }}
+                </div>
+            </div>
+        
+            <div class="col-lg-12">
+                {{ form_widget(edit_form._token) }} 
+                <button type="submit"class="btn btn-primary pull-right">{{ 'backend.global.save_changes'|trans }}</button>
+            </div>
+        {{ form_end(edit_form) }}
+    </div>
+{% endblock %}
+{% block scripts %}
+    singleHtmlEditor('textarea', 200);
+{% endblock %}

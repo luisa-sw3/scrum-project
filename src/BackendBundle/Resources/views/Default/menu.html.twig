@@ -12,7 +12,7 @@
                         <a href="{{ path('backend_project_product_backlog', { 'id': project.id }) }}"><i class="fa fa-fw fa-list"></i> {{ 'backend.backlog.product_backlog'|trans }}</a>
                     </li>
                     <li {% if menu is defined and menu == 'menu_project_sprints' %}class="active"{% endif %}>
-                        <a href="#"><i class="fa fa-fw fa-rotate-right"></i> {{ 'backend.sprint.sprints'|trans }}</a>
+                        <a href="{{ path('backend_project_sprints',{'id':project.id}) }}"><i class="fa fa-fw fa-rotate-right"></i> {{ 'backend.sprint.sprints'|trans }}</a>
                     </li>
                     <li {% if menu is defined and menu == 'menu_project_reports' %}class="active"{% endif %}>
                         <a href="#"><i class="fa fa-fw fa-list"></i> {{ 'backend.report.reports'|trans }}</a>

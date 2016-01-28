@@ -1,0 +1,75 @@
+{% extends 'BackendBundle:Default:main.html.twig' %}
+{% block title %}{{'backend.sprint.sprints'|trans}}{% endblock %}
+
+{% block content %}
+    
+    <!-- Page Heading -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                {{'backend.sprint.sprints'|trans}} - {{project}}
+                <a href="{{path('backend_project_sprints_new',{'id':project.id})}}" class="btn btn-primary pull-right">{{'backend.sprint.new'|trans}}</a>
+            </h1>
+            
+            {% set item1 = {'text': 'backend.project.projects'|trans, 'url':path('backend_projects'),'icon':'fa fa-archive'} %}
+            {% set item2 = {'text': project.name, 'url':path('backend_projects_view',{'id':project.id}),'icon':'fa fa-dashboard'} %}
+            {% set item3 = {'text': 'backend.sprint.sprints'|trans, 'icon':'fa fa-rotate-right'} %}
+            {% set items = [item1, item2, item3] %}
+            {{ filters.breadcrum(items) }}
+        </div>
+    </div>
+    <!-- /.row -->
+    {{ filters.showMessage('messageSuccess', 'success')}}
+    {{ filters.showMessage('messageError', 'danger')}}
+    
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>{{ 'backend.sprint.name'|trans }}</th>
+                    <th>{{ 'backend.sprint.description'|trans }}</th>
+                    <th>{{ 'backend.sprint.start_date'|trans }}</th>
+                    <th>{{ 'backend.sprint.estimated_date'|trans }}</th>
+                    <th>{{ 'backend.global.options'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+            
+            {% set dateFormat = project.settings.dateFormat %}
+            {% for sprint in sprints %}
+                <tr>
+                    <td>
+                        <a href="javascript:void(0);" class="popover-menu" title="{{ sprint.name }}" content="{{sprint.description|raw}}">{{ sprint.name }}</a>
+                    </td>
+                    <td>{{ sprint.description|raw }}</td>
+                    <td>
+                        {{ sprint.startDate|date(dateFormat) }}
+                    </td>
+                    <td>
+                        {{ sprint.estimatedDate|date(dateFormat)}}
+                    </td>
+                    <td>
+                        <a class="btn btn-default btn-sm" title="{{ 'backend.sprint.details'|trans }}" href="#">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                        <a class="btn btn-default btn-sm" title="{{ 'backend.sprint.edit'|trans }}" href="{{ path('backend_project_sprints_edit',{'id':project.id, 'sprintId':sprint.id}) }}">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                        <a class="btn btn-default btn-sm" title="{{ 'backend.sprint.backlog'|trans }}" href="{{ path('backend_project_sprints_backlog',{'id':project.id, 'sprintId':sprint.id}) }}">
+                            <i class="fa fa-tasks"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">{{'backend.sprint.empty_list'|trans}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    
+{% endblock %}

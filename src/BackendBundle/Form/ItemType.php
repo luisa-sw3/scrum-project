@@ -63,18 +63,30 @@ class ItemType extends AbstractType {
             if ($data instanceof Item) {
                 $project = $data->getProject();
 
-                $form->add('designedUser', EntityType::class, array(
-                    'class' => 'BackendBundle:User',
-                    'query_builder' => function (EntityRepository $er) use ($project) {
-                        return $er->createQueryBuilder('u')
+                $form
+                        ->add('designedUser', EntityType::class, array(
+                            'class' => 'BackendBundle:User',
+                            'query_builder' => function (EntityRepository $er) use ($project) {
+                                return $er->createQueryBuilder('u')
                                         ->join('BackendBundle:UserProject', 'uspr')
                                         ->where('uspr.user = u.id')
                                         ->andWhere(($project != null ? "uspr.project = '" . $project->getId() . "'" : '1=1'))
                                         ->orderBy('u.name', 'ASC');
-                    },
-                    'required' => false,
-                    'label' => $this->translator->trans('backend.item.designed_user'),
-                    'placeholder' => $this->translator->trans('backend.global.select'),
+                            },
+                            'required' => false,
+                            'label' => $this->translator->trans('backend.item.designed_user'),
+                            'placeholder' => $this->translator->trans('backend.global.select'),
+                        ))
+                        ->add('sprint', EntityType::class, array(
+                            'class' => 'BackendBundle:Sprint',
+                            'query_builder' => function (EntityRepository $er) use ($project) {
+                                return $er->createQueryBuilder('s')
+                                        ->where(($project != null ? "s.project = '" . $project->getId() . "'" : '1=1'))
+                                        ->orderBy('s.name', 'ASC');
+                            },
+                            'required' => false,
+                            'label' => $this->translator->trans('backend.item.sprint'),
+                            'placeholder' => $this->translator->trans('backend.global.select'),
                 ));
             }
         });

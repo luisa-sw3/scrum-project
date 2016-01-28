@@ -160,6 +160,7 @@ backend:
     item:
         new: "New Item"
         edit: "Edit Item"
+        details: "Item Details"
         title: "Title"
         description: "Description"
         type: "Type"
@@ -168,6 +169,8 @@ backend:
         estimated_hours: "Estimated Hours"
         worked_hours: "Worked hours"
         designed_user: "Designed User"
+        sprint: "Planned to Sprint"
+        no_sprint: "No sprint assigned"
         creation_success_message: "Item created successfully"
         update_success_message: "Item updated successfully"
         delete_success_message: "Item deleted successfully"
@@ -201,6 +204,22 @@ backend:
         
     sprint:
         sprints: "Sprints"
+        new: "New Sprint"
+        edit: "Edit Sprint"
+        details: "Sprint Details"
+        backlog: "Sprint Backlog"
+        backlog_empty: "No items in sprint backlog"
+        name: "Name"
+        description: "Description"
+        start_date: "Start Date"
+        estimated_date: "Estimated Date"
+        status: "Status"
+        creation_success_message: "Sprint created successfully"
+        update_success_message: "Sprint updated successfully"
+        delete_success_message: "Sprint deleted successfully"
+        delete_unable_message: "Sprint can't de deleted"
+        work_weekends: "Work in weekends ?"
+        empty_list: "No sprints in project yet"
         
     report: 
         reports: "Reports"

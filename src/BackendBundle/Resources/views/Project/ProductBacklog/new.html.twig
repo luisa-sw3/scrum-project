@@ -58,6 +58,11 @@
                     {{ form_widget(form.workedHours, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
                     {{ form_errors(form.workedHours) }}
                 </div>
+                <div class="form-group">
+                    {{ form_label(form.sprint)}}
+                    {{ form_widget(form.sprint, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(form.sprint) }}
+                </div>
             </div>
             <div class="col-lg-6">
                 <div class="form-group">
