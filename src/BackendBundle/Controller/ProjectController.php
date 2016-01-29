@@ -13,6 +13,9 @@ use BackendBundle\Entity as Entity;
  */
 class ProjectController extends Controller {
 
+    const MENU = 'menu_projects';
+    const MENU_PROJECT_SETTINGS = 'menu_project_settings';
+    
     /**
      * Lists all Project entities.
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
@@ -24,7 +27,7 @@ class ProjectController extends Controller {
 
         return $this->render('BackendBundle:Project:index.html.twig', array(
                     'projects' => $projects,
-                    'menu' => 'menu_projects'
+                    'menu' => self::MENU
         ));
     }
 
@@ -67,7 +70,7 @@ class ProjectController extends Controller {
                     'project' => $project,
                     'form' => $form->createView(),
                     'settings_form' => $settingsForm->createView(),
-                    'menu' => 'menu_projects'
+                    'menu' => self::MENU
         ));
     }
 
@@ -79,7 +82,7 @@ class ProjectController extends Controller {
 
         return $this->render('BackendBundle:Project:view.html.twig', array(
                     'project' => $project,
-                    'menu' => 'menu_projects'
+                    'menu' => self::MENU
         ));
     }
 
@@ -109,7 +112,7 @@ class ProjectController extends Controller {
                     'edit_form' => $editForm->createView(),
                     'settings_form' => $settingsForm->createView(),
                     'delete_form' => $deleteForm->createView(),
-                    'menu' => 'menu_project_settings'
+                    'menu' => self::MENU_PROJECT_SETTINGS
         ));
     }
 

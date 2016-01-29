@@ -12,6 +12,8 @@ use BackendBundle\Entity as Entity;
  */
 class ItemController extends Controller {
 
+    const MENU = 'menu_project_backlog';
+    
     /**
      * Permite listar el backlog de un proyecto
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 25/01/2016
@@ -37,7 +39,7 @@ class ItemController extends Controller {
         return $this->render('BackendBundle:Project/ProductBacklog:index.html.twig', array(
                     'project' => $project,
                     'backlog' => $backlog,
-                    'menu' => 'menu_project_backlog'
+                    'menu' => self::MENU
         ));
     }
 
@@ -79,7 +81,7 @@ class ItemController extends Controller {
         return $this->render('BackendBundle:Project/ProductBacklog:new.html.twig', array(
                     'project' => $project,
                     'form' => $form->createView(),
-                    'menu' => 'menu_project_backlog'
+                    'menu' => self::MENU
         ));
     }
 
@@ -116,7 +118,7 @@ class ItemController extends Controller {
                     'item' => $item,
                     'project' => $item->getProject(),
                     'edit_form' => $editForm->createView(),
-                    'menu' => 'menu_project_backlog'
+                    'menu' => self::MENU
         ));
     }
     

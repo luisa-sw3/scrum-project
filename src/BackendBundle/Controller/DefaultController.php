@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller {
 
+    const MENU = 'menu_home';
+    
     /**
      * Permite desplegar la home page del backend
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/12/2015
@@ -15,7 +17,7 @@ class DefaultController extends Controller {
     public function indexAction() {
 
         return $this->render('BackendBundle:Default:index.html.twig', array(
-            'menu' => 'menu_home'
+            'menu' => self::MENU
         ));
     }
 

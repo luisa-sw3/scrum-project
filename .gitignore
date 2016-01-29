@@ -33,6 +33,7 @@
 /web/uploads/
 /web/css/
 /web/js
+/web/media/*
 
 # PHPUnit
 /app/phpunit.xml

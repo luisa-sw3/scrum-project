@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class ProjectTeamController extends Controller {
 
+    const MENU = 'menu_project_team';
+    
     /**
      * Permite listar los usuarios que estan asignados a un proyecto
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 18/01/2016
@@ -59,7 +61,7 @@ class ProjectTeamController extends Controller {
                     'forms' => $forms,
                     'invitations' => $invitations,
                     'project' => $project,
-                    'menu' => 'menu_project_team'
+                    'menu' => self::MENU
         ));
     }
 
@@ -121,7 +123,7 @@ class ProjectTeamController extends Controller {
         return $this->render('BackendBundle:ProjectTeam:addCollaborator.html.twig', array(
                     'project' => $project,
                     'form' => $form->createView(),
-                    'menu' => 'menu_project_team',
+                    'menu' => self::MENU,
                     'closeFancy' => $closeFancy
         ));
     }

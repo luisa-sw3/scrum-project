@@ -68,8 +68,8 @@
                     {{ form_errors(form.profileImage) }}
                 </div>
                 <div class="form-group">
-                    <a href="{{ asset('uploads/users/' ~ app.user.profileImagePath) }}" class="fancybox">
-                    <img width="50%" class="thumbnail" src="{{ asset('uploads/users/' ~ app.user.profileImagePath) }}" />
+                    <a href="{{ asset('uploads/users/' ~ app.user.profileImagePath)  }}" class="fancybox">
+                        <img class="thumbnail" src="{{ asset('uploads/users/' ~ app.user.profileImagePath) | imagine_filter('thumbnail_120_90') }}" />
                     </a>
                 </div>
                 

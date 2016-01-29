@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class SettingsController extends Controller {
 
+    const MENU = 'menu_project_settings';
     
     /**
      * Permite obtener la pantalla de inicio del menu de configuraciones
@@ -15,7 +16,7 @@ class SettingsController extends Controller {
     public function indexAction() {
 
         return $this->render('BackendBundle:Settings:index.html.twig', array(
-            'menu' => 'menu_project_settings'
+            'menu' => self::MENU
         ));
     }
 }

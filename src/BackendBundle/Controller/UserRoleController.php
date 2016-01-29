@@ -12,6 +12,8 @@ use BackendBundle\Form\RoleType;
  */
 class UserRoleController extends Controller {
 
+    const MENU = 'menu_project_team';
+    
     /**
      * Permite listar los roles que tiene la aplicacion
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 18/01/2016
@@ -30,7 +32,7 @@ class UserRoleController extends Controller {
         return $this->render('BackendBundle:Settings/Roles:index.html.twig', array(
                     'roles' => $roles,
                     'project' => $project,
-                    'menu' => 'menu_project_team'
+                    'menu' => self::MENU
         ));
     }
 
@@ -64,7 +66,7 @@ class UserRoleController extends Controller {
                     'role' => $role,
                     'project' => $project,
                     'form' => $form->createView(),
-                    'menu' => 'menu_project_team'
+                    'menu' => self::MENU
         ));
     }
 
@@ -100,7 +102,7 @@ class UserRoleController extends Controller {
                     'role' => $role,
                     'project' => $project,
                     'edit_form' => $editForm->createView(),
-                    'menu' => 'menu_project_team'
+                    'menu' => self::MENU
         ));
     }
 

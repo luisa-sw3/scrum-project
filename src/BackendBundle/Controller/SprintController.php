@@ -12,6 +12,8 @@ use BackendBundle\Entity as Entity;
  */
 class SprintController extends Controller {
 
+    const MENU = 'menu_project_sprints';
+    
     /**
      * Permite listar los sprints de un proyecto
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 28/01/2016
@@ -37,7 +39,7 @@ class SprintController extends Controller {
         return $this->render('BackendBundle:Project/Sprint:index.html.twig', array(
                     'project' => $project,
                     'sprints' => $sprints,
-                    'menu' => 'menu_project_sprints'
+                    'menu' => self::MENU
         ));
     }
 
@@ -79,7 +81,7 @@ class SprintController extends Controller {
         return $this->render('BackendBundle:Project/Sprint:new.html.twig', array(
                     'project' => $project,
                     'form' => $form->createView(),
-                    'menu' => 'menu_project_sprints'
+                    'menu' => self::MENU
         ));
     }
 
@@ -116,7 +118,7 @@ class SprintController extends Controller {
                     'sprint' => $sprint,
                     'project' => $sprint->getProject(),
                     'edit_form' => $editForm->createView(),
-                    'menu' => 'menu_project_sprints'
+                    'menu' => self::MENU
         ));
     }
     
@@ -146,7 +148,7 @@ class SprintController extends Controller {
         return $this->render('BackendBundle:Project/Sprint:backlog.html.twig', array(
                     'project' => $sprint->getProject(),
                     'sprintBacklog' => $sprintBacklog,
-                    'menu' => 'menu_project_sprints'
+                    'menu' => self::MENU
         ));
     }
     

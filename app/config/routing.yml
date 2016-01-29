@@ -12,4 +12,8 @@ backend_redirect:
         _controller: BackendBundle:Default:redirect
         route: backend_homepage
         permanent: true
+        
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.xml"
+
 

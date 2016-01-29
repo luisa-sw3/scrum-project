@@ -13,6 +13,8 @@ use Util\Util;
  */
 class NotificationController extends Controller {
 
+    const MENU = 'menu_home';
+    
     /**
      * Permite listar las notificaciones pendientes del usuario logueado
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 22/01/2016
@@ -32,7 +34,7 @@ class NotificationController extends Controller {
         return $this->render('BackendBundle:Notification:index.html.twig', array(
                     'invitations' => $invitations,
                     'rejectInvitation' => $rejectInvitation,
-                    'menu' => 'menu_home'
+                    'menu' => self::MENU
         ));
     }
 
