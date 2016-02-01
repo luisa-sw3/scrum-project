@@ -23,7 +23,7 @@
                 <a href="{{path('backend_homepage')}}"><i class="fa fa-home"></i> {{'backend.global.home'|trans}}</a>
             </li>
         {% endif %}
-        
+
         {% for item in items %}
             <li {% if loop.last %}class="active"{% endif %}>
                 {% if item.url is defined and item.url is not empty and item.url != '#' %}
@@ -35,4 +35,20 @@
         {% endfor %}
     </ol>
 {% endmacro %}
-    
+
+{% macro sortIcon(key, pagination) %}
+
+    {% set params = pagination.params %}
+
+    {% if params.sort is defined %}
+
+        {% if params.sort == key %}
+            {% if params.direction == 'asc'%}
+                <i class="fa fa-sort-asc"></i>
+            {% else %}
+                <i class="fa fa-sort-desc"></i>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+{% endmacro %}    

@@ -2,7 +2,7 @@
 {% block title %}{{'backend.backlog.product_backlog'|trans}}{% endblock %}
 
 {% block content %}
-    
+
     <!-- Page Heading -->
     <div class="row">
         <div class="col-lg-12">
@@ -10,7 +10,7 @@
                 {{'backend.backlog.product_backlog'|trans}}
                 <a href="{{path('backend_project_product_backlog_new',{'id':project.id})}}" class="btn btn-primary pull-right">{{'backend.item.new'|trans}}</a>
             </h1>
-            
+
             {% set item1 = {'text': 'backend.project.projects'|trans, 'url':path('backend_projects'),'icon':'fa fa-archive'} %}
             {% set item2 = {'text': project.name, 'url':path('backend_projects_view',{'id':project.id}),'icon':'fa fa-dashboard'} %}
             {% set item3 = {'text': 'backend.backlog.product_backlog'|trans, 'icon':'fa fa-list'} %}
@@ -21,43 +21,91 @@
     <!-- /.row -->
     {{ filters.showMessage('messageSuccess', 'success')}}
     {{ filters.showMessage('messageError', 'danger')}}
-    
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="input-group" id="adv-search">
+
+                <input type="text" class="form-control" placeholder="Search for snippets" />
+                <div class="input-group-btn">
+                    <div class="btn-group" role="group">
+                        <div class="dropdown dropdown-lg">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                            <div class="dropdown-menu dropdown-menu-right" role="menu">
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <label for="filter">Filter by</label>
+                                        <select class="form-control">
+                                            <option value="0" selected>All Snippets</option>
+                                            <option value="1">Featured</option>
+                                            <option value="2">Most popular</option>
+                                            <option value="3">Top rated</option>
+                                            <option value="4">Most commented</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contain">Author</label>
+                                        <input class="form-control" type="text" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contain">Contains the words</label>
+                                        <input class="form-control" type="text" />
+                                    </div>
+                                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                                </form>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-6 text-right">
+            {# pagina actual * items por pagina  #}
+            {% set previousPage = pagination.getCurrentPageNumber() - 1 %}
+            {% set itemsPerPage = pagination.getItemNumberPerPage %}
+            {% set startItem = (previousPage * itemsPerPage) + 1 %}
+
+            {% if (pagination.getCurrentPageNumber() * itemsPerPage) <= pagination.getTotalItemCount() %}
+                {% set itemsOnPage = pagination.getCurrentPageNumber() * itemsPerPage %}
+            {% else %}
+                {% set itemsOnPage = pagination.getTotalItemCount() %}
+            {% endif %}
+
+            Showing {{ startItem }} to {{ itemsOnPage }} of {{ pagination.getTotalItemCount }}
+        </div>
+    </div>
+
+    {% set dateFormat = project.settings.dateFormat %}
     <div class="table-responsive">
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>{{ 'backend.item.title'|trans }}</th>
-                    <th>{{ 'backend.item.type'|trans }}</th>
-                    <th>{{ 'backend.item.sprint'|trans }}</th>
-                    <th>{{ 'backend.global.creation_date'|trans }}</th>
-                    <th>{{ 'backend.item.priority'|trans }}</th>
-                    <th>{{ 'backend.global.options'|trans }}</th>
-                </tr>
-            </thead>
-            <tbody>
-            
-            {% set dateFormat = project.settings.dateFormat %}
-            {% for item in backlog %}
-                <tr>
-                    <td>
-                        <a href="javascript:void(0);" class="popover-menu" title="{{ item.title }}" content="{{item.description|raw}}">{{ item.title }}</a>
-                    </td>
+        <table class="table table-bordered table-hover no-margin-bottom">
+            <tr>
+                <th>
+                    {{ knp_pagination_sortable(pagination, 'backend.item.title'|trans, 'i.title') }}
+                    {{ filters.sortIcon('i.title', pagination) }} 
+                </th>
+                <th>
+                    {{ knp_pagination_sortable(pagination, 'backend.item.type'|trans, 'i.type') }}
+                    {{ filters.sortIcon('i.type', pagination) }}
+                </th>
+                <th>
+                    {{ knp_pagination_sortable(pagination, 'backend.global.creation_date'|trans, ['i.creationDate']) }}
+                    {{ filters.sortIcon('i.creationDate', pagination) }} 
+                </th>
+                <th>
+                    {{ knp_pagination_sortable(pagination, 'backend.item.priority'|trans, ['i.priority']) }}
+                    {{ filters.sortIcon('i.priority', pagination) }} 
+                </th>
+                <th>{{ 'backend.global.options'|trans }}</th>
+            </tr>
+
+            {% for item in pagination %}
+                <tr {% if loop.index is odd %}class="color"{% endif %}>
+                    <td><a href="javascript:void(0);" class="popover-menu" title="{{ item.title }}" content="{{item.description|raw}}">{{ item.title }}</a></td>
                     <td>{{ item.getTextType()|trans }}</td>
-                    <td>
-                        {% if item.sprint is not empty %}
-                            <a href="{{path('backend_project_sprints_backlog',{'id':project.id, 'sprintId':item.sprint.id})}}">{{ item.sprint }}</a>
-                        {% else %}
-                            {{'backend.item.no_sprint'|trans}}
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if item.creationDate %}
-                            {{ item.creationDate|date(dateFormat) }}
-                        {% endif %}
-                    </td>
-                    <td>
-                        {{ item.priority|default(0) }}
-                    </td>
+                    <td>{{ item.creationDate|date(dateFormat) }}</td>
+                    <td>{{ item.priority|default(0) }}</td>
                     <td>
                         <a class="btn btn-default btn-sm" title="{{ 'backend.project.details'|trans }}" href="#">
                             <i class="fa fa-eye"></i>
@@ -72,11 +120,13 @@
                     <td colspan="5">{{'backend.backlog.empty_list'|trans}}</td>
                 </tr>
             {% endfor %}
-            </tbody>
         </table>
+        <div class="navigation pull-right">
+            {{ knp_pagination_render(pagination) }}
+        </div>
     </div>
 {% endblock %}
 
 {% block scripts %}
-    
+
 {% endblock %}

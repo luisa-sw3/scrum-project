@@ -13,7 +13,7 @@ use BackendBundle\Entity as Entity;
 class ItemController extends Controller {
 
     const MENU = 'menu_project_backlog';
-    
+
     /**
      * Permite listar el backlog de un proyecto
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 25/01/2016
@@ -31,15 +31,31 @@ class ItemController extends Controller {
             return $this->redirectToRoute('backend_projects');
         }
 
-        $search = array('project' => $project->getId());
+        $search = array(
+            'project' => $project->getId(),
+            'sprint' => NULL
+        );
         $order = array('priority' => 'DESC');
 
-        $backlog = $em->getRepository('BackendBundle:Item')->findBy($search, $order);
+        //$backlog = $em->getRepository('BackendBundle:Item')->findBy($search, $order);
+
+
+        $dql = "SELECT i FROM BackendBundle:Item i";
+        $query = $em->createQuery($dql);
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+                $query, /* query NOT result */ 
+                $request->query->getInt('page', 1)/* page number */, 
+                3/* limit per page */
+        );
+        
+        //\Symfony\Component\VarDumper\VarDumper::dump($pagination->getParams());die();
 
         return $this->render('BackendBundle:Project/ProductBacklog:index.html.twig', array(
                     'project' => $project,
-                    'backlog' => $backlog,
-                    'menu' => self::MENU
+                    'menu' => self::MENU,
+                    'pagination' => $pagination
         ));
     }
 
@@ -62,7 +78,7 @@ class ItemController extends Controller {
 
         $item = new Entity\Item();
         $item->setProject($project);
-        
+
         $form = $this->createForm(ItemType::class, $item);
         $form->handleRequest($request);
 
@@ -101,12 +117,12 @@ class ItemController extends Controller {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.item.not_found_message'));
             return $this->redirectToRoute('backend_project_product_backlog', array('id' => $id));
         }
-        
+
         $editForm = $this->createForm(ItemType::class, $item);
         $editForm->handleRequest($request);
-        
+
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            
+
             $em->persist($item);
             $em->flush();
 
@@ -121,6 +137,5 @@ class ItemController extends Controller {
                     'menu' => self::MENU
         ));
     }
-    
 
 }
