@@ -38,6 +38,11 @@ backend:
         accept: "Aceptar"
         reject: "Rechazar"
         owner: "Creado por"
+        search: "Buscar"
+        clear_search: "Borrar Búsqueda"
+        showing: "Mostrando"
+        to: "a"
+        of: "de"
         
     user:
         edit_profile: "Editar Perfil"
@@ -175,6 +180,7 @@ backend:
         update_success_message: "Item actualizado exitosamente"
         delete_success_message: "Item eliminado exitosamente"
         delete_unable_message: "Este item no puede ser eliminado"
+        title_description: "Título, descripción..."
         
         type_user_history: "Historia de Usuario"
         type_feature: "Característica / Funcionalidad"

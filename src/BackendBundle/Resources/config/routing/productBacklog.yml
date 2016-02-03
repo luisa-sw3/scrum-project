@@ -1,7 +1,7 @@
 backend_project_product_backlog:
     path:     /
     defaults: { _controller: "BackendBundle:Item:productBacklog" }
-    methods:  GET
+    methods:  [GET, POST]
 
 backend_project_product_backlog_new:
     path:     /new

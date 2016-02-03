@@ -25,55 +25,34 @@
     <div class="row">
         <div class="col-md-6">
             <div class="input-group" id="adv-search">
-
-                <input type="text" class="form-control" placeholder="Search for snippets" />
-                <div class="input-group-btn">
-                    <div class="btn-group" role="group">
-                        <div class="dropdown dropdown-lg">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
-                            <div class="dropdown-menu dropdown-menu-right" role="menu">
-                                <form class="form-horizontal" role="form">
+                <form class="form-horizontal" role="form" method="post">
+                    {{ form_widget(searchForm.item_free_text, {'attr':{'class':'form-control main-search', 'value':pagination.params.item_free_text|default('')}})}}
+                    <div class="input-group-btn">
+                        <div class="btn-group" role="group">
+                            <div class="dropdown dropdown-lg">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                                <div class="dropdown-menu dropdown-menu-right" role="menu">
                                     <div class="form-group">
-                                        <label for="filter">Filter by</label>
-                                        <select class="form-control">
-                                            <option value="0" selected>All Snippets</option>
-                                            <option value="1">Featured</option>
-                                            <option value="2">Most popular</option>
-                                            <option value="3">Top rated</option>
-                                            <option value="4">Most commented</option>
-                                        </select>
+                                        {{ form_label(searchForm.item_type)}}
+                                        {{ form_widget(searchForm.item_type, {'attr':{'class':'form-control'}})}}
                                     </div>
                                     <div class="form-group">
-                                        <label for="contain">Author</label>
-                                        <input class="form-control" type="text" />
+                                        {{ form_label(searchForm.item_designed_user)}}
+                                        {{ form_widget(searchForm.item_designed_user, {'attr':{'class':'form-control'}})}}
                                     </div>
-                                    <div class="form-group">
-                                        <label for="contain">Contains the words</label>
-                                        <input class="form-control" type="text" />
-                                    </div>
-                                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
-                                </form>
+                                    <button type="reset" class="btn btn-danger pull-left" title="{{'backend.global.clear_search'|trans}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                                    <button type="submit" class="btn btn-primary pull-right" title="{{'backend.global.search'|trans}}"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                                </div>
                             </div>
+                            {{ form_widget(searchForm._token) }} 
+                            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true" title="{{'backend.global.search'|trans}}"></span></button>
                         </div>
-                        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
                     </div>
-                </div>
-
+                </form>
             </div>
         </div>
         <div class="col-md-6 text-right">
-            {# pagina actual * items por pagina  #}
-            {% set previousPage = pagination.getCurrentPageNumber() - 1 %}
-            {% set itemsPerPage = pagination.getItemNumberPerPage %}
-            {% set startItem = (previousPage * itemsPerPage) + 1 %}
-
-            {% if (pagination.getCurrentPageNumber() * itemsPerPage) <= pagination.getTotalItemCount() %}
-                {% set itemsOnPage = pagination.getCurrentPageNumber() * itemsPerPage %}
-            {% else %}
-                {% set itemsOnPage = pagination.getTotalItemCount() %}
-            {% endif %}
-
-            Showing {{ startItem }} to {{ itemsOnPage }} of {{ pagination.getTotalItemCount }}
+            {{ filters.textListedItems(pagination) }}
         </div>
     </div>
 
@@ -128,5 +107,6 @@
 {% endblock %}
 
 {% block scripts %}
-
+    $("#backendbundle_search_item_type_item_type").val("{{ pagination.params.item_type|default('')}}");
+    $("#backendbundle_search_item_type_item_designed_user").val("{{ pagination.params.item_designed_user|default('')}}");
 {% endblock %}

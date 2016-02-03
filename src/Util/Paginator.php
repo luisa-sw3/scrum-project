@@ -12,6 +12,8 @@ class Paginator {
     const ORDER_DESC = 'desc';
     const REQUEST_TYPE_ARRAY = 'array';
     const REQUEST_TYPE_REQUEST = 'request';
+    
+    const DEFAULT_ITEMS_PER_PAGE = 10;
 
     /**
      * Rangos de paginacion por defecto

@@ -5,7 +5,9 @@ namespace BackendBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use BackendBundle\Form\ItemType;
+use BackendBundle\Form\SearchItemType;
 use BackendBundle\Entity as Entity;
+use Util\Paginator;
 
 /**
  * Item controller.
@@ -31,31 +33,35 @@ class ItemController extends Controller {
             return $this->redirectToRoute('backend_projects');
         }
 
-        $search = array(
-            'project' => $project->getId(),
-            'sprint' => NULL
-        );
-        $order = array('priority' => 'DESC');
+        $item = new Entity\Item();
+        $item->setProject($project);
+        $searchForm = $this->createForm(SearchItemType::class, $item);
 
-        //$backlog = $em->getRepository('BackendBundle:Item')->findBy($search, $order);
+        $indexSearch = array('item_designed_user', 'item_free_text', 'item_type');
 
+        if ($request->isMethod('POST')) {
+            $searchForm->handleRequest($request);
+            $parameters = $request->request->get('backendbundle_search_item_type');
+            $search = Paginator::filterParameters($indexSearch, $parameters, Paginator::REQUEST_TYPE_ARRAY);
+            $search['id'] = $id;
+            return $this->redirect($this->generateUrl('backend_project_product_backlog', $search));
+        } else {
+            $search = Paginator::filterParameters($indexSearch, $request, Paginator::REQUEST_TYPE_REQUEST);
+            $search['project'] = $project->getId();
+            $search['sprint'] = NULL;
+        }
 
-        $dql = "SELECT i FROM BackendBundle:Item i";
-        $query = $em->createQuery($dql);
-
+        $query = $em->getRepository('BackendBundle:Item')->findItems($search);
+        
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-                $query, /* query NOT result */ 
-                $request->query->getInt('page', 1)/* page number */, 
-                3/* limit per page */
-        );
-        
-        //\Symfony\Component\VarDumper\VarDumper::dump($pagination->getParams());die();
+                $query, $request->query->getInt('page', 1), Paginator::DEFAULT_ITEMS_PER_PAGE);
 
         return $this->render('BackendBundle:Project/ProductBacklog:index.html.twig', array(
                     'project' => $project,
                     'menu' => self::MENU,
-                    'pagination' => $pagination
+                    'pagination' => $pagination,
+                    'searchForm' => $searchForm->createView(),
         ));
     }
 

@@ -36,8 +36,26 @@
     </ol>
 {% endmacro %}
 
-{% macro sortIcon(key, pagination) %}
+{% macro textListedItems(pagination) %}
+    {% if pagination.getTotalItemCount > 0 %}
+        {% set previousPage = pagination.getCurrentPageNumber() - 1 %}
+        {% set itemsPerPage = pagination.getItemNumberPerPage %}
+        {% set startItem = 0 %}
 
+        {% set startItem = (previousPage * itemsPerPage) + 1 %}
+
+
+        {% if (pagination.getCurrentPageNumber() * itemsPerPage) <= pagination.getTotalItemCount() %}
+            {% set itemsOnPage = pagination.getCurrentPageNumber() * itemsPerPage %}
+        {% else %}
+            {% set itemsOnPage = pagination.getTotalItemCount() %}
+        {% endif %}
+
+        {{'backend.global.showing'|trans}} {{ startItem }} {{'backend.global.to'|trans}} {{ itemsOnPage }} {{'backend.global.of'|trans}} {{ pagination.getTotalItemCount }}
+    {% endif %}
+{% endmacro %}
+
+{% macro sortIcon(key, pagination) %}
     {% set params = pagination.params %}
 
     {% if params.sort is defined %}

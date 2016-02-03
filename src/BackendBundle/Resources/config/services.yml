@@ -77,6 +77,14 @@ services:
         tags:
             - { name: form.type }
     
+    #servicio para formulario del buscador en product backlog
+    backend.form.type.search_item:
+        class: BackendBundle\Form\SearchItemType
+        arguments:
+            - "@service_container"
+        tags:
+            - { name: form.type }
+    
     #servicio para formulario de sprints de un proyecto
     backend.form.type.sprint:
         class: BackendBundle\Form\SprintType

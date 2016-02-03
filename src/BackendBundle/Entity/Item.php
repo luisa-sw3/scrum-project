@@ -10,7 +10,7 @@ use Util\Util;
  * Item
  * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 23/12/2015
  * @ORM\Table(name="item")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="BackendBundle\Entity\ItemRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class Item {

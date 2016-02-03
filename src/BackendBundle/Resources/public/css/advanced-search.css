@@ -49,3 +49,7 @@ and open the template in the editor.
     }
 }
 
+input.main-search {
+    width: 428px !important;
+}
+
