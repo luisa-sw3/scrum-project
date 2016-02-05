@@ -60,6 +60,7 @@
     <div class="table-responsive">
         <table class="table table-bordered table-hover no-margin-bottom">
             <tr>
+                <th>#</th>
                 <th>
                     {{ knp_pagination_sortable(pagination, 'backend.item.title'|trans, 'i.title') }}
                     {{ filters.sortIcon('i.title', pagination) }} 
@@ -81,6 +82,7 @@
 
             {% for item in pagination %}
                 <tr {% if loop.index is odd %}class="color"{% endif %}>
+                    <td><a href="#">{{item.consecutive}}</a></td>
                     <td><a href="javascript:void(0);" class="popover-menu" title="{{ item.title }}" content="{{item.description|raw}}">{{ item.title }}</a></td>
                     <td>{{ item.getTextType()|trans }}</td>
                     <td>{{ item.creationDate|date(dateFormat) }}</td>
@@ -96,7 +98,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="5">{{'backend.backlog.empty_list'|trans}}</td>
+                    <td colspan="6">{{'backend.backlog.empty_list'|trans}}</td>
                 </tr>
             {% endfor %}
         </table>

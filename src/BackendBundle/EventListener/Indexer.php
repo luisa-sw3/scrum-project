@@ -3,6 +3,7 @@
 namespace BackendBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use BackendBundle\Entity as Entity;
 
 class Indexer {
 
@@ -25,9 +26,27 @@ class Indexer {
         if ($reflectedClass->hasProperty('consecutive')) {
             $order = array('consecutive' => 'DESC');
 
-            $lastItem = $entityManager->getRepository($className)->findOneBy(array(), $order);
-            if ($lastItem != null) {
-                $entity->setConsecutive($lastItem->getConsecutive() + 1);
+            $consecutive = null;
+
+            if ($entity instanceof Entity\Item) {
+                //buscamos la cantidad de items que tiene creado un proyecto para asignar el consecutivo
+                $project = $entity->getProject();
+                $consecutive = $project->getLastItemConsecutive() + 1;
+                $project->setLastItemConsecutive($consecutive);
+                $entityManager->persist($project);
+            } elseif ($entity instanceof Entity\Sprint) {
+                //buscamos la cantidad de items que tiene creado un proyecto para asignar el consecutivo
+                $project = $entity->getProject();
+                $consecutive = $project->getLastSprintConsecutive() + 1;
+                $project->setLastSprintConsecutive($consecutive);
+                $entityManager->persist($project);
+            } else {
+                $lastItem = $entityManager->getRepository($className)->findOneBy(array(), $order);
+                $consecutive = $lastItem->getConsecutive() + 1;
+            }
+
+            if ($consecutive != null) {
+                $entity->setConsecutive($consecutive);
             } else {
                 $entity->setConsecutive(1);
             }

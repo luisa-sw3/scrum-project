@@ -70,6 +70,18 @@ class Project {
      */
     protected $settings;
     
+    /**
+     * Ultimo consecutivo de los items creados en un proyecto
+     * @ORM\Column(name="proj_last_item_consecutive", type="integer", nullable=true)
+     */
+    protected $lastItemConsecutive;
+    
+    /**
+     * Ultimo consecutivo de los sprints creados en un proyecto
+     * @ORM\Column(name="proj_last_sprint_consecutive", type="integer", nullable=true)
+     */
+    protected $lastSprintConsecutive;
+    
     function getId() {
         return $this->id;
     }
@@ -132,6 +144,22 @@ class Project {
 
     public function __toString() {
         return $this->getName();
+    }
+
+    function getLastItemConsecutive() {
+        return $this->lastItemConsecutive;
+    }
+
+    function setLastItemConsecutive($lastItemConsecutive) {
+        $this->lastItemConsecutive = $lastItemConsecutive;
+    }
+    
+    function getLastSprintConsecutive() {
+        return $this->lastSprintConsecutive;
+    }
+
+    function setLastSprintConsecutive($lastSprintConsecutive) {
+        $this->lastSprintConsecutive = $lastSprintConsecutive;
     }
 
     /**

@@ -36,7 +36,7 @@
             {% for project in projects %}
                 {% set dateFormat = project.settings.dateFormat %}
                 <tr>
-                    <td>{{ project.name }}</td>
+                    <td><a href="{{ path('backend_projects_view', { 'id': project.id }) }}">{{ project.name }}</a></td>
                     <td>{{ project.description|raw }}</td>
                     <td>
                         {% if project.creationDate %}

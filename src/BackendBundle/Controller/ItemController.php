@@ -128,7 +128,7 @@ class ItemController extends Controller {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-
+            
             $em->persist($item);
             $em->flush();
 
@@ -136,7 +136,7 @@ class ItemController extends Controller {
             return $this->redirectToRoute('backend_project_product_backlog', array('id' => $item->getProject()->getId()));
         }
 
-        return $this->render('BackendBundle:Project/ProductBacklog:uploader.html.twig', array(
+        return $this->render('BackendBundle:Project/ProductBacklog:edit.html.twig', array(
                     'item' => $item,
                     'project' => $item->getProject(),
                     'edit_form' => $editForm->createView(),

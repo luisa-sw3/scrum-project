@@ -26,6 +26,7 @@
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>{{ 'backend.sprint.name'|trans }}</th>
                     <th>{{ 'backend.sprint.description'|trans }}</th>
                     <th>{{ 'backend.sprint.start_date'|trans }}</th>
@@ -38,6 +39,9 @@
             {% set dateFormat = project.settings.dateFormat %}
             {% for sprint in sprints %}
                 <tr>
+                    <td>
+                        <a href="{{ path('backend_project_sprints_backlog',{'id':project.id, 'sprintId':sprint.id}) }}">{{ sprint.consecutive }}</a>
+                    </td>
                     <td>
                         <a href="javascript:void(0);" class="popover-menu" title="{{ sprint.name }}" content="{{sprint.description|raw}}">{{ sprint.name }}</a>
                     </td>

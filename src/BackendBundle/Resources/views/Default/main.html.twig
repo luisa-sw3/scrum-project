@@ -33,7 +33,7 @@
 
         <!-- Custom Styles -->
         <link href="{{asset('bundles/backend/css/style.css')}}" rel="stylesheet" type="text/css">
-        
+
         <!-- Custom Search Bar -->
         <link href="{{asset('bundles/backend/css/advanced-search.css')}}" rel="stylesheet" type="text/css">
 
@@ -62,7 +62,8 @@
         <!-- /#wrapper -->
 
         <!-- jQuery -->
-        <script src="{{ asset('bundles/backend/js/jquery.js') }}"></script>
+        {#<script src="{{ asset('bundles/backend/js/jquery.js') }}"></script>#}
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
         <!-- jQuery UI-->
         <script src="{{ asset('bundles/backend/jquery-ui/jquery-ui.js') }}"></script>
@@ -128,9 +129,11 @@
                 });
                 $('.popover-menu').trigger('click');
 
-                {% block scripts %}
-                {% endblock %}
-            });
+                
+
+            {% block scripts %}
+            {% endblock %}
+                });
             {% block functions_javascript %}
             {% endblock %}
         </script>
