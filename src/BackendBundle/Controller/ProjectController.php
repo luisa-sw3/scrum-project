@@ -15,7 +15,7 @@ class ProjectController extends Controller {
 
     const MENU = 'menu_projects';
     const MENU_PROJECT_SETTINGS = 'menu_project_settings';
-    
+
     /**
      * Lists all Project entities.
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
@@ -59,6 +59,23 @@ class ProjectController extends Controller {
             $userProject->setProject($project);
             $userProject->setUser($this->getUser());
             $em->persist($userProject);
+
+            //creamos los roles por defecto para el proyecto (P.Owner, S.Master, Desarrollador)
+            $roles = array(
+                $this->get('translator')->trans('backend.user_role.product_owner') => $this->get('translator')->trans('backend.user_role.product_owner_description'), 
+                $this->get('translator')->trans('backend.user_role.scrum_master') => $this->get('translator')->trans('backend.user_role.scrum_master_description'),
+                $this->get('translator')->trans('backend.user_role.developer') => $this->get('translator')->trans('backend.user_role.developer_description')) ;
+
+            
+            
+            
+            foreach ($roles as $roleName => $description) {
+                $role = new Entity\Role();
+                $role->setName($roleName);
+                $role->setDescription($description);
+                $role->setProject($project);
+                $em->persist($role);
+            }
 
             $em->flush();
 

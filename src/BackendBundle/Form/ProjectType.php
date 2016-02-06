@@ -37,6 +37,17 @@ class ProjectType extends AbstractType {
             }
         });
 
+        $currentYear = (new \DateTime('now'))->format('Y') - 1;
+        $yearsForStart = $yearsEstimated = array();
+        for ($i = 0; $i < 3; $i++) {
+            array_push($yearsForStart, $currentYear);
+            if ($i > 0) {
+                array_push($yearsEstimated, $currentYear);
+            }
+            $currentYear++;
+        }
+        array_push($yearsEstimated, $currentYear);
+
         $builder
                 ->add('name', Type\TextType::class, array(
                     'required' => true,
@@ -55,6 +66,7 @@ class ProjectType extends AbstractType {
                         'day' => $this->translator->trans('backend.global.day')
                     ),
                     'format' => ($project != null ? $project->getSettings()->getPHPDateFormat() : 'y-M-d'),
+                    'years' => $yearsForStart,
                 ))
                 ->add('estimatedDate', Type\DateType::class, array(
                     'required' => false,
@@ -65,6 +77,7 @@ class ProjectType extends AbstractType {
                         'day' => $this->translator->trans('backend.global.day')
                     ),
                     'format' => ($project != null ? $project->getSettings()->getPHPDateFormat() : 'y-M-d'),
+                    'years' => $yearsEstimated,
                 ))
         ;
     }

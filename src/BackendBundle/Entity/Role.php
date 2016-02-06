@@ -37,12 +37,6 @@ class Role {
     protected $description;
     
     /**
-     * Boolean para saber si el rol fue añadido manualmente
-     * @ORM\Column(name="role_is_manually_added", type="boolean", nullable=true)
-     */
-    protected $isManuallyAdded;
-    
-    /**
      * Proyecto al que pertenece el Rol
      * @ORM\ManyToOne(targetEntity="Project")
      * @ORM\JoinColumn(name="role_project_id", referencedColumnName="proj_id", nullable=true)
@@ -67,14 +61,6 @@ class Role {
 
     function setDescription($description) {
         $this->description = $description;
-    }
-    
-    function getIsManuallyAdded() {
-        return $this->isManuallyAdded;
-    }
-
-    function setIsManuallyAdded($isManuallyAdded) {
-        $this->isManuallyAdded = $isManuallyAdded;
     }
     
     function getProject() {

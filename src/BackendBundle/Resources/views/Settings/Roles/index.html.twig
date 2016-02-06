@@ -37,11 +37,9 @@
                     <td>{{ role.name }}</td>
                     <td>{{ role.description | raw }}</td>
                     <td>
-                        {% if role.isManuallyAdded %}
-                            <a class="btn btn-default btn-sm" title="{{ 'backend.user_role.edit'|trans }}" href="{{ path('backend_projects_roles_edit',{'projectId':project.id, 'id':role.id}) }}">
-                                <i class="fa fa-pencil"></i>
-                            </a>
-                        {% endif %}
+                        <a class="btn btn-default btn-sm" title="{{ 'backend.user_role.edit'|trans }}" href="{{ path('backend_projects_roles_edit',{'projectId':project.id, 'id':role.id}) }}">
+                            <i class="fa fa-pencil"></i>
+                        </a>
                     </td>
                 </tr>
             {% else %}

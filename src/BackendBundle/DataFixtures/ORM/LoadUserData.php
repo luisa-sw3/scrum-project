@@ -38,16 +38,6 @@ class LoadUserData implements FixtureInterface, ContainerAwareInterface {
         $user->setPassword($encoded);
 
         $manager->persist($user);
-
-
-        //creamos los roles basicos de Scrum (P.Owner, S.Master, Desarrollador)
-        $roles = array('Product Owner', 'Scrum Master', 'Developer');
-
-        foreach ($roles as $roleName) {
-            $role = new Entity\Role();
-            $role->setName($roleName);
-            $manager->persist($role);
-        }
         
         $manager->flush();
     }

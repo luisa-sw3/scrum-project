@@ -4,9 +4,9 @@
         <li {% if menu is defined and menu == 'menu_home'%}class="active"{% endif %}>
             <a href="{{ path('backend_homepage') }}"><i class="fa fa-fw fa-home"></i> {{ 'backend.global.home'|trans }}</a>
         </li>
-        {% if project is defined and  project is not empty %}
+        {% if project is defined and  project is not empty and project.id is not empty %}
             <li {% if menu is defined and menu == 'menu_projects' %}class="active"{% endif %}>
-                <a href="{{ path('backend_projects_view',{'id':project.id}) }}" data-toggle="collapse" data-target="#project-menu"><i class="fa fa-fw fa-dashboard"></i> {{ project }}</a>
+                <a href="{{ path('backend_projects_view', {'id':project.id }) }}" data-toggle="collapse" data-target="#project-menu"><i class="fa fa-fw fa-dashboard"></i> {{ project }}</a>
                 <ul id="project-menu">
                     <li {% if menu is defined and menu == 'menu_project_backlog' %}class="active"{% endif %}>
                         <a href="{{ path('backend_project_product_backlog', { 'id': project.id }) }}"><i class="fa fa-fw fa-list"></i> {{ 'backend.backlog.product_backlog'|trans }}</a>

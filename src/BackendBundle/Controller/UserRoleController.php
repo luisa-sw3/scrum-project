@@ -54,7 +54,6 @@ class UserRoleController extends Controller {
         if ($form->isSubmitted() && $form->isValid()) {
 
             $role->setProject($project);
-            $role->setIsManuallyAdded(true);
             $em->persist($role);
             $em->flush();
 
@@ -84,11 +83,6 @@ class UserRoleController extends Controller {
 
         $em = $this->getDoctrine()->getManager();
         $project = $em->getRepository('BackendBundle:Project')->find($projectId);
-        
-        if (!$role->getIsManuallyAdded()) {
-            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.user_role.not_found_message'));
-            return $this->redirectToRoute('backend_projects_roles', array('projectId' => $projectId));
-        }
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em->persist($role);

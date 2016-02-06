@@ -98,6 +98,7 @@ function singleHtmlEditor(field, height) {
             {title: 'Table styles'},
             {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
         ],
+        content_css : "../css/tinyMCE.css", 
         relative_urls: false
 
     });
