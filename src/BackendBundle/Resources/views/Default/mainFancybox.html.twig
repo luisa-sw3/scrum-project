@@ -64,14 +64,21 @@
 
         <!-- Funciones de uso comun en la aplicacion -->
         <script src="{{ asset('bundles/backend/js/utilities.js') }}" type="text/javascript"></script>
-
+        
+        <!-- Libreria para que en Safary funcionen las validaciones HTML5 -->
+        <script type="text/javascript" src="{{ asset('bundles/backend/js/js-webshim/minified/polyfiller.js') }}"></script>
+        
         {% block other_scripts %}
         {% endblock %}
 
         <script type="text/javascript">
             $(document).ready(function () {
-            {% block scripts %}
-            {% endblock %}
+                
+                /* Libreria Safary */
+                webshims.polyfill();
+
+                    {% block scripts %}
+                    {% endblock %}
                 });
             {% block functions_javascript %}
             {% endblock %}
