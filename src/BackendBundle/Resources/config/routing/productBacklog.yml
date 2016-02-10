@@ -17,3 +17,8 @@ backend_project_product_backlog_delete:
     path:     /delete
     defaults: { _controller: "BackendBundle:Item:delete" }
     methods:  [POST]
+    
+backend_project_product_backlog_upload_attachment:
+    path:     /{itemId}/uploadAttachment
+    defaults: { _controller: "BackendBundle:Item:uploadAttachment" }
+    methods:  [POST]

@@ -235,3 +235,10 @@ backend:
         
     report: 
         reports: "Reports"
+        
+    attachment:
+        attachments: "Attachments"
+        invalid_extension: "Invalid File Extension"
+        not_found: "File not found"
+        size_exceeded: "File can't exceed 10MB"
+        error_uploading: "Error while file upload"

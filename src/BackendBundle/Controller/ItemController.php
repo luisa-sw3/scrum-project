@@ -3,6 +3,7 @@
 namespace BackendBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use BackendBundle\Form\ItemType;
 use BackendBundle\Form\SearchItemType;
@@ -52,7 +53,7 @@ class ItemController extends Controller {
         }
 
         $query = $em->getRepository('BackendBundle:Item')->findItems($search);
-        
+
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
                 $query, $request->query->getInt('page', 1), Paginator::DEFAULT_ITEMS_PER_PAGE);
@@ -142,6 +143,87 @@ class ItemController extends Controller {
                     'edit_form' => $editForm->createView(),
                     'menu' => self::MENU
         ));
+    }
+
+    /**
+     * Esta funcion permite realizar la carga de archivos anexos a un item
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 02/09/2016
+     * @param Request $request datos de la solicitud
+     * @param string $id identificador del proyecto
+     * @param string $itemId identificador del item
+     * @return JsonResponse JSON con mensaje de respuesta
+     */
+    public function uploadAttachmentAction(Request $request, $id, $itemId) {
+
+        $response = array('result' => '__OK__', 'msg' => '');
+
+        $em = $this->getDoctrine()->getManager();
+        $item = $em->getRepository('BackendBundle:Item')->find($itemId);
+
+        if (!$item || ($item && $item->getProject()->getId() != $id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.item.not_found_message');
+            return new JsonResponse($response);
+        }
+
+        $extensions = array('avi', 'm4a', 'mp4',
+            'bmpr', 'ttf', 'woff2',
+            'jpg', 'png', 'JPG', 'bmp',
+            'docx', 'doc', 'pages', 'pdf', 'xml',
+            'zip', 'csv', 'json', 'txt', 'xls', 'xlsx');
+
+        $maxSize = 10250000; //10 MB
+
+        if (isset($_FILES['uploaded_file'])) {
+
+            $fileInfo = new \SplFileInfo($_FILES['uploaded_file']['name']);
+            $fileExtension = $fileInfo->getExtension();
+
+            if (in_array($fileExtension, $extensions)) {
+
+                $fileSize = $_FILES['uploaded_file']['size'];
+                if ($fileSize <= $maxSize) {
+
+                    $fileName = uniqid('attach-') . $_FILES['uploaded_file']['name'];
+
+                    $attachment = new Entity\ItemAttachment();
+                    $attachment->setFileExtension($fileExtension);
+                    $attachment->setFilePath($fileName);
+                    $attachment->setItem($item);
+                    $attachment->setName($_FILES['uploaded_file']['name']);
+                    $attachment->setUserOwner($this->getUser());
+
+                    $directory = $this->container->getParameter('item_attachments_folder');
+                    if (!file_exists($directory)) {
+                        mkdir($directory);
+                    }
+
+                    try {
+                        if (move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $directory . $fileName)) {
+                            $em->persist($attachment);
+                            $em->flush();
+                        } else {
+                            $response['result'] = '__KO__';
+                            $response['msg'] = $this->get('translator')->trans('backend.attachment.error_uploading');
+                        }
+                    } catch (\Exception $exc) {
+                        //echo $exc->getTraceAsString();
+                        $response['result'] = '__KO__';
+                        $response['msg'] = $this->get('translator')->trans('backend.attachment.error_uploading');
+                    }
+                } else {
+                    $response['result'] = '__KO__';
+                    $response['msg'] = $this->get('translator')->trans('backend.attachment.size_exceeded');
+                }
+            } else {
+                $response['result'] = '__KO__';
+                $response['msg'] = $this->get('translator')->trans('backend.attachment.invalid_extension');
+            }
+        } else {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.attachment.not_found');
+        }
+        return new JsonResponse($response);
     }
 
 }

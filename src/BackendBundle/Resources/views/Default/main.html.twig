@@ -116,29 +116,15 @@
                 $(".fancybox").fancybox();
 
                 /* Codigo para eventos de popovers */
-                $('.popover-menu').click(function (event) {
-                    $('.popover-menu').popover('hide');
-                    var title = $(this).attr('title');
-                    var content = $(this).attr('content');
-                    $(this).popover({title: title, content: content, html: true, placement: "auto right"});
-                    event.stopPropagation();
+                $('.popover-menu').each(function(){
+                    var object = $(this);
+                    var title = object.attr('title');
+                    var content = object.attr('content');
+                    object.popover({title: title, content: content, html: true, placement: "auto right", trigger: "hover"});
                 });
-                $('.popover').click(function (event) {
-                    if ($(this).is(':visible')) {
-                        event.stopPropagation();
-                    }
-                });
-                $('html').click(function () {
-                    if ($('.popover').is(':visible')) {
-                        $('.popover').popover('hide');
-                    }
-                });
-                $('.popover-menu').trigger('click');
 
-                
-
-            {% block scripts %}
-            {% endblock %}
+                {% block scripts %}
+                {% endblock %}
                 });
             {% block functions_javascript %}
             {% endblock %}

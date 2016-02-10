@@ -72,6 +72,15 @@
             </div>
         </div>
 
+        <div class="col-lg-6">
+            <legend>{{'backend.attachment.attachments'|trans}}</legend>
+            <div class="form-group jumbotron">
+                <label>Upload file(s)</label>
+                <input type="file" id="uploadfiles" multiple="multiple" />
+            </div>
+        </div>
+
+
 
 
         <div class="col-lg-12">
@@ -83,5 +92,42 @@
 {% endblock %}
 {% block scripts %}
     singleHtmlEditor('textarea', 200);
-    
+
+
+    var uploadfiles = $('#uploadfiles');
+
+    $('#uploadfiles').change(function () {
+        var files = this.files;
+        for (var i = 0; i < files.length; i++) {
+            uploadFile(this.files[i]);
+        }
+    });
+
+
+
+
+
 {% endblock %}
+
+{% block functions_javascript %}
+    /**
+     * Upload a file
+     * @param file
+     */
+    function uploadFile(file) {
+        var url = "{{path('backend_project_product_backlog_upload_attachment',{'id':project.id, 'itemId':item.id})}}";
+        var xhr = new XMLHttpRequest();
+        var fd = new FormData();
+        xhr.open("POST", url, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Every thing ok, file uploaded
+                console.log(xhr.responseText); // handle response.
+            }
+        };
+        fd.append('uploaded_file', file);
+        xhr.send(fd);
+    }
+{% endblock %}
+
+

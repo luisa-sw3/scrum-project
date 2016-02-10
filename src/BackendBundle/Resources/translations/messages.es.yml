@@ -235,6 +235,13 @@ backend:
         
     report: 
         reports: "Reportes"
+        
+    attachment:
+        attachments: "Archivos Adjuntos"
+        invalid_extension: "Extensión de archivo invalida"
+        not_found: "Archivo no encontrado"
+        size_exceeded: "El archivo no puede superar los 10MB"
+        error_uploading: "Error cargando el archivo"
      
     
   
