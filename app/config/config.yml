@@ -40,6 +40,7 @@ framework:
 twig:
     globals:
         app_settings: "@app_settings"
+        item_attachments_folder: "%item_attachments_folder%"
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     

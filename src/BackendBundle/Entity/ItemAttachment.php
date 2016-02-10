@@ -17,11 +17,14 @@ class ItemAttachment {
 
     use Consecutive;
 
+    const MAX_FILE_SIZE = 10250000; //10 MB
+
     /**
      * @ORM\Id
      * @ORM\Column(name="atta_id", type="string", length=36)
      * @ORM\GeneratedValue(strategy="UUID")
      */
+
     protected $id;
 
     /**
@@ -58,7 +61,7 @@ class ItemAttachment {
 
     /**
      * Item al cual pertenece el archivo adjunto
-     * @ORM\ManyToOne(targetEntity="Item")
+     * @ORM\ManyToOne(targetEntity="Item", inversedBy="attachments")
      * @ORM\JoinColumn(name="atta_item_id", referencedColumnName="item_id", nullable=true)
      */
     protected $item;
@@ -141,6 +144,76 @@ class ItemAttachment {
         if ($this->getUploadDate() === null) {
             $this->setUploadDate(Util::getCurrentDate());
         }
+    }
+
+    public static function getAvailableExtensions() {
+        return array(
+            'jpg', 'png', 'JPG', 'bmp',
+            'docx', 'doc', 'pages', 'pdf', 'xml',
+            'zip', 'csv', 'json', 'txt', 'xls', 'xlsx',
+            'avi', 'm4a', 'mp4', 'mp3',
+            'bmpr', 'ttf', 'woff2'
+        );
+    }
+
+    public static function getAvailableAudioExtensions() {
+        return array('m4a', 'mp3');
+    }
+
+    public static function getAvailableVideoExtensions() {
+        return array('mp4');
+    }
+
+    public static function getAvailableImageExtensions() {
+        return array('jpg', 'png', 'JPG', 'bmp');
+    }
+
+    /**
+     * Permite determinar si el archivo es un audio o no
+     * @return boolean
+     */
+    public function isAudioFile() {
+        if (in_array($this->getFileExtension(), $this->getAvailableAudioExtensions())) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Permite determinar si el archivo es un video o no
+     * @return boolean
+     */
+    public function isVideoFile() {
+        if (in_array($this->getFileExtension(), $this->getAvailableVideoExtensions())) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Permite determinar si el archivo es una imagen o no
+     * @return boolean
+     */
+    public function isImageFile() {
+        if (in_array($this->getFileExtension(), $this->getAvailableImageExtensions())) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getTextExtensions() {
+
+        $extensions = $this->getAvailableExtensions();
+        $text = '(';
+        $countExtensions = count($extensions);
+        for ($i = 0; $i < $countExtensions; ++$i) {
+            $text .= $extensions[$i];
+            if ($i < $countExtensions - 1) {
+                $text .= ', ';
+            }
+        }
+        $text .= ')';
+        return $text;
     }
 
 }

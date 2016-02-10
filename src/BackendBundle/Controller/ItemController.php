@@ -129,7 +129,7 @@ class ItemController extends Controller {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            
+
             $em->persist($item);
             $em->flush();
 
@@ -137,8 +137,13 @@ class ItemController extends Controller {
             return $this->redirectToRoute('backend_project_product_backlog', array('id' => $item->getProject()->getId()));
         }
 
+        $search = array('item' => $itemId);
+        $order = array('uploadDate' => 'DESC');
+        $attachments = $em->getRepository('BackendBundle:ItemAttachment')->findBy($search, $order);
+
         return $this->render('BackendBundle:Project/ProductBacklog:edit.html.twig', array(
                     'item' => $item,
+                    'attachments' => $attachments,
                     'project' => $item->getProject(),
                     'edit_form' => $editForm->createView(),
                     'menu' => self::MENU
@@ -155,38 +160,29 @@ class ItemController extends Controller {
      */
     public function uploadAttachmentAction(Request $request, $id, $itemId) {
 
-        $response = array('result' => '__OK__', 'msg' => '');
+        $response = array('result' => '__KO__', 'msg' => '');
 
         $em = $this->getDoctrine()->getManager();
         $item = $em->getRepository('BackendBundle:Item')->find($itemId);
 
         if (!$item || ($item && $item->getProject()->getId() != $id)) {
-            $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.item.not_found_message');
             return new JsonResponse($response);
         }
 
-        $extensions = array('avi', 'm4a', 'mp4',
-            'bmpr', 'ttf', 'woff2',
-            'jpg', 'png', 'JPG', 'bmp',
-            'docx', 'doc', 'pages', 'pdf', 'xml',
-            'zip', 'csv', 'json', 'txt', 'xls', 'xlsx');
-
-        $maxSize = 10250000; //10 MB
-
+        $attachment = new Entity\ItemAttachment();
+        
         if (isset($_FILES['uploaded_file'])) {
 
             $fileInfo = new \SplFileInfo($_FILES['uploaded_file']['name']);
             $fileExtension = $fileInfo->getExtension();
 
-            if (in_array($fileExtension, $extensions)) {
+            if (in_array($fileExtension, Entity\ItemAttachment::getAvailableExtensions())) {
 
                 $fileSize = $_FILES['uploaded_file']['size'];
-                if ($fileSize <= $maxSize) {
+                if ($fileSize <= Entity\ItemAttachment::MAX_FILE_SIZE) {
 
                     $fileName = uniqid('attach-') . $_FILES['uploaded_file']['name'];
-
-                    $attachment = new Entity\ItemAttachment();
                     $attachment->setFileExtension($fileExtension);
                     $attachment->setFilePath($fileName);
                     $attachment->setItem($item);
@@ -202,27 +198,66 @@ class ItemController extends Controller {
                         if (move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $directory . $fileName)) {
                             $em->persist($attachment);
                             $em->flush();
+
+                            $html = $this->renderView('BackendBundle:Project/ProductBacklog:attachmentDetails.html.twig', array(
+                                'attach' => $attachment,
+                                'project' => $item->getProject(),
+                            ));
+
+                            $response['result'] = '__OK__';
+                            $response['msg'] = $this->get('translator')->trans('backend.attachment.upload_success');
+                            $response['html'] = $html;
                         } else {
-                            $response['result'] = '__KO__';
                             $response['msg'] = $this->get('translator')->trans('backend.attachment.error_uploading');
                         }
                     } catch (\Exception $exc) {
-                        //echo $exc->getTraceAsString();
-                        $response['result'] = '__KO__';
                         $response['msg'] = $this->get('translator')->trans('backend.attachment.error_uploading');
                     }
                 } else {
-                    $response['result'] = '__KO__';
                     $response['msg'] = $this->get('translator')->trans('backend.attachment.size_exceeded');
                 }
             } else {
-                $response['result'] = '__KO__';
-                $response['msg'] = $this->get('translator')->trans('backend.attachment.invalid_extension');
+                $response['msg'] = $this->get('translator')->trans('backend.attachment.invalid_extension').$attachment->getTextExtensions();
             }
         } else {
-            $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.attachment.not_found');
         }
+        return new JsonResponse($response);
+    }
+
+    /**
+     * Esta funcion permite realizar la eliminacion de un archivo, 
+     * tando del registro en base de datos como de la carpeta donde 
+     * se encuentra alojado
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 02/10/2016
+     * @param Request $request datos de la solicitud
+     * @param string $id identificador del proyecto
+     * @return JsonResponse JSON con mensaje de respuesta
+     */
+    public function deleteAttachmentAction(Request $request, $id) {
+        $response = array('result' => '__OK__', 'msg' => '');
+
+        $em = $this->getDoctrine()->getManager();
+        $attachmentId = $request->request->get('attachId');
+        $attachment = $em->getRepository('BackendBundle:ItemAttachment')->find($attachmentId);
+
+        if (!$attachment || ($attachment && $attachment->getItem()->getProject()->getId() != $id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.attachment.not_found');
+            return new JsonResponse($response);
+        }
+
+        try {
+            $directory = $this->container->getParameter('item_attachments_folder');
+            unlink($directory . $attachment->getFilePath());
+
+            $em->remove($attachment);
+            $em->flush();
+        } catch (\Exception $ex) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.global.unknown_error');
+        }
+
         return new JsonResponse($response);
     }
 

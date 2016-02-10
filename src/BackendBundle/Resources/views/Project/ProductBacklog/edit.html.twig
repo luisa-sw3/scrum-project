@@ -74,9 +74,63 @@
 
         <div class="col-lg-6">
             <legend>{{'backend.attachment.attachments'|trans}}</legend>
-            <div class="form-group jumbotron">
-                <label>Upload file(s)</label>
-                <input type="file" id="uploadfiles" multiple="multiple" />
+            <div class="form-group alert alert-info">
+                <label>{{'backend.attachment.upload_files'|trans}}</label>
+                <input type="file" id="uploadfiles" multiple="multiple"/><br>
+                <div class="progress" id="progress-bar" style="display: none;">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                    </div>
+                </div>
+                <p id="upload-message"></p>
+            </div>
+            <div class="form-group">
+                <table class="table table-bordered table-attachments">
+                    <tr id="table-header">
+                        <th>{{'backend.attachment.file_name'|trans}}</th>
+                        <th>{{'backend.attachment.file_information'|trans}}</th>
+                        <th width="86px">{{'backend.global.options'|trans}}</th>
+                    </tr>
+                    {% for attach in attachments %}
+                        <tr>
+                            <td>
+                                {% if attach.isAudioFile %}
+                                    <audio controls>
+                                        <source src="{{ asset('uploads/items/'~attach.filePath)}}" type="audio/{{attach.fileExtension}}">
+                                        {{'backend.attachment.no_support_audio'|trans}}
+                                    </audio>
+                                {% elseif attach.isVideoFile %}
+                                    <video controls>
+                                        <source src="{{ asset('uploads/items/'~attach.filePath)}}" type="video/{{attach.fileExtension}}">
+                                        {{'backend.attachment.no_support_video'|trans}}
+                                        <!-- You can embed a Flash player here, to play your mp4 video in older browsers -->
+                                    </video>
+                                {% elseif attach.isImageFile %}
+                                    <a class="fancybox" href="{{asset('uploads/items/'~attach.filePath)}}">
+                                        <img class="thumbnail" src="{{ asset('uploads/items/'~attach.filePath) | imagine_filter('thumbnail_120_90')}}"/>
+                                    </a>
+                                {% else %}
+                                    <i class="fa fa-file fa-5x" title="{{'backend.attachment.preview_no_available'|trans}}"></i>
+                                {% endif %}
+                                <p>{{ attach }}</p>
+                            </td>
+                            <td>
+                                <p title="{{'backend.attachment.file_extension'|trans}}"><i class="fa fa-file-o"></i> {{ attach.fileExtension }}</p>
+                                <p title="{{'backend.attachment.uploader'|trans}}"><i class="fa fa-user"></i> {{ attach.userOwner }}</p>
+                                <p title="{{'backend.attachment.upload_date'|trans}}"><i class="fa fa-calendar"></i> {{ attach.uploadDate|date(project.settings.fullDateFormat) }}</p>
+                            </td>
+                            <td>
+                                <a href="{{ asset('uploads/items/'~attach.filePath)}}" download class="btn btn-success btn-sm"><i class="fa fa-download"></i></a>
+                                <a href="javascript:void(0);" class="btn btn-danger btn-sm pull-right delete-attach" attach-id="{{attach.id}}"><i class="fa fa-times"></i></a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3">
+                                {{'backend.attachment.empty_list'|trans}}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
             </div>
         </div>
 
@@ -91,43 +145,90 @@
     </div>
 {% endblock %}
 {% block scripts %}
-    singleHtmlEditor('textarea', 200);
+        singleHtmlEditor('textarea', 200);
 
+        var uploadfiles = $('#uploadfiles');
 
-    var uploadfiles = $('#uploadfiles');
-
-    $('#uploadfiles').change(function () {
-        var files = this.files;
-        for (var i = 0; i < files.length; i++) {
-            uploadFile(this.files[i]);
-        }
-    });
-
-
-
-
-
-{% endblock %}
-
-{% block functions_javascript %}
-    /**
-     * Upload a file
-     * @param file
-     */
-    function uploadFile(file) {
-        var url = "{{path('backend_project_product_backlog_upload_attachment',{'id':project.id, 'itemId':item.id})}}";
-        var xhr = new XMLHttpRequest();
-        var fd = new FormData();
-        xhr.open("POST", url, true);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                // Every thing ok, file uploaded
-                console.log(xhr.responseText); // handle response.
+        $('#uploadfiles').change(function () {
+            var files = this.files;
+            for (var i = 0; i < files.length; i++) {
+                uploadFile(this.files[i]);
             }
-        };
-        fd.append('uploaded_file', file);
-        xhr.send(fd);
-    }
-{% endblock %}
+        });
+        
+        $(".table-attachments").on( "click", ".delete-attach", function() {
+            var object = $(this);
+            var attachId = object.attr('attach-id');
+            bootbox.confirm({
+                message: "{{'backend.attachment.delete_warning'|trans}}",
+                buttons: {
+                    'cancel': {
+                        label: '{{'backend.global.cancel' | trans}}',
+                        className: 'btn-default'
+                    },
+                    'confirm': {
+                        label: '{{'backend.attachment.delete_file' | trans}}',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+
+                    if (result == true)
+                    {
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{path('backend_project_product_backlog_delete_attachment',{'id':project.id})}}",
+                            dataType: 'json',
+                            data: {attachId: attachId},
+                            success: function (r)
+                            {
+                                if (r.result == '__OK__') {
+                                    object.parent().parent().remove();
+                                } else {
+                                    bootbox.alert(r.msg);
+                                }
+                            },
+                            error: function (r)
+                            {
+                                bootbox.alert("{{'backend.global.unknown_error'|trans}}")
+                            }
+                        })
+                    }
+                }
+            });
+        });
+
+    {% endblock %}
+
+    {% block functions_javascript %}
+        /**
+         * Upload a file
+         * @param file
+         */
+        function uploadFile(file) {
+            var url = "{{path('backend_project_product_backlog_upload_attachment',{'id':project.id, 'itemId':item.id})}}";
+            var xhr = new XMLHttpRequest();
+            var fd = new FormData();
+            $("#progress-bar").toggle();
+            $("#upload-message").html('');
+            xhr.open("POST", url, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    $("#upload-message").html(response.msg);
+                    $("#progress-bar").toggle();
+                    if (response.result == "__OK__") {
+                        $("#upload-message").attr('class','success');
+                        $("#table-header").after(response.html);
+                        $("#uploadfiles").val('');
+                    } else {
+                        $("#upload-message").attr('class','danger');
+                    }
+                }
+            };
+            fd.append('uploaded_file', file);
+            xhr.send(fd);
+        }
+    {% endblock %}
 
 

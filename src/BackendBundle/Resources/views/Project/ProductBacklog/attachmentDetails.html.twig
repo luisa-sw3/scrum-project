@@ -1,0 +1,34 @@
+{% spaceless %}
+    <tr>
+        <td>
+            {% if attach.isAudioFile %}
+                <audio controls>
+                    <source src="{{ asset('uploads/items/'~attach.filePath)}}" type="audio/{{attach.fileExtension}}">
+                    {{'backend.attachment.no_support_audio'|trans}}
+                </audio>
+            {% elseif attach.isVideoFile %}
+                <video controls>
+                    <source src="{{ asset('uploads/items/'~attach.filePath)}}" type="video/{{attach.fileExtension}}">
+                    {{'backend.attachment.no_support_video'|trans}}
+                    <!-- You can embed a Flash player here, to play your mp4 video in older browsers -->
+                </video>
+            {% elseif attach.isImageFile %}
+                <a class="fancybox" href="{{asset('uploads/items/'~attach.filePath)}}">
+                    <img class="thumbnail" src="{{ asset('uploads/items/'~attach.filePath) | imagine_filter('thumbnail_120_90')}}"/>
+                </a>
+            {% else %}
+                <i class="fa fa-file fa-5x" title="{{'backend.attachment.preview_no_available'|trans}}"></i>
+            {% endif %}
+            <p>{{ attach }}</p>
+        </td>
+        <td>
+            <p title="{{'backend.attachment.file_extension'|trans}}"><i class="fa fa-file-o"></i> {{ attach.fileExtension }}</p>
+            <p title="{{'backend.attachment.uploader'|trans}}"><i class="fa fa-user"></i> {{ attach.userOwner }}</p>
+            <p title="{{'backend.attachment.upload_date'|trans}}"><i class="fa fa-calendar"></i> {{ attach.uploadDate|date(project.settings.fullDateFormat) }}</p>
+        </td>
+        <td>
+            <a href="{{ asset('uploads/items/'~attach.filePath)}}" download class="btn btn-success btn-sm"><i class="fa fa-download"></i></a>
+            <a href="javascript:void(0);" class="btn btn-danger btn-sm pull-right delete-attach" attach-id="{{attach.id}}"><i class="fa fa-times"></i></a>
+        </td>
+    </tr>
+{% endspaceless %}

@@ -238,10 +238,24 @@ backend:
         
     attachment:
         attachments: "Archivos Adjuntos"
-        invalid_extension: "Extensión de archivo invalida"
+        upload_files: "Subir Archivo(s)"
+        invalid_extension: "Extensión de archivo invalida. "
         not_found: "Archivo no encontrado"
         size_exceeded: "El archivo no puede superar los 10MB"
         error_uploading: "Error cargando el archivo"
+        empty_list: "No hay archivos adjuntos"
+        preview: "Vista Previa"
+        preview_no_available: "Vista previa no disponible"
+        file_information: "Información del Archivo"
+        file_name: "Nombre del Archivo"
+        file_extension: "Extensión"
+        uploader: "Subido por"
+        upload_date: "Fecha de Subida"
+        upload_success: "Archivo subido exitosamente"
+        delete_warning: "Estas seguro que deseas eliminar este archivo?"
+        delete_file: "Eliminar Archivo"
+        no_support_audio: "Tu navegador no tiene soporte para elementos de audio"
+        no_support_video: "u navegador no tiene soporte para video HTML5 en WebM con VP8 o MP4 con H.264"
      
     
   
