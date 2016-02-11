@@ -42,10 +42,10 @@
                     {{ form_errors(form.estimatedDate) }}
                 </div>
                 <div class="form-group col-xs-6 no-padding-left">
-                    <div id='datetimepicker1'></div>
+                    <div id='startDate'></div>
                 </div>
                 <div class="form-group col-xs-6 no-padding-right">
-                    <div id='datetimepicker2'></div>
+                    <div id='estimatedDate'></div>
                 </div>
             </div>
             <div class="col-lg-5">
@@ -68,29 +68,29 @@
     
     singleHtmlEditor('textarea', 200);
 
-    $('#datetimepicker1').datetimepicker({
+    $('#startDate').datetimepicker({
         inline: true,
         format: 'DD/MM/YYYY',
         showTodayButton: true
     });
 
-    $('#datetimepicker2').datetimepicker({
+    $('#estimatedDate').datetimepicker({
         useCurrent: false,
         inline: true,
         format: 'DD/MM/YYYY',
         showTodayButton: true
     });
     
-    $("#datetimepicker1").on("dp.change", function (e) {
-        $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
-        var date1 = $('#datetimepicker1').data("DateTimePicker").date();
+    $("#startDate").on("dp.change", function (e) {
+        $('#estimatedDate').data("DateTimePicker").minDate(e.date);
+        var date1 = $('#startDate').data("DateTimePicker").date();
         $("#backendbundle_sprint_type_startDate_year").val(date1.format('Y'));
         $("#backendbundle_sprint_type_startDate_month").val(date1.format('M'));
         $("#backendbundle_sprint_type_startDate_day").val(date1.format('D'));
     });
-    $("#datetimepicker2").on("dp.change", function (e) {
-        $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
-        var date2 = $('#datetimepicker2').data("DateTimePicker").date();
+    $("#estimatedDate").on("dp.change", function (e) {
+        $('#startDate').data("DateTimePicker").maxDate(e.date);
+        var date2 = $('#estimatedDate').data("DateTimePicker").date();
         $("#backendbundle_sprint_type_estimatedDate_year").val(date2.format('Y'));
         $("#backendbundle_sprint_type_estimatedDate_month").val(date2.format('M'));
         $("#backendbundle_sprint_type_estimatedDate_day").val(date2.format('D'));
@@ -105,8 +105,8 @@
         } else {
             disabledDays = [0, 6];
         }
-        $('#datetimepicker1').data("DateTimePicker").daysOfWeekDisabled(disabledDays);
-        $('#datetimepicker2').data("DateTimePicker").daysOfWeekDisabled(disabledDays);
+        $('#startDate').data("DateTimePicker").daysOfWeekDisabled(disabledDays);
+        $('#estimatedDate').data("DateTimePicker").daysOfWeekDisabled(disabledDays);
     });
     
     $("#backendbundle_sprint_type_isWorkingWeekends").trigger('change');
