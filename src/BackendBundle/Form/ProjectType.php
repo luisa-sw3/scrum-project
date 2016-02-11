@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use BackendBundle\Entity as Entity;
+use Util\Util;
 
 class ProjectType extends AbstractType {
 
@@ -37,16 +38,6 @@ class ProjectType extends AbstractType {
             }
         });
 
-        $currentYear = (new \DateTime('now'))->format('Y') - 1;
-        $yearsForStart = $yearsEstimated = array();
-        for ($i = 0; $i < 3; $i++) {
-            array_push($yearsForStart, $currentYear);
-            if ($i > 0) {
-                array_push($yearsEstimated, $currentYear);
-            }
-            $currentYear++;
-        }
-        array_push($yearsEstimated, $currentYear);
 
         $builder
                 ->add('name', Type\TextType::class, array(
@@ -66,7 +57,7 @@ class ProjectType extends AbstractType {
                         'day' => $this->translator->trans('backend.global.day')
                     ),
                     'format' => ($project != null ? $project->getSettings()->getPHPDateFormat() : 'y-M-d'),
-                    'years' => $yearsForStart,
+                    'years' => Util::getYearstoForm(3),
                 ))
                 ->add('estimatedDate', Type\DateType::class, array(
                     'required' => false,
@@ -77,7 +68,7 @@ class ProjectType extends AbstractType {
                         'day' => $this->translator->trans('backend.global.day')
                     ),
                     'format' => ($project != null ? $project->getSettings()->getPHPDateFormat() : 'y-M-d'),
-                    'years' => $yearsEstimated,
+                    'years' => Util::getYearstoForm(4),
                 ))
         ;
     }

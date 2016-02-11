@@ -26,20 +26,26 @@
                     {{ form_widget(form.name, {'attr':{'class':'form-control'}}) }}
                     {{ form_errors(form.name) }}
                 </div>
-                <div class="form-group col-xs-6 no-padding-left">
-                    {{ form_label(form.startDate)}}
-                    {{ form_widget(form.startDate, {'attr':{'class':'date-selector-sm'}}) }}
-                    {{ form_errors(form.startDate) }}
-                </div>
-                <div class="form-group  col-xs-6 no-padding-right">
-                    {{ form_label(form.estimatedDate)}}
-                    {{ form_widget(form.estimatedDate, {'attr':{'class':'date-selector-sm'}}) }}
-                    {{ form_errors(form.estimatedDate) }}
-                </div>
                 <div class="form-group">
                     {{ form_label(form.isWorkingWeekends)}}
                     {{ form_widget(form.isWorkingWeekends, {'attr':{'class':''}}) }}
                     {{ form_errors(form.isWorkingWeekends) }}
+                </div>
+                <div class="form-group col-xs-6 no-padding-left">
+                    {{ form_label(form.startDate)}}
+                    {{ form_widget(form.startDate, {'attr':{'class':'date-selector-sm', 'style':'display:none;'}}) }}
+                    {{ form_errors(form.startDate) }}
+                </div>
+                <div class="form-group  col-xs-6 no-padding-right">
+                    {{ form_label(form.estimatedDate)}}
+                    {{ form_widget(form.estimatedDate, {'attr':{'class':'date-selector-sm', 'style':'display:none;'}}) }}
+                    {{ form_errors(form.estimatedDate) }}
+                </div>
+                <div class="form-group col-xs-6 no-padding-left">
+                    <div id='datetimepicker1'></div>
+                </div>
+                <div class="form-group col-xs-6 no-padding-right">
+                    <div id='datetimepicker2'></div>
                 </div>
             </div>
             <div class="col-lg-5">
@@ -58,5 +64,51 @@
     </div>
 {% endblock %}
 {% block scripts %}
+    
+    
     singleHtmlEditor('textarea', 200);
+
+    $('#datetimepicker1').datetimepicker({
+        inline: true,
+        format: 'DD/MM/YYYY',
+        showTodayButton: true
+    });
+
+    $('#datetimepicker2').datetimepicker({
+        useCurrent: false,
+        inline: true,
+        format: 'DD/MM/YYYY',
+        showTodayButton: true
+    });
+    
+    $("#datetimepicker1").on("dp.change", function (e) {
+        $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+        var date1 = $('#datetimepicker1').data("DateTimePicker").date();
+        $("#backendbundle_sprint_type_startDate_year").val(date1.format('Y'));
+        $("#backendbundle_sprint_type_startDate_month").val(date1.format('M'));
+        $("#backendbundle_sprint_type_startDate_day").val(date1.format('D'));
+    });
+    $("#datetimepicker2").on("dp.change", function (e) {
+        $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+        var date2 = $('#datetimepicker2').data("DateTimePicker").date();
+        $("#backendbundle_sprint_type_estimatedDate_year").val(date2.format('Y'));
+        $("#backendbundle_sprint_type_estimatedDate_month").val(date2.format('M'));
+        $("#backendbundle_sprint_type_estimatedDate_day").val(date2.format('D'));
+    });
+    
+    $("#backendbundle_sprint_type_isWorkingWeekends").change(function(){
+        var object = $(this);
+        var workWeekends = object.is(":checked");
+        var disabledDays = [];
+        if (workWeekends) {
+            disabledDays = [];
+        } else {
+            disabledDays = [0, 6];
+        }
+        $('#datetimepicker1').data("DateTimePicker").daysOfWeekDisabled(disabledDays);
+        $('#datetimepicker2').data("DateTimePicker").daysOfWeekDisabled(disabledDays);
+    });
+    
+    $("#backendbundle_sprint_type_isWorkingWeekends").trigger('change');
+    
 {% endblock %}

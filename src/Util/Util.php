@@ -27,4 +27,14 @@ class Util {
         return implode($pass); //turn the array into a string
     }
 
+    public static function getYearstoForm($number) {
+        $currentYear = (new \DateTime('now'))->format('Y') - 1;
+        $years = array();
+        for ($i = 0; $i < $number; $i++) {
+            array_push($years, $currentYear);
+            $currentYear++;
+        }
+        return $years;
+    }
+
 }

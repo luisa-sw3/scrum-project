@@ -230,7 +230,7 @@ backend:
         update_success_message: "Sprint updated successfully"
         delete_success_message: "Sprint deleted successfully"
         delete_unable_message: "Sprint can't de deleted"
-        work_weekends: "Work in weekends ?"
+        work_weekends: "Work on weekends ?"
         empty_list: "No sprints in project yet"
         
     report: 
