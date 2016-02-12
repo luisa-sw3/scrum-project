@@ -75,3 +75,18 @@ em {
     height: 18px;
     background: green;
 }
+
+.border-radius-left {
+    border-bottom-left-radius: 3px !important;
+    border-top-left-radius: 3px !important;
+}
+
+.border-radius-right {
+    border-bottom-right-radius: 3px !important;
+    border-top-right-radius: 3px !important;
+}
+@media(min-width:768px) {
+     .rstable {
+    overflow: visible;
+}
+}

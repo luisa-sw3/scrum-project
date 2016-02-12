@@ -67,7 +67,7 @@
         <li class="dropdown">
             {% set invitations = app_settings.getPendingInvitations %}
             {% set countNotifications = invitations|length %}
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <span class="label label-success">{{countNotifications}}</span> <b class="caret"></b> </a>
+            <a href="javascript:void(0);" title="{{'backend.notification.notifications'|trans}}"  class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <span class="label label-success">{{countNotifications}}</span> <b class="caret"></b> </a>
             
             <ul class="dropdown-menu alert-dropdown" style="width: 220px;">
                 {% for invitation in invitations %}    
@@ -78,7 +78,7 @@
                     </li>
                 {% else %}
                     <li>
-                        <a href="#">{{'backend.project_invitation.no_pending_invitations'|trans}}</a>
+                        <a href="javascript:void(0);">{{'backend.project_invitation.no_pending_invitations'|trans}}</a>
                     </li>
                 {% endfor %}
                 <li class="divider"></li>
@@ -89,7 +89,7 @@
         </li>
         
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-language fa-lg"></i> {{'backend.global.language'|trans}} <b class="caret"></b> </a>
+            <a href="javascript:void(0);" title="{{'backend.global.language'|trans}}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-language fa-lg"></i> <b class="caret"></b> </a>
             <ul class="dropdown-menu alert-dropdown ul-languages">
                 <li>
                     <a href="{{ path('backend_homepage',{'_locale':'es'}) }}" {% if app.request.locale == 'es'%}style="text-decoration: underline;"{% endif %}><img src="{{ asset('bundles/backend/images/lang/spanish.png') }}" /> ES</a>
@@ -100,7 +100,7 @@
             </ul>
         </li>
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{ app.user }} <b class="caret"></b></a>
+            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{ app.user.name }} <b class="caret"></b></a>
             <ul class="dropdown-menu" style="width: 170px;">
                 <li>
                     <a href="{{ path('backend_user_edit_profile') }}"><i class="fa fa-fw fa-user"></i> {{ 'backend.user.edit_profile'|trans }}</a>

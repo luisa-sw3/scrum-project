@@ -1,16 +1,16 @@
 {% extends 'BackendBundle:Default:main.html.twig' %}
-{% block title %}{{'backend.backlog.product_backlog'|trans}}{% endblock %}
+{% block title %}{{'backend.sprint.backlog'|trans}}{% endblock %}
 
 {% block content %}
-    
+
     <!-- Page Heading -->
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                {{'backend.backlog.product_backlog'|trans}}
-                <a href="{{path('backend_project_product_backlog_new',{'id':project.id})}}" class="btn btn-primary pull-right">{{'backend.item.new'|trans}}</a>
+                {{'backend.sprint.backlog'|trans}}
+                <a href="{{path('backend_project_product_backlog_new',{'id':project.id, 'sprintId':sprint.id})}}" class="btn btn-primary pull-right">{{'backend.item.new'|trans}}</a>
             </h1>
-            
+
             {% set item1 = {'text': 'backend.project.projects'|trans, 'url':path('backend_projects'),'icon':'fa fa-archive'} %}
             {% set item2 = {'text': project.name, 'url':path('backend_projects_view',{'id':project.id}),'icon':'fa fa-dashboard'} %}
             {% set item3 = {'text': 'backend.sprint.sprints'|trans, 'url':path('backend_project_sprints',{'id':project.id}), 'icon':'fa fa-rotate-right'} %}
@@ -22,54 +22,77 @@
     <!-- /.row -->
     {{ filters.showMessage('messageSuccess', 'success')}}
     {{ filters.showMessage('messageError', 'danger')}}
-    
-    <div class="table-responsive">
+
+    <div class="table-responsive rstable">
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>{{ 'backend.item.title'|trans }}</th>
                     <th>{{ 'backend.item.type'|trans }}</th>
                     <th>{{ 'backend.global.creation_date'|trans }}</th>
                     <th>{{ 'backend.item.priority'|trans }}</th>
-                    <th>{{ 'backend.global.options'|trans }}</th>
+                    <th width='80px'>{{ 'backend.global.options'|trans }}</th>
                 </tr>
             </thead>
             <tbody>
-            
-            {% set dateFormat = project.settings.dateFormat %}
-            {% for item in sprintBacklog %}
-                <tr>
-                    <td>
-                        <a href="javascript:void(0);" class="popover-menu" title="{{ item.title }}" content="{{item.description|raw}}">{{ item.title }}</a>
-                    </td>
-                    <td>{{ item.getTextType()|trans }}</td>
-                    <td>
-                        {% if item.creationDate %}
-                            {{ item.creationDate|date(dateFormat) }}
-                        {% endif %}
-                    </td>
-                    <td>
-                        {{ item.priority|default(0) }}
-                    </td>
-                    <td>
-                        <a class="btn btn-default btn-sm" title="{{ 'backend.item.details'|trans }}" href="#">
-                            <i class="fa fa-eye"></i>
-                        </a>
-                        <a class="btn btn-default btn-sm" title="{{ 'backend.item.edit'|trans }}" href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id}) }}">
-                            <i class="fa fa-pencil"></i>
-                        </a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="5">{{'backend.sprint.backlog_empty'|trans}}</td>
-                </tr>
-            {% endfor %}
+
+                {% set dateFormat = project.settings.dateFormat %}
+                {% for item in sprintBacklog %}
+                    <tr>
+                        <td>{{ item.consecutive }}</td>
+                        <td>
+                            <a href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id}) }}" class="popover-menu" title="{{ item.title }}" content="{{item.description|raw}}">{{ item.title }}</a>
+                        </td>
+                        <td>{{ item.getTextType()|trans }}</td>
+                        <td>
+                            {% if item.creationDate %}
+                                {{ item.creationDate|date(dateFormat) }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ item.priority|default(0) }}
+                        </td>
+                        <td>
+                            <div class="btn-group pull-right">
+                                <a class="btn btn-default btn-sm border-radius-left" title="{{ 'backend.item.edit'|trans }}" href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id}) }}">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+
+                                <button type="button" class="btn btn-default btn-sm dropdown-toggle border-radius-right"
+                                        data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only"></span>
+                                </button>
+
+                                <ul class="dropdown-menu" role="menu">
+                                    <li class="disabled"><a href="#"><i class="fa fa-star-o"></i> Crear item relacionado</a></li>
+                                    <li class="disabled"><a href="#"><i class="fa fa-chain"></i> Relacionar a un item existente</a></li>
+                                    <li class="divider"></li>
+                                    <li class="disabled"><a href="#"><i class="fa fa-comment-o"></i> Agregar Comentario</a></li>
+                                    <li class="disabled"><a href="#"><i class="fa fa-paperclip"></i> Adjuntar Archivo</a></li>
+                                    <li class="disabled"><a href="#"><i class="fa fa-reorder"></i> Cambiar Prioridad</a></li>
+                                    <li class="disabled"><a href="#"><i class="fa fa-clock-o"></i> Cambiar Estimacion</a></li>
+                                    <li class="disabled"><a href="#"><i class="fa fa-clock-o"></i> Cambiar Tiempo Transcurrido</a></li>
+                                    <li class="divider"></li>
+                                    <li class="disabled"><a href="#"><i class="fa fa-cut"></i> Mover a otro Sprint</a></li>
+                                    <li class="disabled"><a href="#"><i class="fa fa-copy"></i> Duplicar en otro Sprint</a></li>
+                                    <li class="divider"></li>
+                                    <li class="disabled"><a href="#"><i class="fa fa-times"></i> Eliminar</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5">{{'backend.sprint.backlog_empty'|trans}}</td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
 {% endblock %}
 
 {% block scripts %}
-    
+
 {% endblock %}

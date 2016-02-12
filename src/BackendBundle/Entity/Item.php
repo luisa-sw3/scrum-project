@@ -136,12 +136,6 @@ class Item {
      * @ORM\JoinColumn(name="item_parent_id", referencedColumnName="item_id", nullable=true)
      */
     protected $parent;
-    
-    /**
-     * Archivos anexos asociados al item
-     * @ORM\OneToMany(targetEntity="ItemAttachment", mappedBy="item")
-     */
-    protected $attachments;
 
     function getId() {
         return $this->id;
@@ -249,14 +243,6 @@ class Item {
 
     function setParent(Item $parent = null) {
         $this->parent = $parent;
-    }
-    
-    function getAttachments() {
-        return $this->attachments;
-    }
-
-    function setAttachments($attachments) {
-        $this->attachments = $attachments;
     }
 
     public function __toString() {

@@ -147,6 +147,7 @@ class SprintController extends Controller {
 
         return $this->render('BackendBundle:Project/Sprint:backlog.html.twig', array(
                     'project' => $sprint->getProject(),
+                    'sprint' => $sprint,
                     'sprintBacklog' => $sprintBacklog,
                     'menu' => self::MENU
         ));

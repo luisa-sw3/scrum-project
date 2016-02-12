@@ -86,6 +86,11 @@ class ItemController extends Controller {
         $item = new Entity\Item();
         $item->setProject($project);
 
+        if (!empty($request->get('sprintId'))) {
+            $sprint = $em->getRepository('BackendBundle:Sprint')->find($request->get('sprintId'));
+            $item->setSprint($sprint);
+        }
+        
         $form = $this->createForm(ItemType::class, $item);
         $form->handleRequest($request);
 

@@ -24,12 +24,12 @@ class ItemRepository extends EntityRepository {
         }
 
         if (isset($search['sprint'])) {
-            if ($search['sprint'] == null) {
-                $where .= ' AND i.sprint IS NULL ';
-            } else {
+            if ($search['sprint'] != null) {
                 $where .= ' AND i.sprint :sprint ';
                 $parameters['sprint'] = $search['sprint'];
             }
+        } else {
+            $where .= ' AND i.sprint IS NULL ';
         }
 
         if (isset($search['item_free_text'])) {
