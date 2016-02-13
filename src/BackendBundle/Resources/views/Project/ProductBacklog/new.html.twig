@@ -19,7 +19,11 @@
     </div>
         
     <div class="row">
-        {{ form_start(form, {'action': path('backend_project_product_backlog_new',{'id':project.id}), 'method': 'POST'}) }}
+        {% set form_params = {'id':project.id} %}
+        {% if app.request.get('sprintId') is not empty %}
+            {% set  form_params = form_params|merge({'sprintId':app.request.get('sprintId')}) %}
+        {% endif %}
+        {{ form_start(form, {'action': path('backend_project_product_backlog_new', form_params), 'method': 'POST'}) }}
             <div class="col-lg-6">
                 <div class="form-group">
                     {{ form_label(form.type)}}<em>*</em>
@@ -34,7 +38,7 @@
                 <div class="form-group">
                     <div class="col-xs-11" style="padding-left: 0px;">
                         {{ form_label(form.priority)}}
-                        {{ form_widget(form.priority, {'attr':{'style':'cursor:pointer;','onchange':'rangevalue.value=value'},}) }}
+                        {{ form_widget(form.priority, {'attr':{'style':'cursor:pointer;','onchange':'rangevalue.value=value','onkeyup':'rangevalue.value=value'},}) }}
                     </div>
                     <output class="alert alert-box col-xs-1 text-center pull-right no-margin-bottom" id="rangevalue">{{item.priority|default(50)}}</output>
                 </div>
@@ -81,4 +85,8 @@
 {% endblock %}
 {% block scripts %}
     singleHtmlEditor('textarea', 200);
+    
+    {% if app.request.get('sprintId') is not empty %}
+        $("#backendbundle_item_type_sprint").val("{{app.request.get('sprintId')}}");
+    {% endif %}
 {% endblock %}

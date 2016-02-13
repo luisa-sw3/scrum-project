@@ -19,7 +19,12 @@
     </div>
 
     <div class="row">
-        {{ form_start(edit_form, {'action': path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id}), 'method': 'POST'}) }}
+        {% set form_params = {'id':project.id, 'itemId':item.id} %}
+        {% if app.request.get('sprintId') is not empty %}
+            {% set  form_params = form_params|merge({'sprintId':app.request.get('sprintId')}) %}
+        {% endif %}
+        
+        {{ form_start(edit_form, {'action': path('backend_project_product_backlog_edit',form_params), 'method': 'POST'}) }}
         <div class="col-lg-6">
             <div class="form-group">
                 {{ form_label(edit_form.type)}}<em>*</em>

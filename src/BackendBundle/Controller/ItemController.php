@@ -86,11 +86,6 @@ class ItemController extends Controller {
         $item = new Entity\Item();
         $item->setProject($project);
 
-        if (!empty($request->get('sprintId'))) {
-            $sprint = $em->getRepository('BackendBundle:Sprint')->find($request->get('sprintId'));
-            $item->setSprint($sprint);
-        }
-        
         $form = $this->createForm(ItemType::class, $item);
         $form->handleRequest($request);
 
@@ -103,6 +98,11 @@ class ItemController extends Controller {
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.item.creation_success_message'));
+
+            if (!empty($request->get('sprintId'))) {
+                return $this->redirectToRoute('backend_project_sprints_backlog', array('id' => $project->getId(), 'sprintId' => $request->get('sprintId')));
+            }
+
             return $this->redirectToRoute('backend_project_product_backlog', array('id' => $project->getId()));
         }
 
@@ -139,6 +139,11 @@ class ItemController extends Controller {
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.item.update_success_message'));
+
+            if (!empty($request->get('sprintId'))) {
+                return $this->redirectToRoute('backend_project_sprints_backlog', array('id' => $id, 'sprintId' => $request->get('sprintId')));
+            }
+
             return $this->redirectToRoute('backend_project_product_backlog', array('id' => $item->getProject()->getId()));
         }
 
@@ -176,7 +181,7 @@ class ItemController extends Controller {
         }
 
         $attachment = new Entity\ItemAttachment();
-        
+
         if (isset($_FILES['uploaded_file'])) {
 
             $fileInfo = new \SplFileInfo($_FILES['uploaded_file']['name']);
@@ -222,7 +227,7 @@ class ItemController extends Controller {
                     $response['msg'] = $this->get('translator')->trans('backend.attachment.size_exceeded');
                 }
             } else {
-                $response['msg'] = $this->get('translator')->trans('backend.attachment.invalid_extension').$attachment->getTextExtensions();
+                $response['msg'] = $this->get('translator')->trans('backend.attachment.invalid_extension') . $attachment->getTextExtensions();
             }
         } else {
             $response['msg'] = $this->get('translator')->trans('backend.attachment.not_found');
