@@ -132,10 +132,16 @@ class Item {
     
     /**
      * Item al cual puede estar relacionado como item dependiente
-     * @ORM\ManyToOne(targetEntity="Item")
+     * @ORM\ManyToOne(targetEntity="Item", inversedBy="children")
      * @ORM\JoinColumn(name="item_parent_id", referencedColumnName="item_id", nullable=true)
      */
     protected $parent;
+    
+    /**
+     * Bidirectional - One-To-Many (INVERSE SIDE)
+     * @ORM\OneToMany(targetEntity="Item", mappedBy="parent")
+     */
+    protected $children;
 
     function getId() {
         return $this->id;
@@ -243,6 +249,14 @@ class Item {
 
     function setParent(Item $parent = null) {
         $this->parent = $parent;
+    }
+    
+    function getChildren() {
+        return $this->children;
+    }
+
+    function setChildren($children) {
+        $this->children = $children;
     }
 
     public function __toString() {

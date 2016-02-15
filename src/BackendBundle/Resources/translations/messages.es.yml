@@ -187,6 +187,7 @@ backend:
         delete_success_message: "Item eliminado exitosamente"
         delete_unable_message: "Este item no puede ser eliminado"
         title_description: "Título, descripción..."
+        not_found_message: "Elemento no encontrado"
         
         type_user_history: "Historia de Usuario"
         type_feature: "Característica / Funcionalidad"
@@ -209,6 +210,9 @@ backend:
         status_postponed: "Postpuesto"
         status_done: "Realizado"
         status_fixed: "Corregido"
+        
+        create_related_item: "Crear item relacionado"
+        assign_user: "Asignar Usuario"
         
     backlog:
         product_backlog: "Pila del Producto"

@@ -51,6 +51,14 @@ and open the template in the editor.
     padding-right: 0px !important;
 }
 
+.no-padding-top {
+    padding-top: 0px !important;
+}
+
+.no-padding-bottom {
+    padding-bottom: 0px !important;
+}
+
 .no-padding-left {
     padding-left: 0px !important;
 }
@@ -86,7 +94,30 @@ em {
     border-top-right-radius: 3px !important;
 }
 @media(min-width:768px) {
-     .rstable {
-    overflow: visible;
+    .rstable {
+        overflow: visible;
+    }
 }
+
+.label-consecutive {
+    margin-top: 10px;
+}
+
+h1.page-header {
+    margin: 18px 0 20px !important;
+}
+
+.main-item {
+    border-bottom: 1px solid lightgray; 
+    padding-top: 8px; 
+    padding-bottom: 8px;
+}
+
+.small-btn-group {
+    width: 58px;
+}
+
+.container-child {
+    padding-left: 30px; 
+    padding-top: 8px;
 }

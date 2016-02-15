@@ -28,33 +28,9 @@ class ItemType extends AbstractType {
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $item = new Item();
-
-        $typeOptions = array(
-            $this->translator->trans($item->getTextType(Item::TYPE_USER_HISTORY)) => Item::TYPE_USER_HISTORY,
-            $this->translator->trans($item->getTextType(Item::TYPE_FEATURE)) => Item::TYPE_FEATURE,
-            $this->translator->trans($item->getTextType(Item::TYPE_TASK)) => Item::TYPE_TASK,
-            $this->translator->trans($item->getTextType(Item::TYPE_BUG)) => Item::TYPE_BUG,
-            $this->translator->trans($item->getTextType(Item::TYPE_IMPROVEMENT)) => Item::TYPE_IMPROVEMENT,
-            $this->translator->trans($item->getTextType(Item::TYPE_CHANGE_REQUEST)) => Item::TYPE_CHANGE_REQUEST,
-            $this->translator->trans($item->getTextType(Item::TYPE_IDEA)) => Item::TYPE_IDEA,
-            $this->translator->trans($item->getTextType(Item::TYPE_INVESTIGATION)) => Item::TYPE_INVESTIGATION,
-        );
-
-        $statusOptions = array(
-            $this->translator->trans($item->getTextStatus(Item::STATUS_NEW)) => Item::STATUS_NEW,
-            $this->translator->trans($item->getTextStatus(Item::STATUS_INVESTIGATING)) => Item::STATUS_INVESTIGATING,
-            $this->translator->trans($item->getTextStatus(Item::STATUS_CONFIRMED)) => Item::STATUS_CONFIRMED,
-            $this->translator->trans($item->getTextStatus(Item::STATUS_NOT_A_BUG)) => Item::STATUS_NOT_A_BUG,
-            $this->translator->trans($item->getTextStatus(Item::STATUS_BEING_WORKED_ON)) => Item::STATUS_BEING_WORKED_ON,
-            $this->translator->trans($item->getTextStatus(Item::STATUS_NEAR_COMPLETION)) => Item::STATUS_NEAR_COMPLETION,
-            $this->translator->trans($item->getTextStatus(Item::STATUS_READY_FOR_TESTING)) => Item::STATUS_READY_FOR_TESTING,
-            $this->translator->trans($item->getTextStatus(Item::STATUS_TESTING)) => Item::STATUS_TESTING,
-            $this->translator->trans($item->getTextStatus(Item::STATUS_CANCELED)) => Item::STATUS_CANCELED,
-            $this->translator->trans($item->getTextStatus(Item::STATUS_POSTPONED)) => Item::STATUS_POSTPONED,
-            $this->translator->trans($item->getTextStatus(Item::STATUS_DONE)) => Item::STATUS_DONE,
-            $this->translator->trans($item->getTextStatus(Item::STATUS_FIXED)) => Item::STATUS_FIXED,
-        );
+        
+        $typeOptions = $this->container->get('form_helper')->getItemTypeOptions();
+        $statusOptions = $this->container->get('form_helper')->getItemStatusOptions();
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $data = $event->getData();

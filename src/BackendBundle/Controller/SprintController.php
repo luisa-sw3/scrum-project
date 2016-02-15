@@ -140,7 +140,7 @@ class SprintController extends Controller {
             return $this->redirectToRoute('backend_project_sprints', array('id' => $id));
         }
 
-        $search = array('sprint' => $sprint->getId());
+        $search = array('sprint' => $sprint->getId(), 'parent' => NULL);
         $order = array('priority' => 'DESC');
 
         $sprintBacklog = $em->getRepository('BackendBundle:Item')->findBy($search, $order);

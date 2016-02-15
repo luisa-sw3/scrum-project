@@ -31,7 +31,7 @@ class ItemRepository extends EntityRepository {
         } else {
             $where .= ' AND i.sprint IS NULL ';
         }
-
+        
         if (isset($search['item_free_text'])) {
             $where .= ' AND (i.title LIKE :item_free_text OR i.description LIKE :item_free_text)';
             $parameters['item_free_text'] = "%" . $search['item_free_text'] . "%";

@@ -70,10 +70,7 @@
     });
     
     {% if closeFancy %}
-        closeFancyOnTime();
-        window.parent.location.reload();
+        closeFancyOnTime(true, 2);
     {% endif %}
-    
-    
     
 {% endblock %}

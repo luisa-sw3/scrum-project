@@ -21,6 +21,12 @@ services:
             container:      "@service_container"
             entityManager:  "@doctrine.orm.entity_manager"
     
+    #servicio para clase de ayuda para implementar formularios
+    form_helper:
+        class: BackendBundle\Services\FormHelper
+        arguments: 
+            container:      "@service_container"
+    
     #servicio para pasarle el container a los formualrios (traduccion)
     backend.form.type.user.profile:
         class: BackendBundle\Form\UserProfileType
@@ -80,6 +86,14 @@ services:
     #servicio para formulario del buscador en product backlog
     backend.form.type.search_item:
         class: BackendBundle\Form\SearchItemType
+        arguments:
+            - "@service_container"
+        tags:
+            - { name: form.type }
+    
+    #servicio para formulario simplificado de items
+    backend.form.type.item_simple:
+        class: BackendBundle\Form\ItemSimpleType
         arguments:
             - "@service_container"
         tags:

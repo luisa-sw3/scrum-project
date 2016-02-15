@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use BackendBundle\Form\ItemType;
+use BackendBundle\Form\ItemSimpleType;
 use BackendBundle\Form\SearchItemType;
 use BackendBundle\Entity as Entity;
 use Util\Paginator;
@@ -50,6 +51,7 @@ class ItemController extends Controller {
             $search = Paginator::filterParameters($indexSearch, $request, Paginator::REQUEST_TYPE_REQUEST);
             $search['project'] = $project->getId();
             $search['sprint'] = NULL;
+            $search['parent'] = NULL;
         }
 
         $query = $em->getRepository('BackendBundle:Item')->findItems($search);
@@ -269,6 +271,60 @@ class ItemController extends Controller {
         }
 
         return new JsonResponse($response);
+    }
+
+    /**
+     * Permite crear un item en el sistema
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 21/01/2016
+     * @param Request $request
+     * @param type $id
+     * @param type $itemId
+     * @return type
+     */
+    public function newRelatedItemAction(Request $request, $id, $itemId) {
+        $em = $this->getDoctrine()->getManager();
+
+        $project = $em->getRepository('BackendBundle:Project')->find($id);
+        $item = $em->getRepository('BackendBundle:Item')->find($itemId);
+
+        if (!$project) {
+            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
+            return $this->redirectToRoute('backend_projects');
+        }
+
+        if (!$item || ($item && $item->getProject()->getId() != $project->getId())) {
+            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.item.not_found_message'));
+            return $this->redirectToRoute('backend_projects');
+        }
+
+        $closeFancy = false;
+        $relatedItem = new Entity\Item();
+        $relatedItem->setType(Entity\Item::TYPE_TASK);
+        $form = $this->createForm(ItemSimpleType::class, $relatedItem);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $relatedItem->setProject($project);
+            $relatedItem->setSprint($item->getSprint());
+            $relatedItem->setParent($item);
+            $relatedItem->setStatus(Entity\Item::STATUS_NEW);
+            $relatedItem->setUserOwner($this->getUser());
+
+            $em->persist($relatedItem);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.item.creation_success_message'));
+            $closeFancy = true;
+        }
+
+        return $this->render('BackendBundle:Project/ProductBacklog:newRelatedItem.html.twig', array(
+                    'project' => $project,
+                    'item' => $item,
+                    'form' => $form->createView(),
+                    'menu' => self::MENU,
+                    'closeFancy' => $closeFancy,
+        ));
     }
 
 }

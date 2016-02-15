@@ -23,6 +23,9 @@
 
         <!-- Custom Styles -->
         <link href="{{asset('bundles/backend/css/style.css')}}" rel="stylesheet" type="text/css">
+        
+        <!-- Custom Fancybox Styles -->
+        <link href="{{asset('bundles/backend/css/style-fancybox.css')}}" rel="stylesheet" type="text/css">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -84,12 +87,15 @@
             {% endblock %}
 
                 var timeToClose = 0;
-                function closeFancyOnTime()
+                function closeFancyOnTime(refreshParent, time)
                 {
                     setInterval(function () {
                         timeToClose++;
-                        if (timeToClose == 2) {
+                        if (timeToClose === time) {
                             window.parent.$.fancybox.close();
+                            if (refreshParent === true) {
+                                window.parent.location.reload();
+                            }
                         }
                     }, 1000);
                 }

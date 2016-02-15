@@ -187,6 +187,7 @@ backend:
         delete_success_message: "Item deleted successfully"
         delete_unable_message: "Item can't de deleted"
         title_description: "Title, description..."
+        not_found_message: "Item not found"
         
         type_user_history: "User History"
         type_feature: "Feature"
@@ -209,6 +210,9 @@ backend:
         status_postponed: "Postponed"
         status_done: "Done"
         status_fixed: "Fixed"
+        
+        create_related_item: "Create related item"
+        assign_user: "Assign User"
         
     backlog:
         product_backlog: "Product Backlog"
