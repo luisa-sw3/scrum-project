@@ -327,4 +327,70 @@ class ItemController extends Controller {
         ));
     }
 
+    /**
+     * Esta funcion permite realizar la eliminacion de un archivo, 
+     * tando del registro en base de datos como de la carpeta donde 
+     * se encuentra alojado
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 02/10/2016
+     * @param Request $request datos de la solicitud
+     * @param string $id identificador del proyecto
+     * @return JsonResponse JSON con mensaje de respuesta
+     */
+    public function deleteAction(Request $request, $id) {
+        $response = array('result' => '__OK__', 'msg' => $this->get('translator')->trans('backend.item.delete_success_message'));
+        $em = $this->getDoctrine()->getManager();
+        $itemId = $request->request->get('itemId');
+        $deleteMode = $request->request->get('mode');
+        $item = $em->getRepository('BackendBundle:Item')->find($itemId);
+
+        if (!$item || ($item && $item->getProject()->getId() != $id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.item.not_found_message');
+            return new JsonResponse($response);
+        }
+
+        try {
+            //verificamos el modo de eliminacion
+            if ($deleteMode == Entity\Item::DELETE_CASCADE) {
+
+                //buscamos los hijos del item, ponemos en null la relacion con otros items y luego los eliminamos
+                $children = $em->getRepository('BackendBundle:Item')->findAllChildren($itemId);
+                foreach($children as $child) {
+                    $child->setParent(null);
+                    $em->persist($child);
+                }
+                $em->flush();
+                
+                foreach($children as $child) {
+                    $child->setParent(null);
+                    $em->remove($child);
+                }
+                
+                //borramos el item
+                $em->remove($item);
+                
+                $em->flush();
+            } elseif ($deleteMode == Entity\Item::DELETE_SIMPLE) {
+
+                //buscamos los items que tengan a este item como padre, para desasignarlo
+                $children = $item->getChildren();
+                foreach ($children as $child) {
+                    $child->setParent(null);
+                    $em->persist($child);
+                }
+
+                //borramos el item
+                $em->remove($item);
+                $em->flush();
+            }
+
+            $em->flush();
+        } catch (\Exception $ex) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.global.unknown_error');
+        }
+
+        return new JsonResponse($response);
+    }
+
 }

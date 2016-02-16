@@ -46,6 +46,12 @@ class Item {
     const STATUS_FIXED = 12;
 
     /**
+     * Constantes para el modo de eliminacion de los items en el sistema
+     */
+    const DELETE_CASCADE = 'cascade';
+    const DELETE_SIMPLE = 'simple';
+    
+    /**
      * @ORM\Id
      * @ORM\Column(name="item_id", type="string", length=36)
      * @ORM\GeneratedValue(strategy="UUID")

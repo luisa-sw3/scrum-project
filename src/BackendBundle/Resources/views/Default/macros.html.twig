@@ -70,7 +70,7 @@
     {% endif %}
 {% endmacro %}  
 
-{% macro itemButtonGroup(item, project, sprint) %}
+{% macro itemButtonGroup(item, project, sprint, moreItems) %}
     <div class="btn-group pull-right small-btn-group">
         <a class="btn btn-default btn-sm border-radius-left" title="{{ 'backend.item.edit'|trans }}" href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id, 'sprintId':sprint.id}) }}">
             <i class="fa fa-pencil"></i>
@@ -80,7 +80,9 @@
             <span class="sr-only"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <li><a href="{{path('backend_project_product_backlog_new_related_item',{'id':project.id,'itemId':item.id})}}" class="create-related-item fancybox.iframe"><i class="fa fa-star-o"></i> {{'backend.item.create_related_item'|trans}}</a></li>
+            {% if moreItems %}
+                <li><a href="{{path('backend_project_product_backlog_new_related_item',{'id':project.id,'itemId':item.id})}}" class="create-related-item fancybox.iframe"><i class="fa fa-star-o"></i> {{'backend.item.create_related_item'|trans}}</a></li>
+            {% endif %}
             <li class="disabled"><a href="#"><i class="fa fa-chain"></i> Relacionar a un item existente</a></li>
             <li class="divider"></li>
             <li class="disabled"><a href="#"><i class="fa fa-comment-o"></i> Agregar Comentario</a></li>
@@ -92,7 +94,7 @@
             <li class="disabled"><a href="#"><i class="fa fa-cut"></i> Mover a otro Sprint</a></li>
             <li class="disabled"><a href="#"><i class="fa fa-copy"></i> Duplicar en otro Sprint</a></li>
             <li class="divider"></li>
-            <li class="disabled"><a href="#"><i class="fa fa-times"></i> Eliminar</a></li>
+            <li><a href="javascript:void(0);" class="delete-item" item-id="{{item.id}}"><i class="fa fa-times"></i> {{'backend.global.delete'|trans}}</a></li>
         </ul>
     </div>
 {% endmacro %} 

@@ -188,6 +188,12 @@ backend:
         delete_unable_message: "Este item no puede ser eliminado"
         title_description: "Título, descripción..."
         not_found_message: "Elemento no encontrado"
+        delete: "Eliminar Elemento"
+        removal_method_message: "Seleccione el método de eliminación para el ítem"
+        cascade_delete: "Eliminación en Cascada"
+        cascade_delete_message: "Elimina todos los elementos relacionados al elemento seleccionado"
+        simple_delete: "Eliminacion Simple"
+        simple_delete_message: "Solo elimina el elemento seleccionado"
         
         type_user_history: "Historia de Usuario"
         type_feature: "Característica / Funcionalidad"

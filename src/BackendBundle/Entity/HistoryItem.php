@@ -57,7 +57,7 @@ class HistoryItem {
     /**
      * Item sobre el cual se realiza la accion
      * @ORM\ManyToOne(targetEntity="Item")
-     * @ORM\JoinColumn(name="hite_item_id", referencedColumnName="item_id", nullable=true)
+     * @ORM\JoinColumn(name="hite_item_id", referencedColumnName="item_id", nullable=true, onDelete="CASCADE")
      */
     protected $item;
 

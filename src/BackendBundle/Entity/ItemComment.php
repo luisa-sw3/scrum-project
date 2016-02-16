@@ -42,7 +42,7 @@ class ItemComment {
     /**
      * Item al cual pertenece el archivo adjunto
      * @ORM\ManyToOne(targetEntity="Item")
-     * @ORM\JoinColumn(name="icom_item_id", referencedColumnName="item_id", nullable=true)
+     * @ORM\JoinColumn(name="icom_item_id", referencedColumnName="item_id", nullable=true, onDelete="CASCADE")
      */
     protected $item;
 

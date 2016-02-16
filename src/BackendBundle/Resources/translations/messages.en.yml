@@ -188,6 +188,12 @@ backend:
         delete_unable_message: "Item can't de deleted"
         title_description: "Title, description..."
         not_found_message: "Item not found"
+        delete: "Delete Item"
+        removal_method_message: "Select the removal method for the item"
+        cascade_delete: "Cascade Delete"
+        cascade_delete_message: "Removes all items related to the selected item"
+        simple_delete: "Simple Delete"
+        simple_delete_message: "Only removes the selected item"
         
         type_user_history: "User History"
         type_feature: "Feature"
