@@ -32,3 +32,8 @@ backend_project_product_backlog_new_related_item:
     path:     /{itemId}/newRelatedItem
     defaults: { _controller: "BackendBundle:Item:newRelatedItem" }
     methods:  [GET, POST]
+    
+backend_project_product_backlog_change_priority:
+    path:     /changePriority
+    defaults: { _controller: "BackendBundle:Item:changePriority" }
+    methods:  [POST]

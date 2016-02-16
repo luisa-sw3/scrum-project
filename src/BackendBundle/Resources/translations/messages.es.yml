@@ -219,6 +219,9 @@ backend:
         
         create_related_item: "Crear item relacionado"
         assign_user: "Asignar Usuario"
+        change_priority: "Cambiar Prioridad"
+        
+        worked_estimated_time: "Tiempo Trabajado / Tiempo Estimado"
         
     backlog:
         product_backlog: "Pila del Producto"

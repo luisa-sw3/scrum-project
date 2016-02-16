@@ -121,3 +121,10 @@ h1.page-header {
     padding-left: 30px; 
     padding-top: 8px;
 }
+.list-group {
+    margin-bottom: 12px !important;
+}
+
+.label-item-times {
+    padding: 0px;
+}

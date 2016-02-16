@@ -28,7 +28,7 @@ class Item {
     const TYPE_CHANGE_REQUEST = 6;
     const TYPE_IDEA = 7;
     const TYPE_INVESTIGATION = 8;
-    
+
     /**
      * Constantes para los estados de los items
      */
@@ -50,7 +50,7 @@ class Item {
      */
     const DELETE_CASCADE = 'cascade';
     const DELETE_SIMPLE = 'simple';
-    
+
     /**
      * @ORM\Id
      * @ORM\Column(name="item_id", type="string", length=36)
@@ -89,60 +89,60 @@ class Item {
      * @ORM\Column(name="item_status", type="integer", nullable=true)
      */
     protected $status;
-    
+
     /**
      * Tiempo estimado en horas para la realizacion del item
      * @ORM\Column(name="item_estimated_hours", type="float", nullable=true)
      */
     protected $estimatedHours;
-    
+
     /**
      * Tiempo transcurrido en horas para la realizacion del item
      * @ORM\Column(name="item_worked_hours", type="float", nullable=true)
      */
     protected $workedHours;
-    
+
     /**
      * Prioridad del item (100 = Urgente , 0 = No es prioridad)
      * @ORM\Column(name="item_priority", type="integer", nullable=true)
      */
     protected $priority;
-    
+
     /**
      * Usuario quien realiza la creación del item
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="item_user_owner", referencedColumnName="user_id")
      */
     protected $userOwner;
-    
+
     /**
      * Proyecto al que pertenece el item
      * @ORM\ManyToOne(targetEntity="Project")
      * @ORM\JoinColumn(name="item_project_id", referencedColumnName="proj_id")
      */
     protected $project;
-    
+
     /**
      * Sprint al que pertenece el usuario item
      * @ORM\ManyToOne(targetEntity="Sprint")
      * @ORM\JoinColumn(name="ussp_sprint_id", referencedColumnName="sprint_id", nullable=true)
      */
     protected $sprint;
-    
+
     /**
      * Usuario responsable de la realizacion del item
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="item_designed_user_id", referencedColumnName="user_id", nullable=true)
      */
     protected $designedUser;
-    
+
     /**
      * Item al cual puede estar relacionado como item dependiente
      * @ORM\ManyToOne(targetEntity="Item", inversedBy="children")
      * @ORM\JoinColumn(name="item_parent_id", referencedColumnName="item_id", nullable=true)
      */
     protected $parent;
-    
+
     /**
      * Bidirectional - One-To-Many (INVERSE SIDE)
      * @ORM\OneToMany(targetEntity="Item", mappedBy="parent")
@@ -256,15 +256,29 @@ class Item {
     function setParent(Item $parent = null) {
         $this->parent = $parent;
     }
-    
+
+    /**
+     * Sort array of objects by field.
+     * @param array $objects Array of objects to sort.
+     * @param string $on Name of field.
+     * @param string $order (ASC|DESC)
+     */
+    function sortByField(&$objects, $on, $order = 'ASC') {
+        $comparer = ($order === 'DESC') ? "return -strcmp(\$a->get{$on}(),\$b->get{$on}());" : "return strcmp(\$a->get{$on}(),\$b->get{$on}());";
+        usort($objects, create_function('$a,$b', $comparer));
+    }
+
     function getChildren() {
-        return $this->children;
+        //construimos un arreglo y lo ordenamos acorde a su la prioridad de items
+        $list = $this->children->toArray();
+        $this->sortByField($list, 'Priority', 'DESC');
+        return $list;
     }
 
     function setChildren($children) {
         $this->children = $children;
     }
-    
+
     public function __toString() {
         return $this->getTitle();
     }
@@ -284,7 +298,7 @@ class Item {
             $this->setWorkedHours(0);
         }
     }
-    
+
     /**
      * Permite obtener el nombre de la variable de idioma correspondiente
      * al tipo del item
@@ -292,12 +306,12 @@ class Item {
      * @param integer $type
      * @return string
      */
-    public function getTextType($type = null){
-        
-        if(!$type){
+    public function getTextType($type = null) {
+
+        if (!$type) {
             $type = $this->getType();
         }
-        
+
         $langVar = '';
         switch ($type) {
             case self::TYPE_USER_HISTORY:
@@ -329,7 +343,7 @@ class Item {
         }
         return $langVar;
     }
-    
+
     /**
      * Permite obtener el nombre de la variable de idioma correspondiente
      * al estado del item
@@ -337,12 +351,12 @@ class Item {
      * @param integer $status
      * @return string
      */
-    public function getTextStatus($status = null){
-        
-        if(!$status){
+    public function getTextStatus($status = null) {
+
+        if (!$status) {
             $status = $this->getStatus();
         }
-        
+
         $langVar = '';
         switch ($status) {
             case self::STATUS_NEW:
@@ -386,7 +400,5 @@ class Item {
         }
         return $langVar;
     }
-    
-    
 
 }

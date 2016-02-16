@@ -70,31 +70,64 @@
     {% endif %}
 {% endmacro %}  
 
-{% macro itemButtonGroup(item, project, sprint, moreItems) %}
-    <div class="btn-group pull-right small-btn-group">
-        <a class="btn btn-default btn-sm border-radius-left" title="{{ 'backend.item.edit'|trans }}" href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id, 'sprintId':sprint.id}) }}">
-            <i class="fa fa-pencil"></i>
-        </a>
-        <button type="button" class="btn btn-default btn-sm dropdown-toggle border-radius-right" data-toggle="dropdown">
-            <span class="caret"></span>
-            <span class="sr-only"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-            {% if moreItems %}
-                <li><a href="{{path('backend_project_product_backlog_new_related_item',{'id':project.id,'itemId':item.id})}}" class="create-related-item fancybox.iframe"><i class="fa fa-star-o"></i> {{'backend.item.create_related_item'|trans}}</a></li>
-            {% endif %}
-            <li class="disabled"><a href="#"><i class="fa fa-chain"></i> Relacionar a un item existente</a></li>
-            <li class="divider"></li>
-            <li class="disabled"><a href="#"><i class="fa fa-comment-o"></i> Agregar Comentario</a></li>
-            <li class="disabled"><a href="#"><i class="fa fa-paperclip"></i> Adjuntar Archivo</a></li>
-            <li class="disabled"><a href="#"><i class="fa fa-reorder"></i> Cambiar Prioridad</a></li>
-            <li class="disabled"><a href="#"><i class="fa fa-clock-o"></i> Cambiar Estimacion</a></li>
-            <li class="disabled"><a href="#"><i class="fa fa-clock-o"></i> Cambiar Tiempo Transcurrido</a></li>
-            <li class="divider"></li>
-            <li class="disabled"><a href="#"><i class="fa fa-cut"></i> Mover a otro Sprint</a></li>
-            <li class="disabled"><a href="#"><i class="fa fa-copy"></i> Duplicar en otro Sprint</a></li>
-            <li class="divider"></li>
-            <li><a href="javascript:void(0);" class="delete-item" item-id="{{item.id}}"><i class="fa fa-times"></i> {{'backend.global.delete'|trans}}</a></li>
-        </ul>
+{% macro itemDescription(item, project, sprint, moreItems) %}
+    {% set dateFormat = project.settings.dateFormat %}
+    <div class="list-group-item col-xs-12">
+        <div class="col-xs-10 col-md-10 no-padding-left">
+            <div class="col-lg-12 col-md-12 col-xs-12 no-padding-sides">
+                <strong>{{ item.getTextType()|trans }} # {{item.consecutive}}</strong>
+            </div>
+            <div class="col-lg-12 col-md-12 col-xs-12 no-padding-sides">
+                <a href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id}) }}" class="popover-menu" title="{{ item.title }}" content="{{item.description|raw}}">{{ item.title }}</a>
+            </div>
+            <div class="col-lg-3 col-md-3 col-xs-6 no-padding-sides">
+                <span title="{{ 'backend.item.status'|trans }}"><i class="fa fa-info-circle"></i> {{ item.textStatus|trans }}</span>
+            </div>
+            <div class="col-lg-9 col-md-9 col-xs-6 no-padding-sides">
+                <span title="{{ 'backend.global.creation_date'|trans }}"><i class="fa fa-calendar"></i> {{ item.creationDate|date(dateFormat) }}</span>
+            </div>
+            <div class="col-lg-3 col-md-3 col-xs-6 no-padding-sides">
+                <span title="{{ 'backend.item.priority'|trans }}"><i class="fa fa-reorder"></i> {{ item.priority|default(0) }}</span>
+            </div>
+            <div class="col-lg-9 col-md-9 col-xs-6 no-padding-sides">
+                <span title="{{ 'backend.item.designed_user'|trans }}">
+                    <i class="fa fa-user"></i> 
+                    {% if item.designedUser is not empty %}
+                        {{ item.designedUser }}
+                    {% else %}
+                        <a href="#">{{'backend.item.assign_user'|trans}}</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        <div class="col-xs-2 col-md-2 pull-right no-padding-right">
+            <label title="{{'backend.item.worked_estimated_time'|trans}}" class="col-xs-12 text-right label-item-times">{{ item.workedHours|default(0) }} / {{ item.estimatedHours|default(0) }}</label>
+            <div class="btn-group pull-right small-btn-group">
+                <a class="btn btn-default btn-sm border-radius-left" title="{{ 'backend.item.edit'|trans }}" href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id, 'sprintId':sprint.id}) }}">
+                    <i class="fa fa-pencil"></i>
+                </a>
+                <button type="button" class="btn btn-default btn-sm dropdown-toggle border-radius-right" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    {% if moreItems %}
+                        <li><a href="{{path('backend_project_product_backlog_new_related_item',{'id':project.id,'itemId':item.id})}}" class="create-related-item fancybox.iframe"><i class="fa fa-star-o"></i> {{'backend.item.create_related_item'|trans}}</a></li>
+                    {% endif %}
+                    <li class="disabled"><a href="#"><i class="fa fa-chain"></i> Relacionar a un item existente</a></li>
+                    <li class="divider"></li>
+                    <li class="disabled"><a href="#"><i class="fa fa-comment-o"></i> Agregar Comentario</a></li>
+                    <li class="disabled"><a href="#"><i class="fa fa-paperclip"></i> Adjuntar Archivo</a></li>
+                    <li><a href="javascript:void(0);" class="change-priority" item-id="{{item.id}}" priority="{{item.priority|default(0)}}"><i class="fa fa-reorder"></i> {{'backend.item.change_priority'|trans}}</a></li>
+                    <li class="disabled"><a href="#"><i class="fa fa-clock-o"></i> Cambiar Estimacion</a></li>
+                    <li class="disabled"><a href="#"><i class="fa fa-clock-o"></i> Cambiar Tiempo Transcurrido</a></li>
+                    <li class="divider"></li>
+                    <li class="disabled"><a href="#"><i class="fa fa-cut"></i> Mover a otro Sprint</a></li>
+                    <li class="disabled"><a href="#"><i class="fa fa-copy"></i> Duplicar en otro Sprint</a></li>
+                    <li class="divider"></li>
+                    <li><a href="javascript:void(0);" class="delete-item" item-id="{{item.id}}"><i class="fa fa-times"></i> {{'backend.global.delete'|trans}}</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 {% endmacro %} 
