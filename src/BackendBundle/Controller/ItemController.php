@@ -349,41 +349,47 @@ class ItemController extends Controller {
             return new JsonResponse($response);
         }
 
+        $directory = $this->container->getParameter('item_attachments_folder');
+
         try {
             //verificamos el modo de eliminacion
             if ($deleteMode == Entity\Item::DELETE_CASCADE) {
 
-                //buscamos los hijos del item, ponemos en null la relacion con otros items y luego los eliminamos
+                //buscamos los hijos del item, ponemos en null la relacion con otros
+                //items, eliminamos los attachments y luego los eliminamos los items
                 $children = $em->getRepository('BackendBundle:Item')->findAllChildren($itemId);
-                foreach($children as $child) {
+                foreach ($children as $child) {
+
+                    $attachments = $em->getRepository('BackendBundle:ItemAttachment')->findByItem($child->getId());
+                    foreach ($attachments as $attach) {
+                        if (file_exists($directory . $attach->getFilePath())) {
+                            unlink($directory . $attach->getFilePath());
+                        }
+                    }
+
                     $child->setParent(null);
                     $em->persist($child);
                 }
                 $em->flush();
-                
-                foreach($children as $child) {
-                    $child->setParent(null);
+
+                foreach ($children as $child) {
                     $em->remove($child);
                 }
-                
-                //borramos el item
-                $em->remove($item);
-                
-                $em->flush();
             } elseif ($deleteMode == Entity\Item::DELETE_SIMPLE) {
-
                 //buscamos los items que tengan a este item como padre, para desasignarlo
-                $children = $item->getChildren();
-                foreach ($children as $child) {
+                foreach ($item->getChildren() as $child) {
                     $child->setParent(null);
                     $em->persist($child);
                 }
-
-                //borramos el item
-                $em->remove($item);
-                $em->flush();
             }
-
+            //borramos el item y sus attachments
+            $attachments = $em->getRepository('BackendBundle:ItemAttachment')->findByItem($item->getId());
+            foreach ($attachments as $attach) {
+                if (file_exists($directory . $attach->getFilePath())) {
+                    unlink($directory . $attach->getFilePath());
+                }
+            }
+            $em->remove($item);
             $em->flush();
         } catch (\Exception $ex) {
             $response['result'] = '__KO__';

@@ -264,7 +264,7 @@ class Item {
     function setChildren($children) {
         $this->children = $children;
     }
-
+    
     public function __toString() {
         return $this->getTitle();
     }
