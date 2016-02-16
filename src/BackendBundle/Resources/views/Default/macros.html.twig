@@ -77,7 +77,7 @@
                 <a href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id}) }}" class="popover-menu" title="{{ item.title }}" content="{{item.description|raw}}">{{ item.title }}</a>
             </div>
             <div class="col-lg-3 col-md-3 col-xs-6 no-padding-sides">
-                <span title="{{ 'backend.item.status'|trans }}"><i class="fa fa-info-circle"></i> {{ item.textStatus|trans }}</span>
+                <span title="{{ 'backend.item.status'|trans }}" class="{{item.getLabelClassByStatus()}}"><i class="fa fa-info-circle"></i> {{ item.textStatus|trans }}</span>
             </div>
             <div class="col-lg-9 col-md-9 col-xs-6 no-padding-sides">
                 <span title="{{ 'backend.global.creation_date'|trans }}"><i class="fa fa-calendar"></i> {{ item.creationDate|date(dateFormat) }}</span>

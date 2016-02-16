@@ -401,4 +401,56 @@ class Item {
         return $langVar;
     }
 
+    /**
+     * Permite obtener la clase bootstrap correspondiente al color que representa
+     * el estado actual del item
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 16/02/2016
+     * @return string
+     */
+    public function getLabelClassByStatus() {
+        $class = '';
+
+        switch ($this->status) {
+            case self::STATUS_NEW:
+                $class = '';
+                break;
+            case self::STATUS_INVESTIGATING:
+                $class = 'label label-info';
+                break;
+            case self::STATUS_CONFIRMED:
+                $class = 'label label-default';
+                break;
+            case self::STATUS_NOT_A_BUG:
+                $class = 'label label-success';
+                break;
+            case self::STATUS_BEING_WORKED_ON:
+                $class = 'label label-default';
+                break;
+            case self::STATUS_NEAR_COMPLETION:
+                $class = 'label label-default';
+                break;
+            case self::STATUS_READY_FOR_TESTING:
+                $class = 'label label-primary';
+                break;
+            case self::STATUS_TESTING:
+                $class = 'label label-primary';
+                break;
+            case self::STATUS_CANCELED:
+                $class = 'label label-danger';
+                break;
+            case self::STATUS_POSTPONED:
+                $class = 'label label-warning';
+                break;
+            case self::STATUS_DONE:
+                $class = 'label label-success';
+                break;
+            case self::STATUS_FIXED:
+                $class = 'label label-success';
+                break;
+            default:
+                break;
+        }
+        return $class;
+    }
+
 }
