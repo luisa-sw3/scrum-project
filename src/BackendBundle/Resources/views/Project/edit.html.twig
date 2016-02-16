@@ -7,7 +7,7 @@
                 {{'backend.project.edit'|trans}}
                 <a href="{{ app.request.headers.get('referer') }}" class="btn btn-default pull-right">{{'backend.global.back'|trans}}</a>
             </h1>
-            {% set item1 = {'text': 'backend.project.projects'|trans, 'url': path('backend_projects'), 'icon':'fa fa-archive'} %}
+            {% set item1 = {'text': project.name, 'url':path('backend_projects_view',{'id':project.id}),'icon':'fa fa-dashboard'} %}
             {% set item2 = {'text': 'backend.project.edit'|trans, 'icon':'fa fa-pencil'} %}
             {% set items = [item1, item2] %}
             {{ filters.breadcrum(items) }}

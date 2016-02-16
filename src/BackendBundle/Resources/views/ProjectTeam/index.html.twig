@@ -11,10 +11,9 @@
                 <a style="margin-left: 8px;" class="btn btn-primary pull-right" title="{{ 'backend.user_role.roles'|trans }}" href="{{ path('backend_projects_roles', { 'projectId': project.id }) }}">{{ 'backend.user_role.roles'|trans }}</a>
                 <a href="{{ path('backend_project_team_add',{'id':project.id}) }}" class="btn btn-primary pull-right add-collaborator fancybox.iframe">{{'backend.user_project.invite_collaborator'|trans}}</a>
             </h1>
-            {% set item1 = {'text': 'backend.project.projects'|trans, 'url':path('backend_projects'),'icon':'fa fa-archive'} %}
             {% set item2 = {'text': project.name, 'url':path('backend_projects_view',{'id':project.id}),'icon':'fa fa-dashboard'} %}
             {% set item3 = {'text': 'backend.user_project.project_team'|trans, 'icon':'fa fa-users'} %}
-            {% set items = [item1, item2, item3] %}
+            {% set items = [item2, item3] %}
             {{ filters.breadcrum(items) }}
         </div>
     </div>

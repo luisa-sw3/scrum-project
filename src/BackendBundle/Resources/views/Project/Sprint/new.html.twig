@@ -9,11 +9,10 @@
                 <a href="{{ app.request.headers.get('referer') }}" class="btn btn-default pull-right">{{'backend.global.back'|trans}}</a>
             </h1>
             
-            {% set item1 = {'text': 'backend.project.projects'|trans, 'url':path('backend_projects'),'icon':'fa fa-archive'} %}
             {% set item2 = {'text': project.name, 'url':path('backend_projects_view',{'id':project.id}),'icon':'fa fa-dashboard'} %}
             {% set item3 = {'text': 'backend.sprint.sprints'|trans, 'url':path('backend_project_sprints',{'id':project.id}), 'icon':'fa fa-rotate-right'} %}
             {% set item4 = {'text': 'backend.sprint.new'|trans, 'icon':'fa fa-star-o'} %}
-            {% set items = [item1, item2, item3, item4] %}
+            {% set items = [item2, item3, item4] %}
             {{ filters.breadcrum(items) }}
         </div>
     </div>

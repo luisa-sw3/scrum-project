@@ -18,10 +18,6 @@
             <li class="active">
                 <i class="fa fa-home"></i> {{'backend.global.home'|trans}}
             </li>
-        {% else %}
-            <li class="active">
-                <a href="{{path('backend_homepage')}}"><i class="fa fa-home"></i> {{'backend.global.home'|trans}}</a>
-            </li>
         {% endif %}
 
         {% for item in items %}
@@ -100,7 +96,7 @@
                 </span>
             </div>
         </div>
-        <div class="col-xs-2 col-md-2 pull-right no-padding-right">
+        <div class="col-xs-2 col-md-2 pull-right no-padding-sides">
             <label title="{{'backend.item.worked_estimated_time'|trans}}" class="col-xs-12 text-right label-item-times">{{ item.workedHours|default(0) }} / {{ item.estimatedHours|default(0) }}</label>
             <div class="btn-group pull-right small-btn-group">
                 <a class="btn btn-default btn-sm border-radius-left" title="{{ 'backend.item.edit'|trans }}" href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id, 'sprintId':sprint.id}) }}">
