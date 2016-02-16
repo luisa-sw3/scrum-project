@@ -37,3 +37,8 @@ backend_project_product_backlog_change_priority:
     path:     /changePriority
     defaults: { _controller: "BackendBundle:Item:changePriority" }
     methods:  [POST]
+    
+backend_project_product_backlog_edit_estimation:
+    path:     /editEstimation
+    defaults: { _controller: "BackendBundle:Item:editEstimation" }
+    methods:  [POST]

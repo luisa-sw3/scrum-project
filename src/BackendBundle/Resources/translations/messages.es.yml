@@ -43,6 +43,8 @@ backend:
         showing: "Mostrando"
         to: "a"
         of: "de"
+        or: "o"
+        example: "Ejemplo"
         
     user:
         edit_profile: "Editar Perfil"
@@ -220,6 +222,7 @@ backend:
         create_related_item: "Crear item relacionado"
         assign_user: "Asignar Usuario"
         change_priority: "Cambiar Prioridad"
+        edit_estimation: "Editar Estimación"
         
         worked_estimated_time: "Tiempo Trabajado / Tiempo Estimado"
         

@@ -153,12 +153,78 @@
                                 }
                             });
                         } else {
-                            $(".bootbox-input").focus();
+                            $(".bootbox-input").select();
                             return false;
                         }
                     } else {
-                        $(".bootbox-input").focus();
+                        $(".bootbox-input").select();
                         return false;
+                    }
+                }
+            });
+        });
+        
+        {# Codigo para cambiar la estimacion de los items #}
+        $(".edit-estimation").click(function() {
+            var object = $(this);
+            var itemId = object.attr('item-id');
+            var estimation = object.attr('estimation');
+            
+            bootbox.dialog({
+                title: "{{'backend.item.edit_estimation'|trans}}",
+                message: '<div class="row">  ' +
+                    '<div class="col-md-12"> ' +
+                    '<form class="form-horizontal"> ' +
+                    '<div class="form-group"> ' +
+                    '<label class="col-md-4 control-label" for="name">{{'backend.item.estimated_hours'|trans}}</label> ' +
+                    '<div class="col-md-4"> ' +
+                        '<input id="estimated-hours-' + itemId + '" value="' + estimation + '" type="text" class="form-control input-md only_numbers_decimal" maxlength="4"> ' +
+                    '<span class="help-block">{{'backend.global.example'|trans}} <strong>2</strong> {{'backend.global.or'|trans}} <strong>3.5</strong></span> </div> ' +
+                    '</div> ' +
+                    '</form> </div>  </div>',
+                buttons: {
+                    success: {
+                        label: "{{'backend.global.save_changes'|trans}}",
+                        className: "btn-primary",
+                        callback: function () {
+                            var newEstimation = $('#estimated-hours-' + itemId).val();
+                            if (newEstimation != '') {
+                                var newEstimation = parseFloat(newEstimation);
+                                if (newEstimation >= 0) {
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: "{{path('backend_project_product_backlog_edit_estimation',{'id':project.id})}}",
+                                        dataType: 'json',
+                                        data: {itemId: itemId, estimation: newEstimation},
+                                        success: function (r)
+                                        {
+                                            if (r.result == '__OK__') {
+                                                window.location.reload();
+                                            } else {
+                                                bootbox.alert(r.msg);
+                                            }
+                                        },
+                                        error: function (r)
+                                        {
+                                            bootbox.alert("{{'backend.global.unknown_error'|trans}}")
+                                        }
+                                    });
+                                } else {
+                                    $('#estimated-hours-' + itemId).select();
+                                    return false;
+                                }
+                            } else {
+                                $('#estimated-hours-' + itemId).select();
+                                return false;
+                            }
+                        }
+                    },
+                    main: {
+                        label: "{{'backend.global.cancel'|trans}}",
+                        className: "btn-default",
+                        callback: function () {
+
+                        }
                     }
                 }
             });

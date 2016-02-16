@@ -43,6 +43,8 @@ backend:
         showing: "Showing"
         to: "to"
         of: "of"
+        or: "or"
+        example: "Example"
     
     user:
         edit_profile: "Edit Profile"
@@ -220,6 +222,7 @@ backend:
         create_related_item: "Create related item"
         assign_user: "Assign User"
         change_priority: "Change Priority"
+        edit_estimation: "Edit Estimation"
         
         worked_estimated_time: "Worked Time / Estimated Time"
         

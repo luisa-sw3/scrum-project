@@ -430,5 +430,37 @@ class ItemController extends Controller {
 
         return new JsonResponse($response);
     }
+    
+    /**
+     * Permite editar la estimacion de un item
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 02/15/2016
+     * @param Request $request datos de la solicitud
+     * @param string $id identificador del proyecto
+     * @return JsonResponse JSON con mensaje de respuesta
+     */
+    public function editEstimationAction(Request $request, $id) {
+        $response = array('result' => '__OK__', 'msg' => $this->get('translator')->trans('backend.item.update_success_message'));
+        $em = $this->getDoctrine()->getManager();
+        $itemId = $request->request->get('itemId');
+        $estimation = $request->request->get('estimation');
+        $item = $em->getRepository('BackendBundle:Item')->find($itemId);
+
+        if (!$item || ($item && $item->getProject()->getId() != $id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.item.not_found_message');
+            return new JsonResponse($response);
+        }
+
+        try {
+            $item->setEstimatedHours($estimation);
+            $em->persist($item);
+            $em->flush();
+        } catch (\Exception $ex) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.global.unknown_error');
+        }
+
+        return new JsonResponse($response);
+    }
 
 }

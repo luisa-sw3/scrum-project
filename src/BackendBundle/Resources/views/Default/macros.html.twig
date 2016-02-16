@@ -119,8 +119,8 @@
                     <li class="disabled"><a href="#"><i class="fa fa-comment-o"></i> Agregar Comentario</a></li>
                     <li class="disabled"><a href="#"><i class="fa fa-paperclip"></i> Adjuntar Archivo</a></li>
                     <li><a href="javascript:void(0);" class="change-priority" item-id="{{item.id}}" priority="{{item.priority|default(0)}}"><i class="fa fa-reorder"></i> {{'backend.item.change_priority'|trans}}</a></li>
-                    <li class="disabled"><a href="#"><i class="fa fa-clock-o"></i> Cambiar Estimacion</a></li>
-                    <li class="disabled"><a href="#"><i class="fa fa-clock-o"></i> Cambiar Tiempo Transcurrido</a></li>
+                    <li><a href="javascript:void(0);" class="edit-estimation" item-id="{{item.id}}" estimation="{{item.estimatedHours|default(0)}}"><i class="fa fa-clock-o"></i> {{'backend.item.edit_estimation'|trans}}</a></li>
+                    <li class="disabled"><a href="#"><i class="fa fa-clock-o"></i> Editar Tiempo Transcurrido</a></li>
                     <li class="divider"></li>
                     <li class="disabled"><a href="#"><i class="fa fa-cut"></i> Mover a otro Sprint</a></li>
                     <li class="disabled"><a href="#"><i class="fa fa-copy"></i> Duplicar en otro Sprint</a></li>
