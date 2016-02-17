@@ -38,7 +38,32 @@ backend_project_product_backlog_change_priority:
     defaults: { _controller: "BackendBundle:Item:changePriority" }
     methods:  [POST]
     
+backend_project_product_backlog_html_edit_estimation:
+    path:     /getHtmlEditEstimation
+    defaults: { _controller: "BackendBundle:Item:getHtmlEditEstimation" }
+    methods:  [POST]
+
 backend_project_product_backlog_edit_estimation:
     path:     /editEstimation
     defaults: { _controller: "BackendBundle:Item:editEstimation" }
+    methods:  [POST]
+
+backend_project_product_backlog_html_edit_worked_time:
+    path:     /getHtmlEditWorkedTime
+    defaults: { _controller: "BackendBundle:Item:getHtmlEditWorkedTime" }
+    methods:  [POST]
+
+backend_project_product_backlog_edit_worked_time:
+    path:     /editWorkedTime
+    defaults: { _controller: "BackendBundle:Item:editWorkedTime" }
+    methods:  [POST]
+    
+backend_project_product_backlog_html_change_status:
+    path:     /getHtmlChangeStatus
+    defaults: { _controller: "BackendBundle:Item:getHtmlChangeStatus" }
+    methods:  [POST]
+
+backend_project_product_backlog_change_status:
+    path:     /changeStatus
+    defaults: { _controller: "BackendBundle:Item:changeStatus" }
     methods:  [POST]

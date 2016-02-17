@@ -223,6 +223,8 @@ backend:
         assign_user: "Assign User"
         change_priority: "Change Priority"
         edit_estimation: "Edit Estimation"
+        edit_worked_time: "Edit Worked Time"
+        change_status: "Change Status"
         
         worked_estimated_time: "Worked Time / Estimated Time"
         

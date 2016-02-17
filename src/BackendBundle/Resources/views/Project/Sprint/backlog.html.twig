@@ -169,18 +169,26 @@
             var itemId = object.attr('item-id');
             var estimation = object.attr('estimation');
             
+            var htmlDialog = '';
+            $.ajax({
+                type: 'POST',
+                url: "{{path('backend_project_product_backlog_html_edit_estimation',{'id':project.id})}}",
+                dataType: 'json',
+                data: {itemId: itemId, estimation: estimation},
+                async: false,
+                success: function (resp)
+                {
+                    if (resp.result == '__OK__') {
+                        htmlDialog = resp.html;
+                    } else {
+                        bootbox.alert(resp.msg);
+                    }
+                }
+            });
+            
             bootbox.dialog({
                 title: "{{'backend.item.edit_estimation'|trans}}",
-                message: '<div class="row">  ' +
-                    '<div class="col-md-12"> ' +
-                    '<form class="form-horizontal"> ' +
-                    '<div class="form-group"> ' +
-                    '<label class="col-md-4 control-label" for="name">{{'backend.item.estimated_hours'|trans}}</label> ' +
-                    '<div class="col-md-4"> ' +
-                        '<input id="estimated-hours-' + itemId + '" value="' + estimation + '" type="text" class="form-control input-md only_numbers_decimal" maxlength="4"> ' +
-                    '<span class="help-block">{{'backend.global.example'|trans}} <strong>2</strong> {{'backend.global.or'|trans}} <strong>3.5</strong></span> </div> ' +
-                    '</div> ' +
-                    '</form> </div>  </div>',
+                message: htmlDialog,
                 buttons: {
                     success: {
                         label: "{{'backend.global.save_changes'|trans}}",
@@ -228,7 +236,155 @@
                 }
             });
         });
+        
+        {# Codigo para cambiar el tiempo trabajado en un item #}
+        $(".edit-worked-time").click(function() {
+            var object = $(this);
+            var itemId = object.attr('item-id');
+            var workedTime = object.attr('worked-time');
+            
+            var htmlDialog = '';
+            $.ajax({
+                type: 'POST',
+                url: "{{path('backend_project_product_backlog_html_edit_worked_time',{'id':project.id})}}",
+                dataType: 'json',
+                data: {itemId: itemId, workedTime: workedTime},
+                async: false,
+                success: function (resp)
+                {
+                    if (resp.result == '__OK__') {
+                        htmlDialog = resp.html;
+                    } else {
+                        bootbox.alert(resp.msg);
+                    }
+                }
+            });
+            
+            bootbox.dialog({
+                title: "{{'backend.item.edit_worked_time'|trans}}",
+                message: htmlDialog,
+                buttons: {
+                    success: {
+                        label: "{{'backend.global.save_changes'|trans}}",
+                        className: "btn-primary",
+                        callback: function () {
+                            var newWorkedTime = $('#worked-hours-' + itemId).val();
+                            if (newWorkedTime != '') {
+                                var newWorkedTime = parseFloat(newWorkedTime);
+                                if (newWorkedTime >= 0) {
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: "{{path('backend_project_product_backlog_edit_worked_time',{'id':project.id})}}",
+                                        dataType: 'json',
+                                        data: {itemId: itemId, workedTime: newWorkedTime},
+                                        success: function (r)
+                                        {
+                                            if (r.result == '__OK__') {
+                                                window.location.reload();
+                                            } else {
+                                                bootbox.alert(r.msg);
+                                            }
+                                        },
+                                        error: function (r)
+                                        {
+                                            bootbox.alert("{{'backend.global.unknown_error'|trans}}")
+                                        }
+                                    });
+                                } else {
+                                    $('#worked-hours-' + itemId).select();
+                                    return false;
+                                }
+                            } else {
+                                $('#worked-hours-' + itemId).select();
+                                return false;
+                            }
+                        }
+                    },
+                    main: {
+                        label: "{{'backend.global.cancel'|trans}}",
+                        className: "btn-default",
+                        callback: function () {
 
+                        }
+                    }
+                }
+            });
+        });
+
+        {# Codigo para cambiar el estado de un item #}
+        $(".change-status").click(function() {
+            var object = $(this);
+            var itemId = object.attr('item-id');
+            var status = object.attr('status');
+            
+            var htmlDialog = '';
+            $.ajax({
+                type: 'POST',
+                url: "{{path('backend_project_product_backlog_html_change_status',{'id':project.id})}}",
+                dataType: 'json',
+                data: {itemId: itemId, status: status},
+                async: false,
+                success: function (resp)
+                {
+                    if (resp.result == '__OK__') {
+                        htmlDialog = resp.html;
+                    } else {
+                        bootbox.alert(resp.msg);
+                    }
+                }
+            });
+            
+            bootbox.dialog({
+                title: "{{'backend.item.change_status'|trans}}",
+                message: htmlDialog,
+                buttons: {
+                    success: {
+                        label: "{{'backend.global.save_changes'|trans}}",
+                        className: "btn-primary",
+                        callback: function () {
+                            var newStatus = $('#item-status-' + itemId).val();
+                            if (newStatus != '') {
+                                var newStatus = parseInt(newStatus);
+                                if (newStatus > 0) {
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: "{{path('backend_project_product_backlog_change_status',{'id':project.id})}}",
+                                        dataType: 'json',
+                                        data: {itemId: itemId, status: newStatus},
+                                        success: function (r)
+                                        {
+                                            if (r.result == '__OK__') {
+                                                window.location.reload();
+                                            } else {
+                                                bootbox.alert(r.msg);
+                                            }
+                                        },
+                                        error: function (r)
+                                        {
+                                            bootbox.alert("{{'backend.global.unknown_error'|trans}}")
+                                        }
+                                    });
+                                } else {
+                                    $('#item-status-' + itemId).focus();
+                                    return false;
+                                }
+                            } else {
+                                $('#item-status-' + itemId).focus();
+                                return false;
+                            }
+                        }
+                    },
+                    main: {
+                        label: "{{'backend.global.cancel'|trans}}",
+                        className: "btn-default",
+                        callback: function () {
+
+                        }
+                    }
+                }
+            });
+        });
+        
     {% endblock %}
 
     {% block functions_javascript %}

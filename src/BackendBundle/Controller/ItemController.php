@@ -432,6 +432,28 @@ class ItemController extends Controller {
     }
     
     /**
+     * Permite obtener el html necesario para editar la estimacion de un item
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 02/15/2016
+     * @param Request $request
+     * @param type $id
+     * @return JsonResponse
+     */
+    public function getHtmlEditEstimationAction(Request $request, $id) {
+        $response = array('result' => '__OK__', 'html' => '');
+        
+        $itemId = $request->request->get('itemId');
+        $estimation = $request->request->get('estimation');
+
+        $html = $this->renderView('BackendBundle:Project/ProductBacklog:editEstimationForm.html.twig', array(
+            'itemId' => $itemId,
+            'estimation' => $estimation,
+        ));
+        $response['html'] = $html;  
+
+        return new JsonResponse($response);
+    }
+    
+    /**
      * Permite editar la estimacion de un item
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 02/15/2016
      * @param Request $request datos de la solicitud
@@ -453,6 +475,115 @@ class ItemController extends Controller {
 
         try {
             $item->setEstimatedHours($estimation);
+            $em->persist($item);
+            $em->flush();
+        } catch (\Exception $ex) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.global.unknown_error');
+        }
+
+        return new JsonResponse($response);
+    }
+    
+    /**
+     * Permite obtener el html necesario para editar el tiempo invertido en un item
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 02/15/2016
+     * @param Request $request
+     * @param type $id
+     * @return JsonResponse
+     */
+    public function getHtmlEditWorkedTimeAction(Request $request, $id) {
+        $response = array('result' => '__OK__', 'html' => '');
+        
+        $itemId = $request->request->get('itemId');
+        $workedTime = $request->request->get('workedTime');
+
+        $html = $this->renderView('BackendBundle:Project/ProductBacklog:editWorkedTimeForm.html.twig', array(
+            'itemId' => $itemId,
+            'workedTime' => $workedTime,
+        ));
+        $response['html'] = $html;  
+
+        return new JsonResponse($response);
+    }
+    
+    /**
+     * Permite editar el tiempo trabajado en un item
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 02/15/2016
+     * @param Request $request datos de la solicitud
+     * @param string $id identificador del proyecto
+     * @return JsonResponse JSON con mensaje de respuesta
+     */
+    public function editWorkedTimeAction(Request $request, $id) {
+        $response = array('result' => '__OK__', 'msg' => $this->get('translator')->trans('backend.item.update_success_message'));
+        $em = $this->getDoctrine()->getManager();
+        $itemId = $request->request->get('itemId');
+        $workedTime = $request->request->get('workedTime');
+        $item = $em->getRepository('BackendBundle:Item')->find($itemId);
+
+        if (!$item || ($item && $item->getProject()->getId() != $id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.item.not_found_message');
+            return new JsonResponse($response);
+        }
+
+        try {
+            $item->setWorkedHours($workedTime);
+            $em->persist($item);
+            $em->flush();
+        } catch (\Exception $ex) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.global.unknown_error');
+        }
+
+        return new JsonResponse($response);
+    }
+    
+    /**
+     * Permite obtener el html necesario para editar el estado de un item
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 02/16/2016
+     * @param Request $request
+     * @param type $id
+     * @return JsonResponse
+     */
+    public function getHtmlChangeStatusAction(Request $request, $id) {
+        $response = array('result' => '__OK__', 'html' => '');
+        
+        $itemId = $request->request->get('itemId');
+        $status = $request->request->get('status');
+
+        $html = $this->renderView('BackendBundle:Project/ProductBacklog:editStatusForm.html.twig', array(
+            'itemId' => $itemId,
+            'status' => $status,
+            'statusList' => $this->get('form_helper')->getItemStatusOptions(),
+        ));
+        $response['html'] = $html;  
+
+        return new JsonResponse($response);
+    }
+    
+    /**
+     * Permite editar el estado de un item
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 02/16/2016
+     * @param Request $request datos de la solicitud
+     * @param string $id identificador del proyecto
+     * @return JsonResponse JSON con mensaje de respuesta
+     */
+    public function changeStatusAction(Request $request, $id) {
+        $response = array('result' => '__OK__', 'msg' => $this->get('translator')->trans('backend.item.update_success_message'));
+        $em = $this->getDoctrine()->getManager();
+        $itemId = $request->request->get('itemId');
+        $status = $request->request->get('status');
+        $item = $em->getRepository('BackendBundle:Item')->find($itemId);
+
+        if (!$item || ($item && $item->getProject()->getId() != $id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.item.not_found_message');
+            return new JsonResponse($response);
+        }
+
+        try {
+            $item->setStatus($status);
             $em->persist($item);
             $em->flush();
         } catch (\Exception $ex) {

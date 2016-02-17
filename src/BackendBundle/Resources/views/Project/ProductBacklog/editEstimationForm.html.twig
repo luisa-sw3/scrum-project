@@ -1,0 +1,17 @@
+{% spaceless %}
+<div class="row">
+    <div class="col-md-12"> 
+        <form class="form-horizontal"> 
+            <div class="form-group"> 
+                <label class="col-md-4 control-label" for="name">{{'backend.item.estimated_hours'|trans}}</label> 
+                <div class="col-md-4"> 
+                    <input id="estimated-hours-{{itemId}}" value="{{estimation}}" type="text" class="form-control input-md only_numbers_decimal" maxlength="4">
+                    <span class="help-block">
+                        {{'backend.global.example'|trans}} <strong>2</strong> {{'backend.global.or'|trans}} <strong>3.5</strong>
+                    </span> 
+                </div> 
+            </div> 
+        </form> 
+    </div>  
+</div>
+{% endspaceless %}
