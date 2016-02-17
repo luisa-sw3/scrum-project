@@ -56,32 +56,49 @@ class Sprint {
      * @ORM\JoinColumn(name="sprint_project_id", referencedColumnName="proj_id")
      */
     protected $project;
-    
+
     /**
      * Usuario quien realiza la creación del sprint
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="sprint_user_owner", referencedColumnName="user_id")
      */
     protected $userOwner;
-    
+
     /**
      * Boolean que permite saber si durante el Sprint se van a trabajar los fines
      * de semana (Sabados y Domingos)
      * @ORM\Column(name="sprint_is_working_weekends", type="boolean", nullable=true)
      */
     protected $isWorkingWeekends;
-    
+
     /**
      * Fecha de creacion del sprint en el sistema
      * @ORM\Column(name="sprint_creation_date", type="datetime", nullable=true)
      */
     protected $creationDate;
-    
+
+    /**
+     * Almacena el tiempo estimado para la realizacion de todos los items del sprint
+     * @ORM\Column(name="sprint_estimated_time", type="float", nullable=true)
+     */
+    protected $estimatedTime;
+
+    /**
+     * Almacena el tiempo trabajado por el equipo para la realizacion de todos los items del sprint
+     * @ORM\Column(name="sprint_worked_time", type="float", nullable=true)
+     */
+    protected $workedTime;
+
+    /**
+     * Almacena el tiempo restante para la realizacion de todos los items del sprint
+     * @ORM\Column(name="sprint_remaining_time", type="float", nullable=true)
+     */
+    protected $remainingTime;
+
     function getId() {
         return $this->id;
     }
 
-    
     function getName() {
         return $this->name;
     }
@@ -144,6 +161,30 @@ class Sprint {
 
     function setIsWorkingWeekends($isWorkingWeekends) {
         $this->isWorkingWeekends = $isWorkingWeekends;
+    }
+
+    function getEstimatedTime() {
+        return $this->estimatedTime;
+    }
+
+    function getWorkedTime() {
+        return $this->workedTime;
+    }
+
+    function setEstimatedTime($estimatedTime) {
+        $this->estimatedTime = $estimatedTime;
+    }
+
+    function setWorkedTime($workedTime) {
+        $this->workedTime = $workedTime;
+    }
+
+    function getRemainingTime() {
+        return $this->remainingTime;
+    }
+
+    function setRemainingTime($remainingTime) {
+        $this->remainingTime = $remainingTime;
     }
 
     public function __toString() {

@@ -13,7 +13,7 @@ use BackendBundle\Entity as Entity;
 class SprintController extends Controller {
 
     const MENU = 'menu_project_sprints';
-    
+
     /**
      * Permite listar los sprints de un proyecto
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 28/01/2016
@@ -62,7 +62,7 @@ class SprintController extends Controller {
 
         $sprint = new Entity\Sprint();
         $sprint->setProject($project);
-        
+
         $form = $this->createForm(SprintType::class, $sprint);
         $form->handleRequest($request);
 
@@ -101,12 +101,12 @@ class SprintController extends Controller {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.sprint.not_found_message'));
             return $this->redirectToRoute('backend_project_sprints', array('id' => $id));
         }
-        
+
         $editForm = $this->createForm(SprintType::class, $sprint);
         $editForm->handleRequest($request);
-        
+
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            
+
             $em->persist($sprint);
             $em->flush();
 
@@ -121,7 +121,7 @@ class SprintController extends Controller {
                     'menu' => self::MENU
         ));
     }
-    
+
     /**
      * Esta funcion permite listar el Sprint Backlog de un sprint determinado
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 28/01/2016
@@ -140,9 +140,29 @@ class SprintController extends Controller {
             return $this->redirectToRoute('backend_project_sprints', array('id' => $id));
         }
 
-        $search = array('sprint' => $sprint->getId(), 'parent' => NULL);
+        $search = array('sprint' => $sprint->getId());
         $order = array('priority' => 'DESC');
+        $allSprintItems = $em->getRepository('BackendBundle:Item')->findBy($search, $order);
 
+        $estimatedTime = 0;
+        $workedTime = 0;
+        $remainingTime = 0;
+        foreach ($allSprintItems as $item) {
+            $estimatedTime += $item->getEstimatedHours();
+            $workedTime += $item->getWorkedHours();
+
+            if ($item->isActive() && $item->getEstimatedHours() > $item->getWorkedHours()) {
+                $remainingTime += ($item->getEstimatedHours() - $item->getWorkedHours());
+            }
+        }
+
+        $sprint->setEstimatedTime($estimatedTime);
+        $sprint->setWorkedTime($workedTime);
+        $sprint->setRemainingTime($remainingTime);
+        $em->persist($sprint);
+        $em->flush();
+
+        $search['parent'] = NULL;
         $sprintBacklog = $em->getRepository('BackendBundle:Item')->findBy($search, $order);
 
         return $this->render('BackendBundle:Project/Sprint:backlog.html.twig', array(
@@ -152,6 +172,5 @@ class SprintController extends Controller {
                     'menu' => self::MENU
         ));
     }
-    
 
 }

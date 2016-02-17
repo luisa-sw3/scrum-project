@@ -453,4 +453,23 @@ class Item {
         return $class;
     }
 
+    /**
+     * Permite saber si el item esta activo de acuerdo a su estado actual
+     * @return boolean
+     */
+    public function isActive() {
+        $inactiveStatus = array(
+            self::STATUS_CANCELED,
+            self::STATUS_POSTPONED,
+            self::STATUS_NOT_A_BUG,
+            self::STATUS_DONE,
+            self::STATUS_FIXED,
+        );
+
+        if (in_array($this->status, $inactiveStatus)) {
+            return false;
+        }
+        return true;
+    }
+
 }
