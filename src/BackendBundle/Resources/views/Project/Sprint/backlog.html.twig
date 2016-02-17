@@ -1,6 +1,5 @@
 {% extends 'BackendBundle:Default:main.html.twig' %}
 {% block title %}{{'backend.sprint.backlog'|trans}}{% endblock %}
-
 {% block content %}
 
     <!-- Page Heading -->
@@ -22,6 +21,11 @@
     {{ filters.showMessage('messageSuccess', 'success')}}
     {{ filters.showMessage('messageError', 'danger')}}
 
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-xs-12">
+            <div id="container-burndown" style="max-width: 680px; height: 500px;"></div>
+        </div>
+    </div>
     <div class="rstable">
         {% for item in sprintBacklog %}
             <div class="col-lg-12 col-md-12 col-xs-12 no-padding-right main-item">
@@ -405,6 +409,75 @@
             });
         });
         
+
+        $('#container-burndown').highcharts({
+            title: {
+              text: 'Burndown Chart',
+              x: -10 //center
+            },
+            scrollbar: {
+                        barBackgroundColor: 'gray',
+                        barBorderRadius: 7,
+                        barBorderWidth: 0,
+                        buttonBackgroundColor: 'gray',
+                        buttonBorderWidth: 0,
+                        buttonBorderRadius: 7,
+                        trackBackgroundColor: 'none',
+                        trackBorderWidth: 1,
+                        trackBorderRadius: 8,
+                        trackBorderColor: '#CCC'
+                    },
+            colors: ['blue', 'red'],
+            plotOptions: {
+              line: {
+                lineWidth: 3
+              },
+              tooltip: {
+                hideDelay: 200
+              }
+            },
+            subtitle: {
+              text: 'All Sprint Progress Summary',
+              x: -10
+            },
+            xAxis: {
+              categories: {{listDays|json_encode()|raw}},
+            },
+            yAxis: {
+              title: {
+                text: 'Remaining work (hours)'
+              },
+                    type: 'linear',
+                    max:{{sprint.estimatedTime}},
+                    min:0,
+                    tickInterval : parseInt({{sprint.estimatedTime}}/{{listDays|length}})
+            },
+            tooltip: {
+              valueSuffix: ' hours',
+              crosshairs: true,
+              shared: true
+            },
+            legend: {
+             layout: 'horizontal',
+              align: 'center',
+              verticalAlign: 'bottom',
+              borderWidth: 0
+            },
+            series: [{
+              name: 'Ideal Burn',
+              color: 'rgba(255,0,0,0.25)',
+              lineWidth: 2,
+
+              data: {{idealArray|json_encode()|raw}}
+            }, {
+              name: 'Actual Burn',
+              color: 'rgba(0,120,200,0.75)',
+              marker: {
+                radius: 6
+              },
+              data: {{actualArray|json_encode()}}
+            }]
+        });
     {% endblock %}
 
     {% block functions_javascript %}
@@ -429,4 +502,10 @@
                 }
             });
         }
+        
+        
+        
+
+       
+        
     {% endblock %}

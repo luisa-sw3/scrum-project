@@ -250,6 +250,7 @@ backend:
         delete_unable_message: "Sprint can't de deleted"
         work_weekends: "Work on weekends ?"
         empty_list: "No sprints in project yet"
+        not_found_message: "Sprint not found"
         
     report: 
         reports: "Reports"

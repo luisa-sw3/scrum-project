@@ -24,34 +24,36 @@ class Indexer {
         $reflectedClass = new \ReflectionClass($className);
 
         if ($reflectedClass->hasProperty('consecutive')) {
-            $order = array('consecutive' => 'DESC');
 
             $consecutive = null;
+            $enabledEntity = false;
 
             if ($entity instanceof Entity\Item) {
+                $enabledEntity = true;
                 //buscamos la cantidad de items que tiene creado un proyecto para asignar el consecutivo
                 $project = $entity->getProject();
                 $consecutive = $project->getLastItemConsecutive() + 1;
                 $project->setLastItemConsecutive($consecutive);
                 $entityManager->persist($project);
             } elseif ($entity instanceof Entity\Sprint) {
+                $enabledEntity = true;
                 //buscamos la cantidad de items que tiene creado un proyecto para asignar el consecutivo
                 $project = $entity->getProject();
                 $consecutive = $project->getLastSprintConsecutive() + 1;
                 $project->setLastSprintConsecutive($consecutive);
                 $entityManager->persist($project);
-            } else {
-                $lastItem = $entityManager->getRepository($className)->findOneBy(array(), $order);
-                $consecutive = $lastItem->getConsecutive() + 1;
             }
 
-            if ($consecutive != null) {
-                $entity->setConsecutive($consecutive);
-            } else {
-                $entity->setConsecutive(1);
-            }
 
-            $entityManager->flush();
+            if ($enabledEntity) {
+                if ($consecutive != null) {
+                    $entity->setConsecutive($consecutive);
+                } else {
+                    $entity->setConsecutive(1);
+                }
+
+                $entityManager->flush();
+            }
         }
     }
 

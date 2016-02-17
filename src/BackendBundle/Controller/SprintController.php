@@ -72,6 +72,22 @@ class SprintController extends Controller {
             $sprint->setUserOwner($this->getUser());
 
             $em->persist($sprint);
+
+            //guardamos los dias de trabajo del sprint
+            $startDate = $sprint->getStartDate();
+            $estimatedDate = $sprint->getEstimatedDate();
+            $diff = $startDate->diff($estimatedDate);
+
+
+            for ($i = 0; $i <= $diff->d; $i++) {
+                $sprintDate = clone $startDate;
+                $sprintDate->modify('+ ' . $i . ' day');
+                $sprintDay = new Entity\SprintDay();
+                $sprintDay->setDate($sprintDate);
+                $sprintDay->setSprint($sprint);
+                $em->persist($sprintDay);
+            }
+
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.sprint.creation_success_message'));
@@ -108,6 +124,28 @@ class SprintController extends Controller {
         if ($editForm->isSubmitted() && $editForm->isValid()) {
 
             $em->persist($sprint);
+
+            //borramos los dias de sprint que habian antes
+            $sprintDays = $em->getRepository('BackendBundle:SprintDay')->findBySprint($sprintId);
+            foreach ($sprintDays as $sprintDay) {
+                $em->remove($sprintDay);
+            }
+
+            $em->flush();
+
+            //guardamos los dias de trabajo del sprint
+            $startDate = $sprint->getStartDate();
+            $estimatedDate = $sprint->getEstimatedDate();
+            $diff = $startDate->diff($estimatedDate);
+
+            for ($i = 0; $i <= $diff->d; $i++) {
+                $sprintDate = clone $startDate;
+                $sprintDate->modify('+ ' . $i . ' day');
+                $sprintDay = new Entity\SprintDay();
+                $sprintDay->setDate($sprintDate);
+                $sprintDay->setSprint($sprint);
+                $em->persist($sprintDay);
+            }
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.sprint.update_success_message'));
@@ -165,11 +203,36 @@ class SprintController extends Controller {
         $search['parent'] = NULL;
         $sprintBacklog = $em->getRepository('BackendBundle:Item')->findBy($search, $order);
 
+
+        //logica para pintar la grafica Burdown del Sprint
+        $days = $em->getRepository('BackendBundle:SprintDay')->findBySprint($sprintId);
+        $sprintDays = count($days);
+
+        $listDays = array();
+        for ($i = 0; $i < $sprintDays; $i++) {
+            $listDays[$i] = $days[$i]->getDate()->format($sprint->getProject()->getSettings()->getPHPDateFormat());
+        }
+
+        $estimatedTimePerDay = number_format(($sprint->getEstimatedTime() / $sprintDays), 1);
+        $idealArray = range(0, $sprint->getEstimatedTime() - $estimatedTimePerDay, $estimatedTimePerDay);
+        $idealXArray = array();
+        foreach ($idealArray as $value) {
+            $value = trim($value);
+            $idealXArray[] = 'Day ' . $value;
+        }
+
+        //datos del avance del sprint
+        $actualArray = array($sprint->getEstimatedTime(), $sprint->getEstimatedTime() - 14, $sprint->getEstimatedTime() - 18, $sprint->getEstimatedTime() - 24, $sprint->getEstimatedTime() - 24);
+        
         return $this->render('BackendBundle:Project/Sprint:backlog.html.twig', array(
                     'project' => $sprint->getProject(),
                     'sprint' => $sprint,
                     'sprintBacklog' => $sprintBacklog,
-                    'menu' => self::MENU
+                    'menu' => self::MENU,
+                    'idealXArray' => $idealXArray,
+                    'idealArray' => array_reverse($idealArray),
+                    'actualArray' => $actualArray,
+                    'listDays' => $listDays,
         ));
     }
 
