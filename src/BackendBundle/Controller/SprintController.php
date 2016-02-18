@@ -226,7 +226,6 @@ class SprintController extends Controller {
             $actualArray[$i] = $days[$i]->getRemainingWork();
         }
         
-        
         return $this->render('BackendBundle:Project/Sprint:backlog.html.twig', array(
                     'project' => $sprint->getProject(),
                     'sprint' => $sprint,

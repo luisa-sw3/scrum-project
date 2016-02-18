@@ -60,6 +60,17 @@
                 <label>{{'backend.sprint.remaining_work'|trans}}</label>
                 <p>{{ sprint.remainingTime }} {{'backend.global.hours'|trans|lower}}</p>
             </div>
+            
+            <div class="form-group col-md-12 col-xs-12">
+                {% if sprint.status == constant('BackendBundle\\Entity\\Sprint::STATUS_PLANNED') %}
+                    <button type="button" class="disabled btn btn-secondary btn-success">{{'backend.sprint.start_sprint'|trans}}</button>
+                {% elseif sprint.status == constant('BackendBundle\\Entity\\Sprint::STATUS_IN_PROCESS') %}
+                    <button type="button" class="disabled btn btn-secondary btn-danger">{{'backend.sprint.stop_sprint'|trans}}</button>
+                    <button type="button" class="disabled btn btn-secondary btn-success">{{'backend.sprint.finish_sprint'|trans}}</button>
+                {% elseif sprint.status == constant('BackendBundle\\Entity\\Sprint::STATUS_STOPPED') %}
+                    <button type="button" class="disabled btn btn-secondary btn-success">{{'backend.sprint.finish_sprint'|trans}}</button>
+                {% endif %}
+            </div>
         </div>
     </div>
     <div class="rstable">
@@ -513,7 +524,7 @@
               marker: {
                 radius: 6
               },
-              {% if sprint.status != 1 %}
+              {% if sprint.status != constant('BackendBundle\\Entity\\Sprint::STATUS_PLANNED') %}
                 data: {{actualArray|json_encode()}}
               {% else %}
                 data: "{0}"

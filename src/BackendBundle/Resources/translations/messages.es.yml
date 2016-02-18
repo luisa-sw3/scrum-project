@@ -268,6 +268,9 @@ backend:
         actual_burn: "Avance Actual"
         total_estimated: "Total Estimado"
         total_worked: "Total Trabajado"
+        start_sprint: "Iniciar Sprint"
+        stop_sprint: "Detener Sprint"
+        finish_sprint: "Finalizar Sprint"
         
     report: 
         reports: "Reportes"
