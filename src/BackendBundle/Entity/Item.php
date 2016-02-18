@@ -258,20 +258,31 @@ class Item {
     }
 
     /**
-     * Sort array of objects by field.
+     * Sort array of objects by string fields
      * @param array $objects Array of objects to sort.
      * @param string $on Name of field.
      * @param string $order (ASC|DESC)
      */
-    function sortByField(&$objects, $on, $order = 'ASC') {
+    function sortByFieldString(&$objects, $on, $order = 'ASC') {
         $comparer = ($order === 'DESC') ? "return -strcmp(\$a->get{$on}(),\$b->get{$on}());" : "return strcmp(\$a->get{$on}(),\$b->get{$on}());";
+        usort($objects, create_function('$a,$b', $comparer));
+    }
+    
+    /**
+     * Sort array of objects by integer fields
+     * @param array $objects Array of objects to sort.
+     * @param string $on Name of field.
+     * @param string $order (ASC|DESC)
+     */
+    function sortByFieldInt(&$objects, $on, $order = 'ASC') {
+        $comparer = ($order === 'ASC') ? "return (\$a->get{$on}()>\$b->get{$on}());" : "return (\$b->get{$on}()>\$a->get{$on}());";
         usort($objects, create_function('$a,$b', $comparer));
     }
 
     function getChildren() {
         //construimos un arreglo y lo ordenamos acorde a su la prioridad de items
         $list = $this->children->toArray();
-        $this->sortByField($list, 'Priority', 'DESC');
+        $this->sortByFieldInt($list, 'Priority', 'DESC');
         return $list;
     }
 
