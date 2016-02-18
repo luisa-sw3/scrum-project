@@ -22,8 +22,44 @@
     {{ filters.showMessage('messageError', 'danger')}}
 
     <div class="row">
-        <div class="col-lg-12 col-md-12 col-xs-12">
+        <div class="col-lg-7 col-md-12 col-xs-12">
             <div id="container-burndown" style="max-width: 680px; height: 500px;"></div>
+        </div>
+        <div class="col-lg-5 col-md-12 col-xs-12">
+            <legend>{{ 'backend.sprint.details'|trans }}</legend>
+            
+            <div class="form-group col-md-6 col-xs-6">
+                <label>{{ 'backend.sprint.start_date'|trans }}</label>
+                <p>{{sprint.startDate|date(project.settings.dateFormat)}}</p>
+            </div>
+            <div class="form-group col-md-6 col-xs-6">
+                <label>{{ 'backend.sprint.estimated_date'|trans }}</label>
+                <p>{{sprint.estimatedDate|date(project.settings.dateFormat)}}</p>
+            </div>
+            <div class="form-group col-md-6 col-xs-6">
+                <label>{{ 'backend.sprint.weekends'|trans }}</label>
+                <p>{{sprint.getTextWorkWeekends()|trans }}</p>
+            </div>
+            <div class="form-group col-md-6 col-xs-6">
+                <label>{{ 'backend.sprint.status'|trans }}</label>
+                <p>{{sprint.textStatus|trans}}</p>
+            </div>
+            <div class="form-group col-md-6 col-xs-6">
+                <label>{{ 'backend.sprint.working_days'|trans }}</label>
+                <p>{{sprint.getSprintDays|length}}</p>
+            </div>
+            <div class="form-group col-md-6 col-xs-6">
+                <label>{{'backend.sprint.total_estimated'|trans}}</label>
+                <p>{{ sprint.estimatedTime }} {{'backend.global.hours'|trans|lower}}</p>
+            </div>
+            <div class="form-group col-md-6 col-xs-6">
+                <label>{{'backend.sprint.total_worked'|trans}}</label>
+                <p>{{ sprint.workedTime }} {{'backend.global.hours'|trans|lower}}</p>
+            </div>
+            <div class="form-group col-md-6 col-xs-6">
+                <label>{{'backend.sprint.remaining_work'|trans}}</label>
+                <p>{{ sprint.remainingTime }} {{'backend.global.hours'|trans|lower}}</p>
+            </div>
         </div>
     </div>
     <div class="rstable">
@@ -69,19 +105,19 @@
         {% endfor %}
             <div class="col-lg-12 col-md-12 col-xs-12 no-padding-right main-item">
                 <div class="col-xs-10 col-md-10 no-padding-left text-right">
-                    Total Estimated
+                    {{'backend.sprint.total_estimated'|trans}}
                 </div>
                 <div class="col-xs-2 col-md-2 pull-right text-right">
                     {{ sprint.estimatedTime }}
                 </div>
                 <div class="col-xs-10 col-md-10 no-padding-left text-right">
-                    Total Worked
+                    {{'backend.sprint.total_worked'|trans}}
                 </div>
                 <div class="col-xs-2 col-md-2 pull-right text-right">
                     {{ sprint.workedTime }}
                 </div>
                 <div class="col-xs-10 col-md-10 no-padding-left text-right">
-                    Remaining Time
+                    {{'backend.sprint.remaining_work'|trans}}
                 </div>
                 <div class="col-xs-2 col-md-2 pull-right text-right">
                     {{ sprint.remainingTime }}
@@ -412,7 +448,7 @@
 
         $('#container-burndown').highcharts({
             title: {
-              text: 'Burndown Chart',
+              text: "{{'backend.sprint.burndown_chart'|trans}} - {{sprint.name}}",
               x: -10 //center
             },
             scrollbar: {
@@ -437,7 +473,7 @@
               }
             },
             subtitle: {
-              text: 'All Sprint Progress Summary',
+              text: "{{'backend.sprint.sprint_progress_summary'|trans}}",
               x: -10
             },
             xAxis: {
@@ -445,7 +481,7 @@
             },
             yAxis: {
               title: {
-                text: 'Remaining work (hours)'
+                text: "{{'backend.sprint.remaining_work'|trans}} ({{'backend.global.hours'|trans}})"
               },
                     type: 'linear',
                     max:{{sprint.estimatedTime}},
@@ -453,7 +489,7 @@
                     tickInterval : parseInt({{sprint.estimatedTime}}/{{listDays|length}})
             },
             tooltip: {
-              valueSuffix: ' hours',
+              valueSuffix: " {{'backend.global.hours'|trans|lower}}",
               crosshairs: true,
               shared: true
             },
@@ -464,18 +500,24 @@
               borderWidth: 0
             },
             series: [{
-              name: 'Ideal Burn',
+              name: "{{'backend.sprint.ideal_burn'|trans}}",
               color: 'rgba(255,0,0,0.25)',
               lineWidth: 2,
 
               data: {{idealArray|json_encode()|raw}}
-            }, {
-              name: 'Actual Burn',
+            }, 
+            
+            {
+              name: "{{'backend.sprint.actual_burn'|trans}}",
               color: 'rgba(0,120,200,0.75)',
               marker: {
                 radius: 6
               },
-              data: {{actualArray|json_encode()}}
+              {% if sprint.status != 1 %}
+                data: {{actualArray|json_encode()}}
+              {% else %}
+                data: "{0}"
+              {% endif %}
             }]
         });
     {% endblock %}

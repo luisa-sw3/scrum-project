@@ -44,7 +44,10 @@ backend:
         to: "to"
         of: "of"
         or: "or"
+        yes: "Yes"
+        no: "No"
         example: "Example"
+        hours: Hours
     
     user:
         edit_profile: "Edit Profile"
@@ -249,8 +252,23 @@ backend:
         delete_success_message: "Sprint deleted successfully"
         delete_unable_message: "Sprint can't de deleted"
         work_weekends: "Work on weekends ?"
+        weekends: "Weekends"
         empty_list: "No sprints in project yet"
         not_found_message: "Sprint not found"
+        status: "Status"
+        status_planned: "Planned"
+        status_in_process: "In Process"
+        status_stopped: "Stopped"
+        status_finished: "Finished"
+        working_days: "Working Days"
+        burndown_chart: "Burndown Chart"
+        sprint_progress_summary: "Sprint Progress Summary"
+        remaining_work: "Remaining Work"
+        ideal_burn: "Ideal Burn"
+        actual_burn: "Actual Burn"
+        total_estimated: "Total Estimated"
+        total_worked: "Total Worked"
+        
         
     report: 
         reports: "Reports"

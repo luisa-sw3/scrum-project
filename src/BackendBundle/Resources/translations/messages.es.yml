@@ -44,7 +44,10 @@ backend:
         to: "a"
         of: "de"
         or: "o"
+        yes: "Si"
+        no: "No"
         example: "Ejemplo"
+        hours: Horas
         
     user:
         edit_profile: "Editar Perfil"
@@ -249,8 +252,22 @@ backend:
         delete_success_message: "Sprint eliminado exitosamente"
         delete_unable_message: "El sprint no puede ser eliminado"
         work_weekends: "Trabajo en fines de semana ?"
+        weekends: "Fines de semana"
         empty_list: "Ningun sprint en el proyecto"
         not_found_message: "Sprint no encontrado"
+        status: "Estado"
+        status_planned: "Planificado"
+        status_in_process: "En Proceso"
+        status_stopped: "Detenido"
+        status_finished: "Finalizado"
+        working_days: "Dias Laborales"
+        burndown_chart: "Burndown Chart"
+        sprint_progress_summary: "Resumen del Progreso del Sprit"
+        remaining_work: "Trabajo Restante"
+        ideal_burn: "Avance Ideal"
+        actual_burn: "Avance Actual"
+        total_estimated: "Total Estimado"
+        total_worked: "Total Trabajado"
         
     report: 
         reports: "Reportes"

@@ -126,8 +126,7 @@ class SprintController extends Controller {
             $em->persist($sprint);
 
             //borramos los dias de sprint que habian antes
-            $sprintDays = $em->getRepository('BackendBundle:SprintDay')->findBySprint($sprintId);
-            foreach ($sprintDays as $sprintDay) {
+            foreach ($sprint->getSprintDays() as $sprintDay) {
                 $em->remove($sprintDay);
             }
 
@@ -205,7 +204,7 @@ class SprintController extends Controller {
 
 
         //logica para pintar la grafica Burdown del Sprint
-        $days = $em->getRepository('BackendBundle:SprintDay')->findBySprint($sprintId);
+        $days = $sprint->getSprintDays();
         $sprintDays = count($days);
 
         $listDays = array();
@@ -222,7 +221,11 @@ class SprintController extends Controller {
         }
 
         //datos del avance del sprint
-        $actualArray = array($sprint->getEstimatedTime(), $sprint->getEstimatedTime() - 14, $sprint->getEstimatedTime() - 18, $sprint->getEstimatedTime() - 24, $sprint->getEstimatedTime() - 24);
+        $actualArray = array();
+        for ($i = 0; $i < $sprintDays; $i++) {
+            $actualArray[$i] = $days[$i]->getRemainingWork();
+        }
+        
         
         return $this->render('BackendBundle:Project/Sprint:backlog.html.twig', array(
                     'project' => $sprint->getProject(),

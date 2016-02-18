@@ -18,6 +18,14 @@ class Sprint {
     use Consecutive;
 
     /**
+     * Constanted para los estados de los Sprints
+     */
+    const STATUS_PLANNED = 1;
+    const STATUS_IN_PROCESS = 2;
+    const STATUS_STOPPED = 3;
+    const STATUS_FINISHED = 4;
+
+    /**
      * @ORM\Id
      * @ORM\Column(name="sprint_id", type="string", length=36)
      * @ORM\GeneratedValue(strategy="UUID")
@@ -72,10 +80,22 @@ class Sprint {
     protected $isWorkingWeekends;
 
     /**
+     * Bidirectional - One-To-Many (INVERSE SIDE)
+     * @ORM\OneToMany(targetEntity="SprintDay", mappedBy="sprint")
+     */
+    protected $sprintDays;
+
+    /**
      * Fecha de creacion del sprint en el sistema
      * @ORM\Column(name="sprint_creation_date", type="datetime", nullable=true)
      */
     protected $creationDate;
+
+    /**
+     * Estado del sprint(1 = Planeado, 2 = En proceso, 3 = Detenido, 4 = Finalizado)
+     * @ORM\Column(name="sprint_status", type="integer", nullable=true)
+     */
+    protected $status;
 
     /**
      * Almacena el tiempo estimado para la realizacion de todos los items del sprint
@@ -163,6 +183,14 @@ class Sprint {
         $this->isWorkingWeekends = $isWorkingWeekends;
     }
 
+    function getSprintDays() {
+        return $this->sprintDays;
+    }
+
+    function setSprintDays($sprintDays) {
+        $this->sprintDays = $sprintDays;
+    }
+
     function getEstimatedTime() {
         return $this->estimatedTime;
     }
@@ -187,6 +215,14 @@ class Sprint {
         $this->remainingTime = $remainingTime;
     }
 
+    function getStatus() {
+        return $this->status;
+    }
+
+    function setStatus($status) {
+        $this->status = $status;
+    }
+
     public function __toString() {
         return $this->getName();
     }
@@ -199,6 +235,50 @@ class Sprint {
         if ($this->getCreationDate() === null) {
             $this->setCreationDate(Util::getCurrentDate());
         }
+
+        if ($this->getStatus() === null) {
+            $this->setStatus(self::STATUS_PLANNED);
+        }
+    }
+
+    /**
+     * Permite obtener el nombre de la variable de idioma correspondiente
+     * al estado del sprint
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 17/02/2016
+     * @param integer $status
+     * @return string
+     */
+    public function getTextStatus($status = null) {
+
+        if (!$status) {
+            $status = $this->getStatus();
+        }
+
+        $langVar = '';
+        switch ($status) {
+            case self::STATUS_PLANNED:
+                $langVar = 'backend.sprint.status_planned';
+                break;
+            case self::STATUS_IN_PROCESS:
+                $langVar = 'backend.sprint.status_in_process';
+                break;
+            case self::STATUS_STOPPED:
+                $langVar = 'backend.sprint.status_stopped';
+                break;
+            case self::STATUS_FINISHED:
+                $langVar = 'backend.sprint.status_finished';
+                break;
+            default:
+                break;
+        }
+        return $langVar;
+    }
+
+    public function getTextWorkWeekends() {
+        if($this->getIsWorkingWeekends()){
+            return 'backend.global.yes';
+        }
+        return 'backend.global.no';
     }
 
 }

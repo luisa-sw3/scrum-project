@@ -25,10 +25,16 @@ class SprintDay {
      * @ORM\Column(name="spda_date", type="date", nullable=true)
      */
     protected $date;
+    
+    /**
+     * Trabajo restante (horas) al final del dia del Sprint
+     * @ORM\Column(name="spda_remaining_work", type="float", nullable=true)
+     */
+    protected $remainingWork;
 
     /**
      * Sprint que se asigna al usuario
-     * @ORM\ManyToOne(targetEntity="Sprint")
+     * @ORM\ManyToOne(targetEntity="Sprint", inversedBy="sprintDays")
      * @ORM\JoinColumn(name="spda_sprint_id", referencedColumnName="sprint_id")
      */
     protected $sprint;
@@ -53,4 +59,13 @@ class SprintDay {
     function setSprint($sprint) {
         $this->sprint = $sprint;
     }
+    
+    function getRemainingWork() {
+        return $this->remainingWork;
+    }
+
+    function setRemainingWork($remainingWork) {
+        $this->remainingWork = $remainingWork;
+    }
+
 }
