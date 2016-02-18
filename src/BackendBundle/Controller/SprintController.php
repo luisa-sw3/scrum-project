@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use BackendBundle\Form\SprintType;
 use BackendBundle\Entity as Entity;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Util\Util;
 
 /**
  * Sprint controller.
@@ -198,6 +199,17 @@ class SprintController extends Controller {
         $sprint->setWorkedTime($workedTime);
         $sprint->setRemainingTime($remainingTime);
         $em->persist($sprint);
+
+        //verificamos si el Sprint esta en proceso
+        if ($sprint->getStatus() == Entity\Sprint::STATUS_IN_PROCESS) {
+            //verificamos si la fecha actual hace parte del Sprint para calcular el tiempo restante
+            $searchSprintDay = array('date' => Util::getCurrentDate(), 'sprint' => $sprintId);
+            $sprintDay = $em->getRepository('BackendBundle:SprintDay')->findOneBy($searchSprintDay);
+            if ($sprintDay) {
+                $sprintDay->setRemainingWork($remainingTime);
+                $em->persist($sprintDay);
+            }
+        }
         $em->flush();
 
         $search['parent'] = NULL;
