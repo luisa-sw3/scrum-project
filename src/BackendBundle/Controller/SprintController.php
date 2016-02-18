@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use BackendBundle\Form\SprintType;
 use BackendBundle\Entity as Entity;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Sprint controller.
@@ -225,7 +226,7 @@ class SprintController extends Controller {
         for ($i = 0; $i < $sprintDays; $i++) {
             $actualArray[$i] = $days[$i]->getRemainingWork();
         }
-        
+
         return $this->render('BackendBundle:Project/Sprint:backlog.html.twig', array(
                     'project' => $sprint->getProject(),
                     'sprint' => $sprint,
@@ -236,6 +237,38 @@ class SprintController extends Controller {
                     'actualArray' => $actualArray,
                     'listDays' => $listDays,
         ));
+    }
+
+    /**
+     * Esta funcion permite modificar el estado de un Sprint
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 18/02/2016
+     * @param Request $request datos de la solicitud
+     * @param string $id identificador del proyecto
+     * @param string $sprintId identificador del sprint
+     * @return \BackendBundle\Controller\JsonResponse JSON con datos de respuesta
+     */
+    public function modifyStatusAction(Request $request, $id, $sprintId) {
+        $response = array('result' => '__OK__', 'msg' => $this->get('translator')->trans('backend.sprint.update_success_message'));
+        $em = $this->getDoctrine()->getManager();
+        $status = $request->request->get('status');
+        $sprint = $em->getRepository('BackendBundle:Sprint')->find($sprintId);
+
+        if (!$sprint || ($sprint && $sprint->getProject()->getId() != $id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.sprint.not_found_message');
+            return new JsonResponse($response);
+        }
+
+        try {
+            $sprint->setStatus($status);
+            $em->persist($sprint);
+            $em->flush();
+        } catch (\Exception $ex) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.global.unknown_error');
+        }
+
+        return new JsonResponse($response);
     }
 
 }

@@ -63,12 +63,20 @@
             
             <div class="form-group col-md-12 col-xs-12">
                 {% if sprint.status == constant('BackendBundle\\Entity\\Sprint::STATUS_PLANNED') %}
-                    <button type="button" class="disabled btn btn-secondary btn-success">{{'backend.sprint.start_sprint'|trans}}</button>
+                    <button type="button" class="btn btn-secondary btn-success modify-sprint-status" new-status="{{constant('BackendBundle\\Entity\\Sprint::STATUS_IN_PROCESS')}}">
+                        {{'backend.sprint.start_sprint'|trans}}
+                    </button>
                 {% elseif sprint.status == constant('BackendBundle\\Entity\\Sprint::STATUS_IN_PROCESS') %}
-                    <button type="button" class="disabled btn btn-secondary btn-danger">{{'backend.sprint.stop_sprint'|trans}}</button>
-                    <button type="button" class="disabled btn btn-secondary btn-success">{{'backend.sprint.finish_sprint'|trans}}</button>
+                    <button type="button" class="btn btn-secondary btn-danger modify-sprint-status" new-status="{{constant('BackendBundle\\Entity\\Sprint::STATUS_STOPPED')}}">
+                        {{'backend.sprint.stop_sprint'|trans}}
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-success modify-sprint-status" new-status="{{constant('BackendBundle\\Entity\\Sprint::STATUS_FINISHED')}}">
+                        {{'backend.sprint.finish_sprint'|trans}}
+                    </button>
                 {% elseif sprint.status == constant('BackendBundle\\Entity\\Sprint::STATUS_STOPPED') %}
-                    <button type="button" class="disabled btn btn-secondary btn-success">{{'backend.sprint.finish_sprint'|trans}}</button>
+                    <button type="button" class="btn btn-secondary btn-success modify-sprint-status" new-status="{{constant('BackendBundle\\Entity\\Sprint::STATUS_FINISHED')}}">
+                        {{'backend.sprint.finish_sprint'|trans}}
+                    </button>
                 {% endif %}
             </div>
         </div>
@@ -531,6 +539,68 @@
               {% endif %}
             }]
         });
+        
+        {# Codigo para cambiar el estado de un Sprint #}
+        $(".modify-sprint-status").click(function(){
+            var object = $(this);
+            var newStatus = object.attr('new-status');
+            
+            var btnClass = '';
+            var bootboxMessage = '';
+            var sendButton = '';
+            if (newStatus == {{constant('BackendBundle\\Entity\\Sprint::STATUS_IN_PROCESS')}}) {
+                btnClass = 'btn-success';
+                bootboxMessage = "{{'backend.sprint.start_sprint_message'|trans}}";
+                sendButton = "{{'backend.sprint.start_sprint'|trans}}";
+            } else if (newStatus == {{constant('BackendBundle\\Entity\\Sprint::STATUS_STOPPED')}}) {
+                btnClass = 'btn-danger';
+                bootboxMessage = "{{'backend.sprint.stop_sprint_message'|trans}}";
+                sendButton = "{{'backend.sprint.stop_sprint'|trans}}";
+            } else if (newStatus == {{constant('BackendBundle\\Entity\\Sprint::STATUS_FINISHED')}}) {
+                btnClass = 'btn-success';
+                bootboxMessage = "{{'backend.sprint.finish_sprint_message'|trans}}";
+                sendButton = "{{'backend.sprint.finish_sprint'|trans}}";
+            }
+            
+            bootbox.confirm({
+                message: bootboxMessage,
+                buttons: {
+                    'cancel': {
+                        label: '{{'backend.global.cancel' | trans}}',
+                        className: 'btn-default'
+                    },
+                    'confirm': {
+                        label: sendButton,
+                        className: btnClass
+                    }
+                },
+                callback: function (result) {
+
+                    if (result == true)
+                    {
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{path('backend_project_sprints_modify_status',{'id':project.id,'sprintId':sprint.id})}}",
+                            dataType: 'json',
+                            data: {status: newStatus},
+                            success: function (r)
+                            {
+                                if (r.result == '__OK__') {
+                                    window.location.reload();
+                                } else {
+                                    bootbox.alert(r.msg);
+                                }
+                            },
+                            error: function (r)
+                            {
+                                bootbox.alert("{{'backend.global.unknown_error'|trans}}")
+                            }
+                        })
+                    }
+                }
+            });
+        });
+        
     {% endblock %}
 
     {% block functions_javascript %}

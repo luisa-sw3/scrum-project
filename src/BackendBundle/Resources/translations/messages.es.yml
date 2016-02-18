@@ -269,8 +269,11 @@ backend:
         total_estimated: "Total Estimado"
         total_worked: "Total Trabajado"
         start_sprint: "Iniciar Sprint"
+        start_sprint_message: "Esta seguro de iniciar este Sprint?"
         stop_sprint: "Detener Sprint"
+        stop_sprint_message: "Esta seguro de detener este Sprint?"
         finish_sprint: "Finalizar Sprint"
+        finish_sprint_message: "Esta seguro de finalizar este Sprint?"
         
     report: 
         reports: "Reportes"

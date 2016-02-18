@@ -20,8 +20,8 @@ security:
             form_login:
                 check_path: backend_login_check
                 login_path: backend_login
-                default_target_path: backend_homepage
-                always_use_default_target_path: true
+                default_target_path: backend_projects
+                #always_use_default_target_path: true
             logout:
                 path:   backend_logout
                 target: backend_login
