@@ -38,3 +38,8 @@ backend_project_product_backlog:
 backend_project_sprints:
         resource: "@BackendBundle/Resources/config/routing/sprint.yml"
         prefix:   /{id}/sprints
+
+backend_projects_binnacle:
+    path:     /{id}/binnacle
+    defaults: { _controller: "BackendBundle:Project:binnacle" }
+    methods:  [GET]

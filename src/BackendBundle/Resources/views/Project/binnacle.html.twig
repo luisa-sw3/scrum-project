@@ -1,0 +1,53 @@
+{% extends 'BackendBundle:Default:main.html.twig' %}
+{% block title %}{{'backend.binnacle.binnacle'|trans}}{% endblock %}
+{% block content %}
+
+    <!-- Page Heading -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                {{'backend.binnacle.binnacle'|trans}}
+                <a href="{{ app.request.headers.get('referer') }}" class="btn btn-default pull-right">{{'backend.global.back'|trans}}</a>
+            </h1>
+
+            {% set item1 = {'text': project.name, 'url':path('backend_projects_view',{'id':project.id}),'icon':'fa fa-dashboard'} %}
+            {% set item2 = {'text': 'backend.binnacle.binnacle'|trans, 'icon':'fa fa-list'} %}
+            {% set items = [item1, item2] %}
+            {{ filters.breadcrum(items) }}
+        </div>
+    </div>
+    <!-- /.row -->
+    {{ filters.showMessage('messageSuccess', 'success')}}
+    {{ filters.showMessage('messageError', 'danger')}}
+
+    <div class="rstable">
+        {% set sprints = [] %}
+
+        {% for item in binnacle %}
+            
+            {% if item.sprint.id not in sprints %}
+                <legend>{{item.sprint.name}}</legend>
+                {% set sprints = sprints|merge([item.sprint.id]) %}
+            {% endif %}
+            
+            <div class="col-lg-12 col-md-12 col-xs-12 no-padding-right main-item">
+                {{ filters.itemDescription(item, project, null, true) }}
+                {% if item.children is not empty %}
+                    <div class="list-group col-lg-12 col-md-12 container-child no-padding-right">
+                        {% for firstChild in item.children %}
+                            {{ filters.itemDescription(firstChild, project, null, true) }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
+
+{% block functions_javascript %}
+
+{% endblock %}

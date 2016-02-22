@@ -98,33 +98,37 @@
             </div>
         </div>
         <div class="col-xs-2 col-md-2 pull-right no-padding-sides">
-            <label title="{{'backend.item.worked_estimated_time'|trans}}" class="col-xs-12 text-right label-item-times">{{ item.workedHours|default(0) }} / {{ item.estimatedHours|default(0) }}</label>
-            <div class="btn-group pull-right small-btn-group">
-                <a class="btn btn-default btn-sm border-radius-left" title="{{ 'backend.item.edit'|trans }}" href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id, 'sprintId':sprint.id}) }}">
-                    <i class="fa fa-pencil"></i>
-                </a>
-                <button type="button" class="btn btn-default btn-sm dropdown-toggle border-radius-right" data-toggle="dropdown">
-                    <span class="caret"></span>
-                    <span class="sr-only"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    {% if moreItems %}
-                        <li><a href="{{path('backend_project_product_backlog_new_related_item',{'id':project.id,'itemId':item.id})}}" class="create-related-item fancybox.iframe"><i class="fa fa-star-o"></i> {{'backend.item.create_related_item'|trans}}</a></li>
-                    {% endif %}
-                    <li class="disabled"><a href="#"><i class="fa fa-chain"></i> Relacionar a un item existente</a></li>
-                    <li class="divider"></li>
-                    <li class="disabled"><a href="#"><i class="fa fa-comment-o"></i> Agregar Comentario</a></li>
-                    <li><a href="javascript:void(0);" class="change-status" item-id="{{item.id}}" status="{{item.status}}"><i class="fa fa-arrows-h"></i> {{ 'backend.item.change_status'|trans }}</a></li>
-                    <li><a href="javascript:void(0);" class="change-priority" item-id="{{item.id}}" priority="{{item.priority|default(0)}}"><i class="fa fa-reorder"></i> {{'backend.item.change_priority'|trans}}</a></li>
-                    <li><a href="javascript:void(0);" class="edit-estimation" item-id="{{item.id}}" estimation="{{item.estimatedHours|default(0)}}"><i class="fa fa-clock-o"></i> {{'backend.item.edit_estimation'|trans}}</a></li>
-                    <li><a href="javascript:void(0);" class="edit-worked-time" item-id="{{item.id}}" worked-time="{{item.workedHours|default(0)}}"><i class="fa fa-clock-o"></i> {{'backend.item.edit_worked_time'|trans}}</a></li>
-                    <li class="divider"></li>
-                    <li class="disabled"><a href="#"><i class="fa fa-cut"></i> Mover a otro Sprint</a></li>
-                    <li class="disabled"><a href="#"><i class="fa fa-copy"></i> Duplicar en otro Sprint</a></li>
-                    <li class="divider"></li>
-                    <li><a href="javascript:void(0);" class="delete-item" item-id="{{item.id}}"><i class="fa fa-times"></i> {{'backend.global.delete'|trans}}</a></li>
-                </ul>
-            </div>
+            {% if sprint is not empty %}
+                <label title="{{'backend.item.worked_estimated_time'|trans}}" class="col-xs-12 text-right label-item-times">{{ item.workedHours|default(0) }} / {{ item.estimatedHours|default(0) }}</label>
+                <div class="btn-group pull-right small-btn-group">
+                    <a class="btn btn-default btn-sm border-radius-left" title="{{ 'backend.item.edit'|trans }}" href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id, 'sprintId':sprint.id}) }}">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                    <button type="button" class="btn btn-default btn-sm dropdown-toggle border-radius-right" data-toggle="dropdown">
+                        <span class="caret"></span>
+                        <span class="sr-only"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        {% if moreItems %}
+                            <li><a href="{{path('backend_project_product_backlog_new_related_item',{'id':project.id,'itemId':item.id})}}" class="create-related-item fancybox.iframe"><i class="fa fa-star-o"></i> {{'backend.item.create_related_item'|trans}}</a></li>
+                            {% endif %}
+                        <li class="disabled"><a href="#"><i class="fa fa-chain"></i> Relacionar a un item existente</a></li>
+                        <li class="divider"></li>
+                        <li class="disabled"><a href="#"><i class="fa fa-comment-o"></i> Agregar Comentario</a></li>
+                        <li><a href="javascript:void(0);" class="change-status" item-id="{{item.id}}" status="{{item.status}}"><i class="fa fa-arrows-h"></i> {{ 'backend.item.change_status'|trans }}</a></li>
+                        <li><a href="javascript:void(0);" class="change-priority" item-id="{{item.id}}" priority="{{item.priority|default(0)}}"><i class="fa fa-reorder"></i> {{'backend.item.change_priority'|trans}}</a></li>
+                        <li><a href="javascript:void(0);" class="edit-estimation" item-id="{{item.id}}" estimation="{{item.estimatedHours|default(0)}}"><i class="fa fa-clock-o"></i> {{'backend.item.edit_estimation'|trans}}</a></li>
+                        <li><a href="javascript:void(0);" class="edit-worked-time" item-id="{{item.id}}" worked-time="{{item.workedHours|default(0)}}"><i class="fa fa-clock-o"></i> {{'backend.item.edit_worked_time'|trans}}</a></li>
+                        <li class="divider"></li>
+                        <li class="disabled"><a href="#"><i class="fa fa-cut"></i> Mover a otro Sprint</a></li>
+                        <li class="disabled"><a href="#"><i class="fa fa-copy"></i> Duplicar en otro Sprint</a></li>
+                        <li class="divider"></li>
+                        <li><a href="javascript:void(0);" class="delete-item" item-id="{{item.id}}"><i class="fa fa-times"></i> {{'backend.global.delete'|trans}}</a></li>
+                    </ul>
+                </div>
+            {% else %}
+                <label class="col-xs-12 text-right label-item-times">{{ item.sprint.name }}</label>
+            {% endif %}
         </div>
     </div>
 {% endmacro %} 

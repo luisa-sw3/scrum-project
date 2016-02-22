@@ -297,7 +297,10 @@ backend:
         delete_warning: "Estas seguro que deseas eliminar este archivo?"
         delete_file: "Eliminar Archivo"
         no_support_audio: "Tu navegador no tiene soporte para elementos de audio"
-        no_support_video: "u navegador no tiene soporte para video HTML5 en WebM con VP8 o MP4 con H.264"
+        no_support_video: "Tu navegador no tiene soporte para video HTML5 en WebM con VP8 o MP4 con H.264"
+        
+    binnacle:
+        binnacle: "Bitácora"
      
     
   

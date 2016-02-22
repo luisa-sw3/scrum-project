@@ -17,6 +17,8 @@ class Sprint {
 
     use Consecutive;
 
+    const ALL_SPRINTS = 'all_sprints';
+    
     /**
      * Constanted para los estados de los Sprints
      */

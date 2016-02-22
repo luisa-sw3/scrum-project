@@ -15,6 +15,7 @@ class ProjectController extends Controller {
 
     const MENU = 'menu_projects';
     const MENU_PROJECT_SETTINGS = 'menu_project_settings';
+    const MENU_PROJECT_BINNACLE = 'menu_project_binnacle';
 
     /**
      * Lists all Project entities.
@@ -62,13 +63,13 @@ class ProjectController extends Controller {
 
             //creamos los roles por defecto para el proyecto (P.Owner, S.Master, Desarrollador)
             $roles = array(
-                $this->get('translator')->trans('backend.user_role.product_owner') => $this->get('translator')->trans('backend.user_role.product_owner_description'), 
+                $this->get('translator')->trans('backend.user_role.product_owner') => $this->get('translator')->trans('backend.user_role.product_owner_description'),
                 $this->get('translator')->trans('backend.user_role.scrum_master') => $this->get('translator')->trans('backend.user_role.scrum_master_description'),
-                $this->get('translator')->trans('backend.user_role.developer') => $this->get('translator')->trans('backend.user_role.developer_description')) ;
+                $this->get('translator')->trans('backend.user_role.developer') => $this->get('translator')->trans('backend.user_role.developer_description'));
 
-            
-            
-            
+
+
+
             foreach ($roles as $roleName => $description) {
                 $role = new Entity\Role();
                 $role->setName($roleName);
@@ -168,6 +169,41 @@ class ProjectController extends Controller {
                         ->setMethod('DELETE')
                         ->getForm()
         ;
+    }
+
+    /**
+     * Permite listar las historias de usuario de todos los Sprints que 
+     * se han trabajado en el proyecto
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 22/02/2016
+     * @param string $id identificador del proyecto
+     * @return type
+     */
+    public function binnacleAction($id) {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $project = $em->getRepository('BackendBundle:Project')->find($id);
+
+        if (!$project) {
+            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
+            return $this->redirectToRoute('backend_projects');
+        }
+
+        $search = $order = array();
+        $search['project'] = $project->getId();
+        $search['sprint'] = Entity\Sprint::ALL_SPRINTS;
+        $search['parent'] = NULL;
+        $order ['sprint'] = 'ASC';
+
+        $binnacle = $em->getRepository('BackendBundle:Item')->findItems($search, $order)->getResult();
+
+        return $this->render('BackendBundle:Project:binnacle.html.twig', array(
+                    'project' => $project,
+                    'menu' => self::MENU_PROJECT_BINNACLE,
+                    'binnacle' =>  $binnacle,
+                    'debug' => true,
+        ));
+        
     }
 
 }

@@ -15,13 +15,16 @@
                         <a href="{{ path('backend_project_sprints',{'id':project.id}) }}"><i class="fa fa-fw fa-rotate-right"></i> {{ 'backend.sprint.sprints'|trans }}</a>
                     </li>
                     <li {% if menu is defined and menu == 'menu_project_reports' %}class="active"{% endif %}>
-                        <a href="#"><i class="fa fa-fw fa-list"></i> {{ 'backend.report.reports'|trans }}</a>
+                        <a href="#"><i class="fa fa-fw fa-file"></i> {{ 'backend.report.reports'|trans }}</a>
                     </li>
                     <li {% if menu is defined and menu == 'menu_project_team' %}class="active"{% endif %}>
                         <a href="{{ path('backend_project_team', { 'id': project.id }) }}"><i class="fa fa-fw fa-users"></i> {{ 'backend.user_project.project_team'|trans }}</a>
                     </li>
                     <li {% if menu is defined and menu == 'menu_project_settings' %}class="active"{% endif %}>
                         <a href="{{ path('backend_projects_edit', { 'id': project.id }) }}"><i class="fa fa-fw fa-cogs"></i> {{ 'backend.project.settings'|trans }}</a>
+                    </li>
+                    <li {% if menu is defined and menu == 'menu_project_binnacle' %}class="active"{% endif %}>
+                        <a href="{{ path('backend_projects_binnacle', { 'id': project.id }) }}"><i class="fa fa-fw fa-list-ol"></i> {{ 'backend.binnacle.binnacle'|trans }}</a>
                     </li>
                 </ul>
             </li>

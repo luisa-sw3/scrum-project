@@ -14,7 +14,7 @@ class ItemRepository extends EntityRepository {
      * @param string $direction
      * @return type
      */
-    public function findItems($search = array()) {
+    public function findItems($search = array(), $order = array()) {
 
         $where = '';
         $parameters = array();
@@ -24,12 +24,23 @@ class ItemRepository extends EntityRepository {
         }
 
         if (isset($search['sprint'])) {
-            if ($search['sprint'] != null) {
+            if ($search['sprint'] != null && $search['sprint'] != Sprint::ALL_SPRINTS) {
                 $where .= ' AND i.sprint :sprint ';
                 $parameters['sprint'] = $search['sprint'];
+            } else {
+                $where .= ' AND i.sprint IS NOT NULL ';
             }
         } else {
             $where .= ' AND i.sprint IS NULL ';
+        }
+        
+        if (isset($search['parent'])) {
+            if ($search['parent'] != null) {
+                $where .= ' AND i.parent :parent ';
+                $parameters['parent'] = $search['parent'];
+            }
+        } else {
+            $where .= ' AND i.parent IS NULL ';
         }
 
         if (isset($search['item_free_text'])) {
@@ -38,11 +49,18 @@ class ItemRepository extends EntityRepository {
         }
 
         $orderBy = ' ORDER BY i.priority DESC';
+        if (!empty($order)) {
+            if (isset($order['sprint'])) {
+                $orderBy = ' ORDER BY s.startDate '.$order['sprint'].', i.priority DESC';
+            }
+        }
+
 
         $em = $this->getEntityManager();
         $consult = $em->createQuery("
         SELECT i
         FROM BackendBundle:Item i
+        LEFT JOIN BackendBundle:Sprint s WITH (i.sprint = s.id)
         WHERE 1=1 " . $where . $orderBy);
         $consult->setParameters($parameters);
 

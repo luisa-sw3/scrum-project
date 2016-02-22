@@ -299,3 +299,6 @@ backend:
         delete_file: "Delete File"
         no_support_audio: "Your browser does not support the audio element"
         no_support_video: "Your browser doesn't support HTML5 video in WebM with VP8 or MP4 with H.264"
+        
+    binnacle:
+        binnacle: "Binnacle"
