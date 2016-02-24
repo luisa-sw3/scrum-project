@@ -162,7 +162,7 @@ backend:
         subject: "Bienvenido a Agile SCRUM"
         title: "Bienvenido a Agile SCRUM"
         thanks: "gracias por registrarte con nosotros."
-        clic_message: "Presione clic sobre el siguiente enlace para confirmar tu cuenta:"
+        clic_message: "Haz clic sobre el siguiente enlace para confirmar tu cuenta:"
         confirm_account: "Confirmar Cuenta"
         
     project_invitation_email:
