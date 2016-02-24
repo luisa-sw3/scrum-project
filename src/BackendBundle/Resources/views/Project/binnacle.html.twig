@@ -41,6 +41,45 @@
                 {% endif %}
             </div>
         {% endfor %}
+
+        {#<table class="table table-condensed">
+            {% for item in binnacle %}
+
+                {% if item.sprint.id not in sprints %}
+                    <tr>
+                        <td colspan="4">
+                    <legend>{{item.sprint.name}}</legend>
+                    </td>
+                    </tr>
+                    {% set sprints = sprints|merge([item.sprint.id]) %}
+                {% endif %}
+
+                <tr>
+                    <td colspan="4">
+                        <table width="100%">
+                            <tr>
+                                <td>
+                                    <strong>{{ item.getTextType()|trans }} # {{item.consecutive}}</strong>
+                                </td>
+                                <td><label>Estado : </label> {{ item.textStatus|trans }}</td>
+                                <td><label>Fecha de Creación : </label> {{ item.creationDate|date(item.project.settings.dateFormat) }}</td>
+                                <td><label>Estimado / Trabajado : </label> {{ item.workedHours|default(0) }} / {{ item.estimatedHours|default(0) }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <a href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id}) }}">{{ item.title }}</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="padding-left: 20px;">
+                                    {{item.description|raw}}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>#}
     </div>
 {% endblock %}
 

@@ -126,27 +126,49 @@ class SprintController extends Controller {
         if ($editForm->isSubmitted() && $editForm->isValid()) {
 
             $em->persist($sprint);
-
-            //borramos los dias de sprint que habian antes
-            foreach ($sprint->getSprintDays() as $sprintDay) {
-                $em->remove($sprintDay);
-            }
-
             $em->flush();
-
-            //guardamos los dias de trabajo del sprint
-            $startDate = $sprint->getStartDate();
-            $estimatedDate = $sprint->getEstimatedDate();
-            $diff = $startDate->diff($estimatedDate);
-
-            for ($i = 0; $i <= $diff->d; $i++) {
-                $sprintDate = clone $startDate;
-                $sprintDate->modify('+ ' . $i . ' day');
-                $sprintDay = new Entity\SprintDay();
-                $sprintDay->setDate($sprintDate);
-                $sprintDay->setSprint($sprint);
-                $em->persist($sprintDay);
+            
+            //buscamos posibles dias del Sprint que no esten en el rango de fechas para eliminarlos
+            $outOfRangeDays = $em->getRepository('BackendBundle:SprintDay')->findDaysOutOfRange($sprintId, $sprint->getStartDate(), $sprint->getEstimatedDate());
+            foreach ($outOfRangeDays as $outDay) {
+                $em->remove($outDay);
             }
+            
+            $startDate = clone $sprint->getStartDate();
+            $endDate = clone $sprint->getEstimatedDate();
+
+            //recorremos las fechas desde la inicial hasta la final del sprint
+            while ($startDate <= $endDate) {
+
+                $currentDate = $startDate->format('Y-m-d');
+
+                //se verifica si la fecha actual viene en el POST
+                $sendDate = $request->request->get($currentDate);
+
+                if ($sendDate) {
+                    //si viene en el POST verificamos si no esta en el sistema para el sprint
+                    $searchSprintDate = array('sprint' => $sprint->getId(), 'date' => new \DateTime($sendDate));
+                    $sprintDate = $em->getRepository('BackendBundle:SprintDay')->findOneBy($searchSprintDate);
+                    
+                    //si no esta en el sistema para el sprint la creamos, la creamos
+                    if (!$sprintDate) {
+                        $sprintDay = new Entity\SprintDay();
+                        $sprintDay->setDate(new \DateTime($sendDate));
+                        $sprintDay->setSprint($sprint);
+                        $em->persist($sprintDay);
+                    } 
+                } else {
+                    //si la fecha actual no viene en el post verificamos si esta en el sistema para el sprint para eliminarla
+                    $searchSprintDate = array('sprint' => $sprint->getId(), 'date' => new \DateTime($currentDate));
+                    $sprintDate = $em->getRepository('BackendBundle:SprintDay')->findOneBy($searchSprintDate);
+                    if ($sprintDate) {
+                        $em->remove($sprintDate);
+                    }
+                }
+
+                $startDate->modify('+1 day');
+            }
+            
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.sprint.update_success_message'));
@@ -217,7 +239,7 @@ class SprintController extends Controller {
 
 
         //logica para pintar la grafica Burdown del Sprint
-        $days = $sprint->getSprintDays();
+        $days = $em->getRepository('BackendBundle:SprintDay')->findBy(array('sprint' => $sprintId), array('date'=>'ASC'));
         $sprintDays = count($days);
 
         $listDays = array();
@@ -226,13 +248,14 @@ class SprintController extends Controller {
         }
 
         $estimatedTimePerDay = number_format(($sprint->getEstimatedTime() / $sprintDays), 1);
-        $idealArray = range(0, $sprint->getEstimatedTime() - $estimatedTimePerDay, $estimatedTimePerDay);
+        $idealArray = range(0, $sprint->getEstimatedTime() - 1, $estimatedTimePerDay);
+        
         $idealXArray = array();
         foreach ($idealArray as $value) {
             $value = trim($value);
             $idealXArray[] = 'Day ' . $value;
         }
-
+        
         //datos del avance del sprint
         $actualArray = array();
         for ($i = 0; $i < $sprintDays; $i++) {

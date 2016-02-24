@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * SprintDay
  * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 17/02/2016
  * @ORM\Table(name="sprint_day")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="BackendBundle\Entity\SprintDayRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class SprintDay {
