@@ -48,6 +48,7 @@ backend:
         no: "No"
         example: "Ejemplo"
         hours: Horas
+        all: "Todos"
         
     user:
         edit_profile: "Editar Perfil"

@@ -71,6 +71,10 @@ and open the template in the editor.
     margin-bottom: 0px !important;
 }
 
+.no-margin-top {
+    margin-top: 0px !important;
+}
+
 em {
     color: #ff0000;
     font-size: 16px;

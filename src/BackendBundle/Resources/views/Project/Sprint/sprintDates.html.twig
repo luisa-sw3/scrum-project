@@ -14,14 +14,23 @@
 
     {% set break = ((range(startDate|date('U'), estimatedDate|date('U'), 86400 )|length)/2)|round %}
 
-    <label class="col-lg-12 col-md-12 col-xs-12">{{'backend.sprint.working_days'|trans}}</label>
+    <label class="col-lg-6 col-md-6 col-xs-6">{{'backend.sprint.working_days'|trans}}</label>
+    <div class="col-lg-6 col-md-6 col-xs-6 pull-right no-margin-top checkbox">
+        <label style="margin-left: 8px;">
+            <input type="checkbox" id="all-days"/> {{'backend.global.all'|trans}}
+        </label>
+    </div>
     <div class="col-lg-12 col-md-12 col-xs-12 no-padding-right">
         <div class="col-md-6 col-xs-6 no-padding-left">
             {% for x in range(startDate|date('U'), estimatedDate|date('U'), 86400 ) %}
                 <div class="checkbox">
                     <label>
                         {% set checked = '' %}
-                        {% if x|date('Y-m-d') in sprintDays %}
+                        {% if sprintDays is not empty %}
+                            {% if x|date('Y-m-d') in sprintDays %}
+                                {% set checked = 'checked="checked"' %}
+                            {% endif %}
+                        {% else %}
                             {% set checked = 'checked="checked"' %}
                         {% endif %}
 
@@ -34,8 +43,8 @@
                         {% endif %}
 
 
-                        <input {{checked}} type="checkbox" name="{{ x|date('Y-m-d')}}" value="{{ x|date('Y-m-d') }}">
-                        <strong>{{loop.index}} </strong>. {{ x|date('D')}} {{ x|date(sprint.project.settings.dateFormat)}}
+                        <input class="working-check-day" {{checked}} type="checkbox" name="{{ x|date('Y-m-d')}}" value="{{ x|date('Y-m-d') }}">
+                        <strong>{{loop.index}} </strong>. {{ x|date('D')}} {{ x|date(project.settings.dateFormat)}}
                     </label>
                 </div>
                 {% if loop.index == break %}

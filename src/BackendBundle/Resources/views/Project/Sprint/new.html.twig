@@ -19,7 +19,7 @@
         
     <div class="row">
         {{ form_start(form, {'action': path('backend_project_sprints_new',{'id':project.id}), 'method': 'POST'}) }}
-            <div class="col-lg-7">
+            <div class="col-lg-12 col-md-12 col-xs-12">
                 <div class="form-group">
                     {{ form_label(form.name)}}<em>*</em>
                     {{ form_widget(form.name, {'attr':{'class':'form-control'}}) }}
@@ -30,24 +30,25 @@
                     {{ form_widget(form.isWorkingWeekends, {'attr':{'class':''}}) }}
                     {{ form_errors(form.isWorkingWeekends) }}
                 </div>
-                <div class="form-group col-xs-6 no-padding-left">
-                    {{ form_label(form.startDate)}}
-                    {{ form_widget(form.startDate, {'attr':{'class':'date-selector-sm', 'style':'display:none;'}}) }}
+                <div style="display: none;">
+                    {{ form_widget(form.startDate, {'attr':{'class':'date-selector-sm'}}) }}
                     {{ form_errors(form.startDate) }}
-                </div>
-                <div class="form-group  col-xs-6 no-padding-right">
-                    {{ form_label(form.estimatedDate)}}
-                    {{ form_widget(form.estimatedDate, {'attr':{'class':'date-selector-sm', 'style':'display:none;'}}) }}
+                    {{ form_widget(form.estimatedDate, {'attr':{'class':'date-selector-sm'}}) }}
                     {{ form_errors(form.estimatedDate) }}
                 </div>
-                <div class="form-group col-xs-6 no-padding-left">
+                <div class="form-group col-lg-3 col-md-4 col-xs-10 no-padding-left">
+                    {{ form_label(form.startDate)}}
                     <div id='startDate'></div>
                 </div>
-                <div class="form-group col-xs-6 no-padding-right">
+                <div class="form-group col-lg-3 col-md-4 col-xs-10 no-padding-right">
+                    {{ form_label(form.estimatedDate)}}
                     <div id='estimatedDate'></div>
                 </div>
+                <div class="form-group col-lg-6 col-md-6 col-xs-12" id="sprint-dates">
+                    {% include 'BackendBundle:Project/Sprint:sprintDates.html.twig' %}
+                </div>
             </div>
-            <div class="col-lg-5">
+            <div class="col-lg-12 col-md-12 col-xs-12">
                 <div class="form-group">
                     {{ form_label(form.description)}}
                     {{ form_widget(form.description, {'attr':{'class':'form-control'}}) }}
@@ -55,7 +56,7 @@
                 </div>
             </div>
         
-            <div class="col-lg-12">
+            <div class="col-lg-12 col-md-12 col-xs-12">
                 {{ form_widget(form._token) }} 
                 <button type="submit"class="btn btn-primary pull-right">{{ 'backend.global.create'|trans }}</button>
             </div>
@@ -86,6 +87,7 @@
         $("#backendbundle_sprint_type_startDate_year").val(date1.format('Y'));
         $("#backendbundle_sprint_type_startDate_month").val(date1.format('M'));
         $("#backendbundle_sprint_type_startDate_day").val(date1.format('D'));
+        updateSprintDates();
     });
     $("#estimatedDate").on("dp.change", function (e) {
         $('#startDate').data("DateTimePicker").maxDate(e.date);
@@ -93,6 +95,7 @@
         $("#backendbundle_sprint_type_estimatedDate_year").val(date2.format('Y'));
         $("#backendbundle_sprint_type_estimatedDate_month").val(date2.format('M'));
         $("#backendbundle_sprint_type_estimatedDate_day").val(date2.format('D'));
+        updateSprintDates();
     });
     
     $("#backendbundle_sprint_type_isWorkingWeekends").change(function(){
@@ -106,8 +109,90 @@
         }
         $('#startDate').data("DateTimePicker").daysOfWeekDisabled(disabledDays);
         $('#estimatedDate').data("DateTimePicker").daysOfWeekDisabled(disabledDays);
+        
+        updateSprintDates();
+    });
+    
+    $("#sprint-dates").on( "click", "#all-days", function() {
+        
+        console.log('entra');
+        var object = $(this);
+        var allDays = object.is(":checked");
+        
+        $('.working-check-day').each(function() {
+            
+            var isChecked = $(this).is(":checked");
+            
+            if (allDays) {
+                if (!isChecked) {
+                    $(this).prop('checked', true);
+                }
+            } else {
+                if (isChecked) {
+                    $(this).prop('checked',false)
+                }
+            }
+        });
     });
     
     $("#backendbundle_sprint_type_isWorkingWeekends").trigger('change');
     $("#startDate").trigger("dp.change");
+    $("#estimatedDate").trigger("dp.change");
+{% endblock %}
+
+{% block functions_javascript %}
+    
+    var pageLoaded = false;
+    
+    function updateSprintDates() {
+        
+        var startDate = getStartDateValue();
+        var estimatedDate = getEstimatedDateValue();
+        var workingWeekends = $("#backendbundle_sprint_type_isWorkingWeekends").is(":checked");
+        
+        if (startDate != '' && estimatedDate != '') {
+            $("#loading, #sprint-dates").toggle();
+            $.ajax({
+                type: 'POST',
+                url: "{{path('backend_project_sprints_html_sprint_days',{'id':project.id, 'sprintId':0})}}",
+                dataType: 'json',
+                data: {startDate: startDate, estimatedDate: estimatedDate, workingWeekends:workingWeekends},
+                success: function (resp)
+                {
+                    $("#loading, #sprint-dates").toggle();
+                    if (resp.result == '__OK__') {
+                        $("#sprint-dates").html(resp.html);
+                    } else {
+                        bootbox.alert(resp.msg);
+                    }
+                },
+                error: function (resp)
+                {
+                    $("#loading, #sprint-dates").toggle();
+                    bootbox.alert("{{'backend.global.unknown_error'|trans}}")
+                }
+            });
+        }
+    }
+    
+    function getStartDateValue() {
+        var year = $("#backendbundle_sprint_type_startDate_year").val();
+        var month = $("#backendbundle_sprint_type_startDate_month").val();
+        var day = $("#backendbundle_sprint_type_startDate_day").val();
+        
+        if( year != '' && month !='' && day != '') {
+            return year+'-'+month+'-'+day;
+        }
+        return '';
+    }
+    
+    function getEstimatedDateValue() {
+        var year = $("#backendbundle_sprint_type_estimatedDate_year").val();
+        var month = $("#backendbundle_sprint_type_estimatedDate_month").val();
+        var day = $("#backendbundle_sprint_type_estimatedDate_day").val();
+        if (year != '' && month !='' && day != '') {
+            return year+'-'+month+'-'+day;
+        }
+        return '';
+    }
 {% endblock %}

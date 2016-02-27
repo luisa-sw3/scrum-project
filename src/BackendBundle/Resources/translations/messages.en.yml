@@ -48,7 +48,8 @@ backend:
         no: "No"
         example: "Example"
         hours: Hours
-    
+        all: "All"
+        
     user:
         edit_profile: "Edit Profile"
         password: "Password"

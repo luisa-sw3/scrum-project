@@ -70,24 +70,31 @@ class SprintController extends Controller {
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+
             $sprint->setProject($project);
             $sprint->setUserOwner($this->getUser());
 
             $em->persist($sprint);
+            $em->flush();
 
-            //guardamos los dias de trabajo del sprint
-            $startDate = $sprint->getStartDate();
-            $estimatedDate = $sprint->getEstimatedDate();
-            $diff = $startDate->diff($estimatedDate);
+            $startDate = clone $sprint->getStartDate();
+            $endDate = clone $sprint->getEstimatedDate();
 
+            //recorremos las fechas desde la inicial hasta la final del sprint
+            while ($startDate <= $endDate) {
 
-            for ($i = 0; $i <= $diff->d; $i++) {
-                $sprintDate = clone $startDate;
-                $sprintDate->modify('+ ' . $i . ' day');
-                $sprintDay = new Entity\SprintDay();
-                $sprintDay->setDate($sprintDate);
-                $sprintDay->setSprint($sprint);
-                $em->persist($sprintDay);
+                $currentDate = $startDate->format('Y-m-d');
+
+                //se verifica si la fecha actual viene en el POST
+                $sendDate = $request->request->get($currentDate);
+
+                if ($sendDate) {
+                    $sprintDay = new Entity\SprintDay();
+                    $sprintDay->setDate(new \DateTime($sendDate));
+                    $sprintDay->setSprint($sprint);
+                    $em->persist($sprintDay);
+                }
+                $startDate->modify('+1 day');
             }
 
             $em->flush();
@@ -98,6 +105,7 @@ class SprintController extends Controller {
 
         return $this->render('BackendBundle:Project/Sprint:new.html.twig', array(
                     'project' => $project,
+                    'sprint' => $sprint,
                     'form' => $form->createView(),
                     'menu' => self::MENU
         ));
@@ -247,8 +255,12 @@ class SprintController extends Controller {
             $listDays[$i] = $days[$i]->getDate()->format($sprint->getProject()->getSettings()->getPHPDateFormat());
         }
 
-        $estimatedTimePerDay = number_format(($sprint->getEstimatedTime() / $sprintDays), 1);
-        $idealArray = range(0, $sprint->getEstimatedTime() - 1, $estimatedTimePerDay);
+        $estimatedTimePerDay = 0;
+        $idealArray = array();
+        if ($sprintDays > 0) {
+            $estimatedTimePerDay = number_format(($sprint->getEstimatedTime() / $sprintDays), 1);
+            $idealArray = range(0, $sprint->getEstimatedTime() - 1, $estimatedTimePerDay);
+        }
 
         $idealXArray = array();
         foreach ($idealArray as $value) {
@@ -306,19 +318,33 @@ class SprintController extends Controller {
         return new JsonResponse($response);
     }
 
+    /**
+     * Permite cargar dinamicamente el HTML corrspondiente a la edicion de los
+     * dias laborales de un Sprint
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 27/02/2016
+     * @param Request $request datos de la solicitud
+     * @param string $id identificador del proyecto
+     * @param string $sprintId identificador del Sprint
+     * @return JsonResponse JSON con mensaje de respuesta
+     */
     public function htmlSprintDaysAction(Request $request, $id, $sprintId) {
         $response = array('result' => '__OK__', 'msg' => '');
         $em = $this->getDoctrine()->getManager();
         $startDate = $request->request->get('startDate');
         $estimatedDate = $request->request->get('estimatedDate');
 
+        $project = $em->getRepository('BackendBundle:Project')->find($id);
         $sprint = $em->getRepository('BackendBundle:Sprint')->find($sprintId);
         $workingWeekends = $request->request->get('workingWeekends');
-        
+
         if (!$sprint || ($sprint && $sprint->getProject()->getId() != $id)) {
-            $response['result'] = '__KO__';
-            $response['msg'] = $this->get('translator')->trans('backend.sprint.not_found_message');
-            return new JsonResponse($response);
+            if ($sprintId == 0) {
+                $sprint = new Entity\Sprint();
+            } else {
+                $response['result'] = '__KO__';
+                $response['msg'] = $this->get('translator')->trans('backend.sprint.not_found_message');
+                return new JsonResponse($response);
+            }
         }
 
         try {
@@ -327,10 +353,9 @@ class SprintController extends Controller {
                 'estimatedDate' => $estimatedDate,
                 'workingWeekends' => $workingWeekends,
                 'sprint' => $sprint,
-                
+                'project' => $project,
             ));
             $response['html'] = $html;
-
         } catch (\Exception $ex) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.global.unknown_error');
