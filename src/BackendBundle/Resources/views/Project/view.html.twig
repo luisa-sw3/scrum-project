@@ -23,9 +23,9 @@
     {% set fullDateFormat = project.settings.fullDateFormat %}
     
     <div class="row">
-        <div class="col-lg-2 col-md-6">
+        <div class="col-lg-2 col-md-4">
             <div class="panel panel-primary">
-                <div class="panel-heading">
+                <div class="panel-heading project-link">
                     <div class="row">
                         <div class="col-xs-12 text-center">
                             <i class="fa fa-list fa-5x"></i>
@@ -35,15 +35,14 @@
                 <a href="{{ path('backend_project_product_backlog', { 'id': project.id }) }}">
                     <div class="panel-footer">
                         <span class="pull-left">{{ 'backend.backlog.product_backlog'|trans }}</span>
-                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                         <div class="clearfix"></div>
                     </div>
                 </a>
             </div>
         </div>
-        <div class="col-lg-2 col-md-6">
+        <div class="col-lg-2 col-md-4">
             <div class="panel panel-primary">
-                <div class="panel-heading">
+                <div class="panel-heading project-link">
                     <div class="row">
                         <div class="col-xs-12 text-center">
                             <i class="fa fa-rotate-right fa-5x"></i>
@@ -53,15 +52,14 @@
                 <a href="{{ path('backend_project_sprints',{'id':project.id}) }}">
                     <div class="panel-footer">
                         <span class="pull-left">{{ 'backend.sprint.sprints'|trans }}</span>
-                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                         <div class="clearfix"></div>
                     </div>
                 </a>
             </div>
         </div>
-        <div class="col-lg-2 col-md-6">
+        <div class="col-lg-2 col-md-4">
             <div class="panel panel-primary">
-                <div class="panel-heading">
+                <div class="panel-heading project-link">
                     <div class="row">
                         <div class="col-xs-12 text-center">
                             <i class="fa fa-file-text-o fa-5x"></i>
@@ -71,15 +69,14 @@
                 <a href="#">
                     <div class="panel-footer">
                         <span class="pull-left">{{ 'backend.report.reports'|trans }}</span>
-                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                         <div class="clearfix"></div>
                     </div>
                 </a>
             </div>
         </div>
-        <div class="col-lg-2 col-md-6">
+        <div class="col-lg-2 col-md-4">
             <div class="panel panel-primary">
-                <div class="panel-heading">
+                <div class="panel-heading project-link">
                     <div class="row">
                         <div class="col-xs-12 text-center">
                             <i class="fa fa-users fa-5x"></i>
@@ -89,15 +86,14 @@
                 <a href="{{ path('backend_project_team', { 'id': project.id }) }}">
                     <div class="panel-footer">
                         <span class="pull-left">{{ 'backend.user_project.project_team'|trans }}</span>
-                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                         <div class="clearfix"></div>
                     </div>
                 </a>
             </div>
         </div>
-        <div class="col-lg-2 col-md-6">
+        <div class="col-lg-2 col-md-4">
             <div class="panel panel-primary">
-                <div class="panel-heading">
+                <div class="panel-heading project-link">
                     <div class="row">
                         <div class="col-xs-12 text-center">
                             <i class="fa fa-cogs fa-5x"></i>
@@ -107,7 +103,6 @@
                 <a href="{{ path('backend_projects_edit', { 'id': project.id }) }}">
                     <div class="panel-footer">
                         <span class="pull-left">{{ 'backend.project.settings'|trans }}</span>
-                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                         <div class="clearfix"></div>
                     </div>
                 </a>
@@ -115,33 +110,102 @@
         </div>
     </div>
     
-    <div class="table-responsive">
-        <legend>{{ 'backend.project.details'|trans }}</legend>
-        <table class="table" border="0">
-            <tbody>
-                <tr>
-                    <th width="230px">{{ 'backend.project.description'|trans }}</th>
-                    <td>{{ project.description |raw }}</td>
-                    <th width="230px">{{ 'backend.project.start_date'|trans }}</th>
-                    <td>{% if project.startDate %}{{ project.startDate|date(dateFormat) }}{% endif %}</td>
-                </tr>
-                <tr>
-                    <th>{{ 'backend.project.creation_date'|trans }}</th>
-                    <td>{% if project.creationDate %}{{ project.creationDate|date(fullDateFormat) }}{% endif %}</td>
-                    <th>{{ 'backend.project.estimated_date'|trans }}</th>
-                    <td>{% if project.estimatedDate %}{{ project.estimatedDate|date(dateFormat) }}{% endif %}</td>
-                </tr>
-                <tr>
-                    <th>{{ 'backend.setting.date_format'|trans }}</th>
-                    <td>{{ project.settings.dateFormat }}</td>
-                    <th>{{ 'backend.setting.hour_format'|trans }}</th>
-                    <td>{{ project.settings.hourFormat }}</td>
-                </tr>
-                <tr>
-                    <th>{{ 'backend.global.owner'|trans }}</th>
-                    <td>{{ project.userOwner }}</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="col-lg-6 col-md-6 col-xs-12 no-padding-sides">                    
+        <div class="panel panel-default">
+            <div class="panel-heading panel-head-details">
+                <h3 class="panel-title">
+                    {{ 'backend.project.details'|trans }}
+                    <a class="btn btn-default btn-sm pull-right" title="{{'backend.project.edit'|trans}}" href="{{ path('backend_projects_edit', { 'id': project.id }) }}"><i class="fa fa-pencil"></i></a>
+                </h3>
+            </div>
+            <div class="list-group">
+                <a class="list-group-item" href="javascript:void(0);">
+                    <label>{{ 'backend.project.description'|trans }}</label>
+                    <div>{{ project.description |raw }}</div>
+                </a>
+                <a class="list-group-item" href="javascript:void(0);">
+                    <label>{{ 'backend.project.start_date'|trans }}</label>
+                    <div>{% if project.startDate %}{{ project.startDate|date(dateFormat) }}{% endif %}</div>
+                </a>
+                <a class="list-group-item" href="javascript:void(0);">
+                    <label>{{ 'backend.project.creation_date'|trans }}</label>
+                    <div>{% if project.creationDate %}{{ project.creationDate|date(dateFormat) }}{% endif %}</div>
+                </a>
+                <a class="list-group-item" href="javascript:void(0);">
+                    <label>{{ 'backend.project.estimated_date'|trans }}</label>
+                    <div>{% if project.estimatedDate %}{{ project.estimatedDate|date(dateFormat) }}{% endif %}</div>
+                </a>
+                <a class="list-group-item" href="javascript:void(0);">
+                    <label>{{ 'backend.setting.date_format'|trans }}</label>
+                    <div>{{ project.settings.dateFormat }}</div>
+                </a>
+                <a class="list-group-item" href="javascript:void(0);">
+                    <label>{{ 'backend.setting.hour_format'|trans }}</label>
+                    <div>{{ project.settings.hourFormat }}</div>
+                </a>
+                <a class="list-group-item" href="javascript:void(0);">
+                    <label>{{ 'backend.global.owner'|trans }}</label>
+                    <div>{{ project.userOwner }}</div>
+                </a>
+            </div>
+        </div>
     </div>
+                    
+    <div class="col-lg-6 col-md-6 col-xs-12 no-padding-right pull-right">                    
+        <div class="panel panel-default">
+            <div class="panel-heading panel-head-details">
+                <h3 class="panel-title">
+                    {{ 'backend.sprint.sprints'|trans }} ({{sprints|length}})
+                    <a class="btn btn-default btn-sm pull-right" title="{{'backend.sprint.sprints'|trans}}" href="{{ path('backend_project_sprints',{'id':project.id}) }}"><i class="fa fa-list"></i></a>
+                </h3>
+            </div>
+            <div class="list-group">
+                {% for sprint in sprints %}
+                    <a class="list-group-item" href="{{ path('backend_project_sprints_backlog',{'id':project.id,'sprintId':sprint.id}) }}">
+                        <label>{{ sprint.name }}</label>
+                        <span class="{{sprint.getLabelClassByStatus()}} pull-right">{{ sprint.textStatus|trans }}</span>
+                        <div>
+                            {{ sprint.startDate|date(dateFormat)}} {{'backend.global.to'|trans}} {{ sprint.estimatedDate|date(dateFormat)}}
+                        </div>
+                    </a>
+                {% else %}
+                    {{ 'backend.sprint.empty_list'|trans }}
+                {% endfor%}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6 col-md-6 col-xs-12 no-padding-right pull-right">                    
+        <div class="panel panel-default">
+            <div class="panel-heading panel-head-details">
+                <h3 class="panel-title">
+                    {{ 'backend.user_project.project_team'|trans }} ({{team|length}})
+                    <a class="btn btn-default btn-sm pull-right" title="{{ 'backend.user_project.project_team'|trans }}" href="{{ path('backend_project_team', { 'id': project.id }) }}"><i class="fa fa-list"></i></a>
+                </h3>
+            </div>
+            <div class="list-group">
+                {% for userProject in team %}
+                    <a class="list-group-item" href="javascript:void(0);">
+                        <label>{{ userProject.user|title }}</label>
+                        <span class="pull-right">{{userProject.role}}</span>
+                        <div>
+                            {{ userProject.assignationDate|date(dateFormat)}}
+                        </div>
+                    </a>
+                {% else %}
+                    {{ 'backend.sprint.empty_list'|trans }}
+                {% endfor%}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    $(".project-link").click(function() {
+        var object = $(this);
+        var href = object.next("a").attr("href");
+        if (href != '') {
+            window.location.href = href; 
+        }
+    });
 {% endblock %}

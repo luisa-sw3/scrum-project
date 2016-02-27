@@ -97,10 +97,17 @@ class ProjectController extends Controller {
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
      */
     public function viewAction(Entity\Project $project) {
+        $em = $this->getDoctrine()->getManager();
 
+        $sprints = $em->getRepository('BackendBundle:Sprint')->findBy(array('project'=>$project->getId()), array('startDate'=>'DESC'));
+
+        $team = $em->getRepository('BackendBundle:UserProject')->findBy(array('project'=>$project->getId()), array('assignationDate'=>'ASC'));
+        
         return $this->render('BackendBundle:Project:view.html.twig', array(
                     'project' => $project,
-                    'menu' => self::MENU
+                    'menu' => self::MENU,
+                    'sprints' => $sprints,
+                    'team' => $team,
         ));
     }
 
@@ -200,10 +207,9 @@ class ProjectController extends Controller {
         return $this->render('BackendBundle:Project:binnacle.html.twig', array(
                     'project' => $project,
                     'menu' => self::MENU_PROJECT_BINNACLE,
-                    'binnacle' =>  $binnacle,
+                    'binnacle' => $binnacle,
                     'debug' => true,
         ));
-        
     }
 
 }

@@ -257,7 +257,7 @@ class SprintController extends Controller {
 
         $estimatedTimePerDay = 0;
         $idealArray = array();
-        if ($sprintDays > 0) {
+        if ($sprintDays > 0 && $sprint->getEstimatedTime() > 0) {
             $estimatedTimePerDay = number_format(($sprint->getEstimatedTime() / $sprintDays), 1);
             $idealArray = range(0, $sprint->getEstimatedTime() - 1, $estimatedTimePerDay);
         }

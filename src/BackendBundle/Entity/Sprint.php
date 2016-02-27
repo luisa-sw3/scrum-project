@@ -282,5 +282,33 @@ class Sprint {
         }
         return 'backend.global.no';
     }
+    
+    /**
+     * Permite obtener la clase bootstrap correspondiente al color que representa
+     * el estado actual del Sprint
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 16/02/2016
+     * @return string
+     */
+    public function getLabelClassByStatus() {
+        $class = '';
+
+        switch ($this->status) {
+            case self::STATUS_PLANNED:
+                $class = 'label label-default';
+                break;
+            case self::STATUS_IN_PROCESS:
+                $class = 'label label-primary';
+                break;
+            case self::STATUS_STOPPED:
+                $class = 'label label-danger';
+                break;
+            case self::STATUS_FINISHED:
+                $class = 'label label-success';
+                break;
+            default:
+                break;
+        }
+        return $class;
+    }
 
 }
