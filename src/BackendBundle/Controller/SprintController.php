@@ -28,7 +28,7 @@ class SprintController extends Controller {
 
         $project = $em->getRepository('BackendBundle:Project')->find($id);
 
-        if (!$project) {
+        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
             return $this->redirectToRoute('backend_projects');
         }
@@ -57,7 +57,7 @@ class SprintController extends Controller {
 
         $project = $em->getRepository('BackendBundle:Project')->find($id);
 
-        if (!$project) {
+        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
             return $this->redirectToRoute('backend_projects');
         }
@@ -126,6 +126,11 @@ class SprintController extends Controller {
         if (!$sprint || ($sprint && $sprint->getProject()->getId() != $id)) {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.sprint.not_found_message'));
             return $this->redirectToRoute('backend_project_sprints', array('id' => $id));
+        }
+        
+        if (!$this->container->get('access_control')->isAllowedProject($id)) {
+            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
+            return $this->redirectToRoute('backend_projects');
         }
 
         $editForm = $this->createForm(SprintType::class, $sprint);
@@ -207,6 +212,11 @@ class SprintController extends Controller {
         if (!$sprint || ($sprint && $sprint->getProject()->getId() != $id)) {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.sprint.not_found_message'));
             return $this->redirectToRoute('backend_project_sprints', array('id' => $id));
+        }
+        
+        if (!$this->container->get('access_control')->isAllowedProject($id)) {
+            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
+            return $this->redirectToRoute('backend_projects');
         }
 
         $search = array('sprint' => $sprint->getId());
@@ -303,6 +313,12 @@ class SprintController extends Controller {
         if (!$sprint || ($sprint && $sprint->getProject()->getId() != $id)) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.sprint.not_found_message');
+            return new JsonResponse($response);
+        }
+        
+        if (!$this->container->get('access_control')->isAllowedProject($id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
             return new JsonResponse($response);
         }
 

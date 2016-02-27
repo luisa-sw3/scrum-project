@@ -30,7 +30,7 @@ class ItemController extends Controller {
 
         $project = $em->getRepository('BackendBundle:Project')->find($id);
 
-        if (!$project) {
+        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
             return $this->redirectToRoute('backend_projects');
         }
@@ -80,11 +80,11 @@ class ItemController extends Controller {
 
         $project = $em->getRepository('BackendBundle:Project')->find($id);
 
-        if (!$project) {
+        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
             return $this->redirectToRoute('backend_projects');
         }
-
+        
         $item = new Entity\Item();
         $item->setProject($project);
 
@@ -127,11 +127,16 @@ class ItemController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $item = $em->getRepository('BackendBundle:Item')->find($itemId);
 
+        if (!$this->container->get('access_control')->isAllowedProject($id)) {
+            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
+            return $this->redirectToRoute('backend_projects');
+        }
+        
         if (!$item || ($item && $item->getProject()->getId() != $id)) {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.item.not_found_message'));
             return $this->redirectToRoute('backend_project_product_backlog', array('id' => $id));
         }
-
+        
         $editForm = $this->createForm(ItemType::class, $item);
         $editForm->handleRequest($request);
 
@@ -181,6 +186,13 @@ class ItemController extends Controller {
             $response['msg'] = $this->get('translator')->trans('backend.item.not_found_message');
             return new JsonResponse($response);
         }
+        
+        if (!$this->container->get('access_control')->isAllowedProject($id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
+            return new JsonResponse($response);
+        }
+        
 
         $attachment = new Entity\ItemAttachment();
 
@@ -258,6 +270,12 @@ class ItemController extends Controller {
             $response['msg'] = $this->get('translator')->trans('backend.attachment.not_found');
             return new JsonResponse($response);
         }
+        
+        if (!$this->container->get('access_control')->isAllowedProject($id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
+            return new JsonResponse($response);
+        }
 
         try {
             $directory = $this->container->getParameter('item_attachments_folder');
@@ -287,7 +305,7 @@ class ItemController extends Controller {
         $project = $em->getRepository('BackendBundle:Project')->find($id);
         $item = $em->getRepository('BackendBundle:Item')->find($itemId);
 
-        if (!$project) {
+        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
             return $this->redirectToRoute('backend_projects');
         }
@@ -349,6 +367,12 @@ class ItemController extends Controller {
             return new JsonResponse($response);
         }
 
+        if (!$this->container->get('access_control')->isAllowedProject($id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
+            return new JsonResponse($response);
+        }
+        
         $directory = $this->container->getParameter('item_attachments_folder');
 
         try {
@@ -418,6 +442,12 @@ class ItemController extends Controller {
             $response['msg'] = $this->get('translator')->trans('backend.item.not_found_message');
             return new JsonResponse($response);
         }
+        
+        if (!$this->container->get('access_control')->isAllowedProject($id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
+            return new JsonResponse($response);
+        }
 
         try {
             $item->setPriority($priority);
@@ -470,6 +500,12 @@ class ItemController extends Controller {
         if (!$item || ($item && $item->getProject()->getId() != $id)) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.item.not_found_message');
+            return new JsonResponse($response);
+        }
+        
+        if (!$this->container->get('access_control')->isAllowedProject($id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
             return new JsonResponse($response);
         }
 
@@ -526,6 +562,12 @@ class ItemController extends Controller {
             $response['msg'] = $this->get('translator')->trans('backend.item.not_found_message');
             return new JsonResponse($response);
         }
+        
+        if (!$this->container->get('access_control')->isAllowedProject($id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
+            return new JsonResponse($response);
+        }
 
         try {
             $item->setWorkedHours($workedTime);
@@ -579,6 +621,12 @@ class ItemController extends Controller {
         if (!$item || ($item && $item->getProject()->getId() != $id)) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.item.not_found_message');
+            return new JsonResponse($response);
+        }
+        
+        if (!$this->container->get('access_control')->isAllowedProject($id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
             return new JsonResponse($response);
         }
 

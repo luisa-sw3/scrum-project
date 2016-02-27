@@ -30,7 +30,7 @@ class ProjectTeamController extends Controller {
         $order = array('assignationDate' => 'ASC');
 
         $project = $em->getRepository('BackendBundle:Project')->find($id);
-        if (!$project) {
+        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
             return $this->redirectToRoute('backend_projects');
         }
@@ -74,7 +74,7 @@ class ProjectTeamController extends Controller {
 
         $em = $this->getDoctrine()->getManager();
         $project = $em->getRepository('BackendBundle:Project')->find($id);
-        if (!$project) {
+        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
             $closeFancy = true;
         }
@@ -204,6 +204,12 @@ class ProjectTeamController extends Controller {
             $response['msg'] = $this->get('translator')->trans('backend.user.not_found_message');
             return new JsonResponse($response);
         }
+        
+        if (!$this->container->get('access_control')->isAllowedProject($id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
+            return new JsonResponse($response);
+        }
 
         try {
             $em->remove($userProject);
@@ -237,6 +243,12 @@ class ProjectTeamController extends Controller {
         if (!$userProject || ($userProject && $userProject->getProject()->getId() != $id)) {
             $response['result'] = "__KO__";
             $response['msg'] = $this->get('translator')->trans('backend.user.not_found_message');
+            return new JsonResponse($response);
+        }
+        
+        if (!$this->container->get('access_control')->isAllowedProject($id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
             return new JsonResponse($response);
         }
         

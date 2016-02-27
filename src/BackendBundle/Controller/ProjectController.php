@@ -99,10 +99,15 @@ class ProjectController extends Controller {
     public function viewAction(Entity\Project $project) {
         $em = $this->getDoctrine()->getManager();
 
-        $sprints = $em->getRepository('BackendBundle:Sprint')->findBy(array('project'=>$project->getId()), array('startDate'=>'DESC'));
+        //validamos el acceso del usuario al proyecto
+        if (!$this->container->get('access_control')->isAllowedProject($project->getId())) {
+            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
+            return $this->redirectToRoute('backend_projects');
+        }
 
-        $team = $em->getRepository('BackendBundle:UserProject')->findBy(array('project'=>$project->getId()), array('assignationDate'=>'ASC'));
-        
+        $sprints = $em->getRepository('BackendBundle:Sprint')->findBy(array('project' => $project->getId()), array('startDate' => 'DESC'));
+        $team = $em->getRepository('BackendBundle:UserProject')->findBy(array('project' => $project->getId()), array('assignationDate' => 'ASC'));
+
         return $this->render('BackendBundle:Project:view.html.twig', array(
                     'project' => $project,
                     'menu' => self::MENU,
@@ -116,6 +121,13 @@ class ProjectController extends Controller {
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 12/01/2016
      */
     public function editAction(Request $request, Entity\Project $project) {
+        
+        //validamos el acceso del usuario al proyecto
+        if (!$this->container->get('access_control')->isAllowedProject($project->getId())) {
+            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
+            return $this->redirectToRoute('backend_projects');
+        }
+        
         $deleteForm = $this->createDeleteForm($project);
         $editForm = $this->createForm(ProjectType::class, $project);
         $editForm->handleRequest($request);
@@ -149,6 +161,12 @@ class ProjectController extends Controller {
         $form = $this->createDeleteForm($project);
         $form->handleRequest($request);
 
+        //validamos el acceso del usuario al proyecto
+        if (!$this->container->get('access_control')->isAllowedProject($project->getId())) {
+            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
+            return $this->redirectToRoute('backend_projects');
+        }
+        
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
@@ -190,8 +208,8 @@ class ProjectController extends Controller {
         $em = $this->getDoctrine()->getManager();
 
         $project = $em->getRepository('BackendBundle:Project')->find($id);
-
-        if (!$project) {
+        
+        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
             return $this->redirectToRoute('backend_projects');
         }

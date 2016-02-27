@@ -27,6 +27,11 @@ class UserRoleController extends Controller {
 
         $project = $em->getRepository('BackendBundle:Project')->find($projectId);
         
+        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
+            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
+            return $this->redirectToRoute('backend_projects');
+        }
+        
         $roles = $em->getRepository('BackendBundle:Role')->findBy($search, $order);
 
         return $this->render('BackendBundle:Settings/Roles:index.html.twig', array(
@@ -50,6 +55,11 @@ class UserRoleController extends Controller {
 
         $em = $this->getDoctrine()->getManager();
         $project = $em->getRepository('BackendBundle:Project')->find($projectId);
+        
+        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
+            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
+            return $this->redirectToRoute('backend_projects');
+        }
         
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -84,6 +94,11 @@ class UserRoleController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $project = $em->getRepository('BackendBundle:Project')->find($projectId);
 
+        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
+            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
+            return $this->redirectToRoute('backend_projects');
+        }
+        
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em->persist($role);
             $em->flush();

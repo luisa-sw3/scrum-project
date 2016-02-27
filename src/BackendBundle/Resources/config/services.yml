@@ -27,6 +27,13 @@ services:
         arguments: 
             container:      "@service_container"
     
+    #servicio para clase de ayuda para implementar formularios
+    access_control:
+        class: BackendBundle\Services\AccessControl
+        arguments:
+            entityManager:  "@doctrine.orm.entity_manager"
+            tokenStorage:   "@security.token_storage"
+    
     #servicio para pasarle el container a los formualrios (traduccion)
     backend.form.type.user.profile:
         class: BackendBundle\Form\UserProfileType
