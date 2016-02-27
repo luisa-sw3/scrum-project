@@ -9,17 +9,17 @@
                 <a href="{{ app.request.headers.get('referer') }}" class="btn btn-default pull-right">{{'backend.global.back'|trans}}</a>
             </h1>
 
-            {% set item2 = {'text': project.name, 'url':path('backend_projects_view',{'id':project.id}),'icon':'fa fa-dashboard'} %}
-            {% set item3 = {'text': 'backend.sprint.sprints'|trans, 'url':path('backend_project_sprints',{'id':project.id}), 'icon':'fa fa-rotate-right'} %}
-            {% set item4 = {'text': 'backend.sprint.edit'|trans, 'icon':'fa fa-pencil'} %}
-            {% set items = [item2, item3, item4] %}
+            {% set item1 = {'text': project.name, 'url':path('backend_projects_view',{'id':project.id}),'icon':'fa fa-dashboard'} %}
+            {% set item2 = {'text': 'backend.sprint.sprints'|trans, 'url':path('backend_project_sprints',{'id':project.id}), 'icon':'fa fa-rotate-right'} %}
+            {% set item3 = {'text': 'backend.sprint.edit'|trans, 'icon':'fa fa-pencil'} %}
+            {% set items = [item1, item2, item3] %}
             {{ filters.breadcrum(items) }}
         </div>
     </div>
 
     <div class="row">
         {{ form_start(edit_form, {'action': path('backend_project_sprints_edit',{'id':project.id, 'sprintId':sprint.id}), 'method': 'POST'}) }}
-        <div class="col-lg-7">
+        <div class="col-lg-12">
                 <div class="form-group">
                     {{ form_label(edit_form.name)}}<em>*</em>
                     {{ form_widget(edit_form.name, {'attr':{'class':'form-control'}}) }}
@@ -30,61 +30,34 @@
                     {{ form_widget(edit_form.isWorkingWeekends, {'attr':{'class':''}}) }}
                     {{ form_errors(edit_form.isWorkingWeekends) }}
                 </div>
-                <div class="form-group col-xs-6 no-padding-left">
-                    {{ form_label(edit_form.startDate)}}
-                    {{ form_widget(edit_form.startDate, {'attr':{'class':'date-selector-sm', 'style':'display:none;'}}) }}
+                <div style="display: none;">
+                    {{ form_widget(edit_form.startDate, {'attr':{'class':'date-selector-sm'}}) }}
                     {{ form_errors(edit_form.startDate) }}
-                </div>
-                <div class="form-group  col-xs-6 no-padding-right">
-                    {{ form_label(edit_form.estimatedDate)}}
-                    {{ form_widget(edit_form.estimatedDate, {'attr':{'class':'date-selector-sm', 'style':'display:none;'}}) }}
+                
+                    {{ form_widget(edit_form.estimatedDate, {'attr':{'class':'date-selector-sm'}}) }}
                     {{ form_errors(edit_form.estimatedDate) }}
                 </div>
-                <div class="form-group col-lg-6 col-md-6 col-xs-12 no-padding-left">
+                <div class="form-group col-lg-3 col-md-4 col-xs-10 no-padding-left">
+                    {{ form_label(edit_form.startDate)}}
                     <div id='startDate'></div>
                 </div>
-                <div class="form-group col-lg-6 col-md-6 col-xs-12 no-padding-right">
+                <div class="form-group col-lg-3 col-md-4 col-xs-10 no-padding-right">
+                    {{ form_label(edit_form.estimatedDate)}}
                     <div id='estimatedDate'></div>
                 </div>
                 
-                <div class="form-group col-lg-12 col-md-12 col-xs-12">
-                    <div class="col-md-6 col-xs-6 no-padding-left">
-                    
-                        {# Metemos en un arreglo de strings los dias del Sprint #}
-                        {% set sprintDays = [] %}
-                        {% for sprintDay in sprint.sprintDays %}
-                            {% set sprintDays = sprintDays|merge([sprintDay.date|date('Y-m-d')]) %}
-                        {% endfor %}
-                        
-                        {% set startDate = sprint.startDate|date('Y-m-d') %}
-                        {% set endDate = sprint.estimatedDate|date('Y-m-d') %}
-                        
-                        {% set break = ((sprint.sprintDays|length)/ 2 + 1)|round  %}
-                        
-                        {% for x in range(startDate|date('U'), endDate|date('U'), 86400 ) %}
-                            
-                            <div class="checkbox">
-                                <label>
-                                    <input {% if x|date('Y-m-d') in sprintDays %}checked="checked"{% endif %} type="checkbox" name="{{ x|date('Y-m-d')}}" value="{{ x|date('Y-m-d') }}"><strong>{{loop.index}}</strong>. {{ x|date('D')}} {{ x|date(project.settings.dateFormat)}}
-                                </label>
-                            </div>
-                            {% if loop.index == break %}
-                                </div>
-                                <div class="col-md-6 col-xs-6 no-padding-right">
-                            {% endif %}    
-                        {% endfor %}
-                        
-                    </div>
+                <div class="form-group col-lg-6 col-md-6 col-xs-12" id="sprint-dates">
+                    {% include 'BackendBundle:Project/Sprint:sprintDates.html.twig' %}
                 </div>
             </div>
-            <div class="col-lg-5">
+            <div class="col-lg-12 col-md-12 col-xs-12">
                 <div class="form-group">
                     {{ form_label(edit_form.description)}}
                     {{ form_widget(edit_form.description, {'attr':{'class':'form-control'}}) }}
                     {{ form_errors(edit_form.description) }}
                 </div>
             </div>
-            <div class="col-lg-5 pull-right">
+            <div class="col-lg-12 pull-right">
                 {{ form_widget(edit_form._token) }} 
                 <button type="submit"class="btn btn-primary pull-right">{{ 'backend.global.save_changes'|trans }}</button>
             </div>
@@ -119,6 +92,7 @@
         $("#backendbundle_sprint_type_startDate_year").val(date1.format('Y'));
         $("#backendbundle_sprint_type_startDate_month").val(date1.format('M'));
         $("#backendbundle_sprint_type_startDate_day").val(date1.format('D'));
+        updateSprintDates();
     });
     $("#estimatedDate").on("dp.change", function (e) {
         $('#startDate').data("DateTimePicker").maxDate(e.date);
@@ -126,7 +100,10 @@
         $("#backendbundle_sprint_type_estimatedDate_year").val(date2.format('Y'));
         $("#backendbundle_sprint_type_estimatedDate_month").val(date2.format('M'));
         $("#backendbundle_sprint_type_estimatedDate_day").val(date2.format('D'));
+        updateSprintDates();
     });
+    
+    
     
     $("#backendbundle_sprint_type_isWorkingWeekends").change(function(){
         var object = $(this);
@@ -139,7 +116,67 @@
         }
         $('#startDate').data("DateTimePicker").daysOfWeekDisabled(disabledDays);
         $('#estimatedDate').data("DateTimePicker").daysOfWeekDisabled(disabledDays);
+        
+        if (pageLoaded) {
+            updateSprintDates();
+        }
+        
+        pageLoaded = true;
     });
     
     $("#backendbundle_sprint_type_isWorkingWeekends").trigger('change');
+{% endblock %}
+
+
+{% block functions_javascript %}
+    
+    var pageLoaded = false;
+    
+    function updateSprintDates() {
+        
+        var startDate = getStartDateValue();
+        var estimatedDate = getEstimatedDateValue();
+        var workingWeekends = $("#backendbundle_sprint_type_isWorkingWeekends").is(":checked");
+        
+        if (startDate != '' && estimatedDate != '') {
+            $.ajax({
+                type: 'POST',
+                url: "{{path('backend_project_sprints_html_sprint_days',{'id':project.id, 'sprintId':sprint.id})}}",
+                dataType: 'json',
+                data: {startDate: startDate, estimatedDate: estimatedDate, workingWeekends:workingWeekends},
+                success: function (resp)
+                {
+                    if (resp.result == '__OK__') {
+                        $("#sprint-dates").html(resp.html);
+                    } else {
+                        bootbox.alert(resp.msg);
+                    }
+                },
+                error: function (resp)
+                {
+                    bootbox.alert("{{'backend.global.unknown_error'|trans}}")
+                }
+            });
+        }
+    }
+    
+    function getStartDateValue() {
+        var year = $("#backendbundle_sprint_type_startDate_year").val();
+        var month = $("#backendbundle_sprint_type_startDate_month").val();
+        var day = $("#backendbundle_sprint_type_startDate_day").val();
+        
+        if( year != '' && month !='' && day != '') {
+            return year+'-'+month+'-'+day;
+        }
+        return '';
+    }
+    function getEstimatedDateValue() {
+        var year = $("#backendbundle_sprint_type_estimatedDate_year").val();
+        var month = $("#backendbundle_sprint_type_estimatedDate_month").val();
+        var day = $("#backendbundle_sprint_type_estimatedDate_day").val();
+        if (year != '' && month !='' && day != '') {
+            return year+'-'+month+'-'+day;
+        }
+        return '';
+    }
 {% endblock %}

@@ -27,3 +27,8 @@ backend_project_sprints_modify_status:
     path:     /{sprintId}/modifyStatus
     defaults: { _controller: "BackendBundle:Sprint:modifyStatus" }
     methods:  POST
+    
+backend_project_sprints_html_sprint_days:
+    path:     /{sprintId}/htmlSprintDays
+    defaults: { _controller: "BackendBundle:Sprint:htmlSprintDays" }
+    methods:  POST

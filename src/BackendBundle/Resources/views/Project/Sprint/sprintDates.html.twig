@@ -1,0 +1,48 @@
+{% spaceless %}
+    {# Metemos en un arreglo de strings los dias del Sprint #}
+    {% set sprintDays = [] %}
+    {% for sprintDay in sprint.sprintDays %}
+        {% set sprintDays = sprintDays|merge([sprintDay.date|date('Y-m-d')]) %}
+    {% endfor %}
+
+    {% if startDate is not defined %}
+        {% set startDate = sprint.startDate|date('Y-m-d') %}
+    {% endif %}
+    {% if estimatedDate is not defined %}
+        {% set estimatedDate = sprint.estimatedDate|date('Y-m-d') %}
+    {% endif %}
+
+    {% set break = ((range(startDate|date('U'), estimatedDate|date('U'), 86400 )|length)/2)|round %}
+
+    <label class="col-lg-12 col-md-12 col-xs-12">{{'backend.sprint.working_days'|trans}}</label>
+    <div class="col-lg-12 col-md-12 col-xs-12 no-padding-right">
+        <div class="col-md-6 col-xs-6 no-padding-left">
+            {% for x in range(startDate|date('U'), estimatedDate|date('U'), 86400 ) %}
+                <div class="checkbox">
+                    <label>
+                        {% set checked = '' %}
+                        {% if x|date('Y-m-d') in sprintDays %}
+                            {% set checked = 'checked="checked"' %}
+                        {% endif %}
+
+                        {% if (x|date('D') == 'Sat' or x|date('D') == 'Sun') and workingWeekends is defined %}
+                            {% if workingWeekends == 'true' %}
+                                {% set checked = 'checked="checked"' %}
+                            {% else %}
+                                {% set checked = ' ' %}
+                            {% endif %}
+                        {% endif %}
+
+
+                        <input {{checked}} type="checkbox" name="{{ x|date('Y-m-d')}}" value="{{ x|date('Y-m-d') }}">
+                        <strong>{{loop.index}} </strong>. {{ x|date('D')}} {{ x|date(sprint.project.settings.dateFormat)}}
+                    </label>
+                </div>
+                {% if loop.index == break %}
+                </div>
+                <div class="col-md-6 col-xs-6 no-padding-right">
+                {% endif %}    
+            {% endfor %}
+        </div>
+    </div>
+{% endspaceless %}

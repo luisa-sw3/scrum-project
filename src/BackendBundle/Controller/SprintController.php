@@ -127,13 +127,13 @@ class SprintController extends Controller {
 
             $em->persist($sprint);
             $em->flush();
-            
+
             //buscamos posibles dias del Sprint que no esten en el rango de fechas para eliminarlos
             $outOfRangeDays = $em->getRepository('BackendBundle:SprintDay')->findDaysOutOfRange($sprintId, $sprint->getStartDate(), $sprint->getEstimatedDate());
             foreach ($outOfRangeDays as $outDay) {
                 $em->remove($outDay);
             }
-            
+
             $startDate = clone $sprint->getStartDate();
             $endDate = clone $sprint->getEstimatedDate();
 
@@ -149,14 +149,14 @@ class SprintController extends Controller {
                     //si viene en el POST verificamos si no esta en el sistema para el sprint
                     $searchSprintDate = array('sprint' => $sprint->getId(), 'date' => new \DateTime($sendDate));
                     $sprintDate = $em->getRepository('BackendBundle:SprintDay')->findOneBy($searchSprintDate);
-                    
+
                     //si no esta en el sistema para el sprint la creamos, la creamos
                     if (!$sprintDate) {
                         $sprintDay = new Entity\SprintDay();
                         $sprintDay->setDate(new \DateTime($sendDate));
                         $sprintDay->setSprint($sprint);
                         $em->persist($sprintDay);
-                    } 
+                    }
                 } else {
                     //si la fecha actual no viene en el post verificamos si esta en el sistema para el sprint para eliminarla
                     $searchSprintDate = array('sprint' => $sprint->getId(), 'date' => new \DateTime($currentDate));
@@ -168,7 +168,7 @@ class SprintController extends Controller {
 
                 $startDate->modify('+1 day');
             }
-            
+
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.sprint.update_success_message'));
@@ -239,7 +239,7 @@ class SprintController extends Controller {
 
 
         //logica para pintar la grafica Burdown del Sprint
-        $days = $em->getRepository('BackendBundle:SprintDay')->findBy(array('sprint' => $sprintId), array('date'=>'ASC'));
+        $days = $em->getRepository('BackendBundle:SprintDay')->findBy(array('sprint' => $sprintId), array('date' => 'ASC'));
         $sprintDays = count($days);
 
         $listDays = array();
@@ -249,13 +249,13 @@ class SprintController extends Controller {
 
         $estimatedTimePerDay = number_format(($sprint->getEstimatedTime() / $sprintDays), 1);
         $idealArray = range(0, $sprint->getEstimatedTime() - 1, $estimatedTimePerDay);
-        
+
         $idealXArray = array();
         foreach ($idealArray as $value) {
             $value = trim($value);
             $idealXArray[] = 'Day ' . $value;
         }
-        
+
         //datos del avance del sprint
         $actualArray = array();
         for ($i = 0; $i < $sprintDays; $i++) {
@@ -303,6 +303,38 @@ class SprintController extends Controller {
             $response['msg'] = $this->get('translator')->trans('backend.global.unknown_error');
         }
 
+        return new JsonResponse($response);
+    }
+
+    public function htmlSprintDaysAction(Request $request, $id, $sprintId) {
+        $response = array('result' => '__OK__', 'msg' => '');
+        $em = $this->getDoctrine()->getManager();
+        $startDate = $request->request->get('startDate');
+        $estimatedDate = $request->request->get('estimatedDate');
+
+        $sprint = $em->getRepository('BackendBundle:Sprint')->find($sprintId);
+        $workingWeekends = $request->request->get('workingWeekends');
+        
+        if (!$sprint || ($sprint && $sprint->getProject()->getId() != $id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.sprint.not_found_message');
+            return new JsonResponse($response);
+        }
+
+        try {
+            $html = $this->renderView('BackendBundle:Project/Sprint:sprintDates.html.twig', array(
+                'startDate' => $startDate,
+                'estimatedDate' => $estimatedDate,
+                'workingWeekends' => $workingWeekends,
+                'sprint' => $sprint,
+                
+            ));
+            $response['html'] = $html;
+
+        } catch (\Exception $ex) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.global.unknown_error');
+        }
         return new JsonResponse($response);
     }
 
