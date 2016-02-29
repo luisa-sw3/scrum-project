@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class ProjectTeamController extends Controller {
 
     const MENU = 'menu_project_team';
-    
+
     /**
      * Permite listar los usuarios que estan asignados a un proyecto
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 18/01/2016
@@ -41,7 +41,7 @@ class ProjectTeamController extends Controller {
         $forms = array();
         $i = 0;
         foreach ($users as $user) {
-            
+
             $form = $this->container
                     ->get('form.factory')
                     ->createNamedBuilder(EditUserRoleType::FORM_PREFIX . $i, EditUserRoleType::class, $user)
@@ -204,7 +204,7 @@ class ProjectTeamController extends Controller {
             $response['msg'] = $this->get('translator')->trans('backend.user.not_found_message');
             return new JsonResponse($response);
         }
-        
+
         if (!$this->container->get('access_control')->isAllowedProject($id)) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
@@ -221,8 +221,7 @@ class ProjectTeamController extends Controller {
 
         return new JsonResponse($response);
     }
-    
-    
+
     /**
      * Esta funcion permite editar el que el usuario tiene asignado en un proyecto
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 23/01/2016
@@ -245,13 +244,13 @@ class ProjectTeamController extends Controller {
             $response['msg'] = $this->get('translator')->trans('backend.user.not_found_message');
             return new JsonResponse($response);
         }
-        
+
         if (!$this->container->get('access_control')->isAllowedProject($id)) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
             return new JsonResponse($response);
         }
-        
+
         $role = $em->getRepository('BackendBundle:Role')->find($roleId);
         if (!$role) {
             $response['result'] = "__KO__";
@@ -269,6 +268,35 @@ class ProjectTeamController extends Controller {
         }
 
         return new JsonResponse($response);
+    }
+
+    /**
+     * Permite desplegar la ficha descriptiva de un usuario asociado a un proyecto
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 28/02/2016
+     * @param string $id identificador del proyecto
+     * @param string $userId identificador del usuario
+     * @return type
+     */
+    public function viewAction($id, $userId) {
+
+        $em = $this->getDoctrine()->getManager();
+        $project = $em->getRepository('BackendBundle:Project')->find($id);
+        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
+            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
+            return $this->redirectToRoute('backend_projects');
+        }
+
+        $userProject = $em->getRepository('BackendBundle:UserProject')->find($userId);
+        if (!$userProject || ($userProject && $userProject->getProject()->getId() != $project->getId())) {
+            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.user.not_found_message'));
+            return $this->redirectToRoute('backend_project_team', array('id' => $project->getId()));
+        }
+
+        return $this->render('BackendBundle:ProjectTeam:view.html.twig', array(
+                    'project' => $project,
+                    'userProject' => $userProject,
+                    'menu' => self::MENU,
+        ));
     }
 
 }

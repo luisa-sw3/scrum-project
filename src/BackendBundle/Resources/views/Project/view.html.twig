@@ -185,7 +185,7 @@
             </div>
             <div class="list-group">
                 {% for userProject in team %}
-                    <a class="list-group-item" href="javascript:void(0);">
+                    <a class="list-group-item" href="{{ path('backend_project_team_view',{'id':project.id, 'userId':userProject.id})}}">
                         <label>{{ userProject.user|title }}</label>
                         <span class="pull-right">{{userProject.role}}</span>
                         <div>

@@ -70,6 +70,7 @@ backend:
         message_account_created_2: ", please review your inbox and press click on the link to confirm your account."
         confirmed_account_message: "Account confirmed successfully"
         not_found_message: "User not found"
+        view: "View User"
     
     project:
         projects: "Projects"

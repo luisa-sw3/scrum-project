@@ -58,6 +58,9 @@
                             {% endif %}
                         </td>
                         <td>
+                            <a class="btn btn-default btn-sm" title="{{ 'backend.user.view'|trans }}" href="{{ path('backend_project_team_view',{'id':project.id, 'userId':userProject.id})}}">
+                                <i class="fa fa-eye"></i>
+                            </a>
                             <a class="btn btn-danger btn-sm cancel-assign" user-project-id="{{userProject.id}}" title="{{ 'backend.user_project.unassign_user'|trans }}" href="javascript:void(0);">
                                 <i class="fa fa-close"></i>
                             </a>
