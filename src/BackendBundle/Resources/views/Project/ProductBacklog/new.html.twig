@@ -51,17 +51,35 @@
                     {{ form_widget(form.status, {'attr':{'class':'form-control'}}) }}
                     {{ form_errors(form.status) }}
                 </div>
-                <div class="form-group col-xs-6 no-padding-left">
+                {% set displayFibonacci = true %}
+                {% if project.effortEstimationMethod != constant('BackendBundle\\Entity\\Project::METHOD_FIBONACCI')%}
+                    {% set displayFibonacci = false %}
+                {% endif  %}
+                <div class="form-group col-xs-6 no-padding-left" {% if not displayFibonacci %}style="display: none;"{% endif %}>
+                    {{ form_label(form.effortFibonacci)}}
+                    {{ form_widget(form.effortFibonacci, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
+                    {{ form_errors(form.effortFibonacci) }}
+                </div>
+                {% set displayTShirt = true %}
+                {% if project.effortEstimationMethod != constant('BackendBundle\\Entity\\Project::METHOD_TSHIRT_SIZE')%}
+                    {% set displayTShirt = false %}
+                {% endif %}
+                <div class="form-group col-xs-6 no-padding-left" {% if not displayTShirt %}style="display: none;"{% endif %}>
+                    {{ form_label(form.effortTShirt)}}
+                    {{ form_widget(form.effortTShirt, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
+                    {{ form_errors(form.effortTShirt) }}
+                </div>
+                <div class="form-group col-xs-6 no-padding-right">
                     {{ form_label(form.estimatedHours)}}
                     {{ form_widget(form.estimatedHours, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
                     {{ form_errors(form.estimatedHours) }}
                 </div>
-                <div class="form-group  col-xs-6 no-padding-right">
+                <div class="form-group  col-xs-6 no-padding-left">
                     {{ form_label(form.workedHours)}}
                     {{ form_widget(form.workedHours, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
                     {{ form_errors(form.workedHours) }}
                 </div>
-                <div class="form-group">
+                <div class="form-group col-xs-6 no-padding-right">
                     {{ form_label(form.sprint)}}
                     {{ form_widget(form.sprint, {'attr':{'class':'form-control'}}) }}
                     {{ form_errors(form.sprint) }}

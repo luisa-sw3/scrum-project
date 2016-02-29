@@ -136,6 +136,10 @@
                     <div>{% if project.estimatedDate %}{{ project.estimatedDate|date(dateFormat) }}{% endif %}</div>
                 </a>
                 <a class="list-group-item" href="javascript:void(0);">
+                    <label>{{ 'backend.project.effort_method'|trans }}</label>
+                    <div>{% if project.effortEstimationMethod %}{{ project.getTextEffortMethod()|trans }}{% endif %}</div>
+                </a>
+                <a class="list-group-item" href="javascript:void(0);">
                     <label>{{ 'backend.setting.date_format'|trans }}</label>
                     <div>{{ project.settings.dateFormat }}</div>
                 </a>

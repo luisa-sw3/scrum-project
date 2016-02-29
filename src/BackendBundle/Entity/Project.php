@@ -18,6 +18,12 @@ class Project {
     use Consecutive;
 
     /**
+     * Constantes para los metodos de estimacion de esfuerzo
+     */
+    const METHOD_TSHIRT_SIZE = 1;
+    const METHOD_FIBONACCI = 2;
+
+    /**
      * @ORM\Id
      * @ORM\Column(name="proj_id", type="string", length=36)
      * @ORM\GeneratedValue(strategy="UUID")
@@ -62,26 +68,33 @@ class Project {
      * @ORM\JoinColumn(name="proj_user_owner", referencedColumnName="user_id")
      */
     protected $userOwner;
-    
+
     /**
      * Configuraciones del proyecto
      * @ORM\ManyToOne(targetEntity="Settings")
      * @ORM\JoinColumn(name="proj_settings_id", referencedColumnName="sett_id", nullable=true)
      */
     protected $settings;
-    
+
     /**
      * Ultimo consecutivo de los items creados en un proyecto
      * @ORM\Column(name="proj_last_item_consecutive", type="integer", nullable=true)
      */
     protected $lastItemConsecutive;
-    
+
     /**
      * Ultimo consecutivo de los sprints creados en un proyecto
      * @ORM\Column(name="proj_last_sprint_consecutive", type="integer", nullable=true)
      */
     protected $lastSprintConsecutive;
-    
+
+    /**
+     * Numero entero para saber el metodo utilizado para la estimacion 
+     * del esfuerzo de los items de un proyecto (1 = Tallas de Camisas, 2 Serie Fibonacci)
+     * @ORM\Column(name="proj_effort_method", type="integer", nullable=true)
+     */
+    protected $effortEstimationMethod;
+
     function getId() {
         return $this->id;
     }
@@ -125,7 +138,7 @@ class Project {
     function setEstimatedDate($estimatedDate) {
         $this->estimatedDate = $estimatedDate;
     }
-    
+
     function getUserOwner() {
         return $this->userOwner;
     }
@@ -133,7 +146,7 @@ class Project {
     function setUserOwner(User $userOwner) {
         $this->userOwner = $userOwner;
     }
-    
+
     function getSettings() {
         return $this->settings;
     }
@@ -153,13 +166,21 @@ class Project {
     function setLastItemConsecutive($lastItemConsecutive) {
         $this->lastItemConsecutive = $lastItemConsecutive;
     }
-    
+
     function getLastSprintConsecutive() {
         return $this->lastSprintConsecutive;
     }
 
     function setLastSprintConsecutive($lastSprintConsecutive) {
         $this->lastSprintConsecutive = $lastSprintConsecutive;
+    }
+
+    function getEffortEstimationMethod() {
+        return $this->effortEstimationMethod;
+    }
+
+    function setEffortEstimationMethod($effortEstimationMethod) {
+        $this->effortEstimationMethod = $effortEstimationMethod;
     }
 
     /**
@@ -170,6 +191,32 @@ class Project {
         if ($this->getCreationDate() === null) {
             $this->setCreationDate(Util::getCurrentDate());
         }
+    }
+
+    /**
+     * Permite obtener el valor de la variable de idioma para el metodo
+     * de estimacion de esfuerzo usado para el proyecto
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 29/02/2016
+     * @param type $method
+     * @return string
+     */
+    public function getTextEffortMethod($method = null) {
+        if (!$method) {
+            $method = $this->getEffortEstimationMethod();
+        }
+
+        $langVar = '';
+        switch ($method) {
+            case self::METHOD_TSHIRT_SIZE:
+                $langVar = 'backend.project.effort_method_tshirt';
+                break;
+            case self::METHOD_FIBONACCI:
+                $langVar = 'backend.project.effort_method_fibonacci';
+                break;
+            default:
+                break;
+        }
+        return $langVar;
     }
 
 }

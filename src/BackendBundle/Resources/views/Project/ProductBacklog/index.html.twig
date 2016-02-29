@@ -76,6 +76,16 @@
                     {{ knp_pagination_sortable(pagination, 'backend.item.priority'|trans, ['i.priority']) }}
                     {{ filters.sortIcon('i.priority', pagination) }} 
                 </th>
+                <th>
+                    {% set effortOrder = '' %}
+                    {% if project.effortEstimationMethod == constant('BackendBundle\\Entity\\Project::METHOD_FIBONACCI')%}
+                        {% set effortOrder = 'i.effortFibonacci' %}
+                    {% else %}
+                        {% set effortOrder = 'i.effortTShirt' %}
+                    {% endif  %}
+                    {{ knp_pagination_sortable(pagination, 'backend.item.effort_estimation'|trans, [effortOrder]) }}
+                    {{ filters.sortIcon(effortOrder, pagination) }} 
+                </th>
                 <th>{{ 'backend.global.options'|trans }}</th>
             </tr>
 
@@ -87,9 +97,13 @@
                     <td>{{ item.creationDate|date(dateFormat) }}</td>
                     <td>{{ item.priority|default(0) }}</td>
                     <td>
-                        <a class="btn btn-default btn-sm" title="{{ 'backend.project.details'|trans }}" href="#">
-                            <i class="fa fa-eye"></i>
-                        </a>
+                        {% if project.effortEstimationMethod == constant('BackendBundle\\Entity\\Project::METHOD_FIBONACCI')%}
+                            {{item.effortFibonacci}}
+                        {% else %}
+                            {{item.effortTShirt}}
+                        {% endif  %}
+                    </td>
+                    <td>
                         <a class="btn btn-default btn-sm" title="{{ 'backend.project.edit'|trans }}" href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id}) }}">
                             <i class="fa fa-pencil"></i>
                         </a>

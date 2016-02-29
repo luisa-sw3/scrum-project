@@ -43,6 +43,11 @@
                     {{ form_errors(form.estimatedDate) }}
                 </div>
                 <div class="form-group">
+                    {{ form_label(form.effortEstimationMethod)}}
+                    {{ form_widget(form.effortEstimationMethod, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(form.effortEstimationMethod) }}
+                </div>
+                <div class="form-group">
                     {{ form_label(settings_form.dateFormat)}}
                     {{ form_widget(settings_form.dateFormat, {'attr':{'class':'form-control'}}) }}
                     {{ form_errors(settings_form.dateFormat) }}

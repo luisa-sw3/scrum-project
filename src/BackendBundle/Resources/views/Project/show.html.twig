@@ -46,6 +46,10 @@
                     <td>{% if project.estimatedDate %}{{ project.estimatedDate|date(dateFormat) }}{% endif %}</td>
                 </tr>
                 <tr>
+                    <th>{{ 'backend.project.effort_method'|trans }}</th>
+                    <td>{% if project.effortEstimationMethod %}{{ project.getTextEffortMethod()|trans }}{% endif %}</td>
+                </tr>
+                <tr>
                     <th>{{ 'backend.global.consecutive'|trans }}</th>
                     <td>{{ project.consecutive }}</td>
                 </tr>

@@ -31,6 +31,8 @@ class ItemType extends AbstractType {
         
         $typeOptions = $this->container->get('form_helper')->getItemTypeOptions();
         $statusOptions = $this->container->get('form_helper')->getItemStatusOptions();
+        $fibonacciOptions = $this->container->get('form_helper')->getItemFibonacciOptions();
+        $tShirtOptions = $this->container->get('form_helper')->getItemTShirtOptions();
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $data = $event->getData();
@@ -96,6 +98,18 @@ class ItemType extends AbstractType {
                         'min' => 0,
                         'max' => 100,
                     )
+                ))
+                ->add('effortFibonacci', Type\ChoiceType::class, array(
+                    'required' => false,
+                    'placeholder' => $this->translator->trans('backend.global.select'),
+                    'label' => $this->translator->trans('backend.item.effort_estimation'),
+                    'choices' => $fibonacciOptions,
+                ))
+                ->add('effortTShirt', Type\ChoiceType::class, array(
+                    'required' => false,
+                    'placeholder' => $this->translator->trans('backend.global.select'),
+                    'label' => $this->translator->trans('backend.item.effort_estimation'),
+                    'choices' => $tShirtOptions,
                 ))
                 ->add('estimatedHours', Type\NumberType::class, array(
                     'required' => false,

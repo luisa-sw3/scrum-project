@@ -148,6 +148,20 @@ class Item {
      * @ORM\OneToMany(targetEntity="Item", mappedBy="parent")
      */
     protected $children;
+    
+    /**
+     * Valor correspondiente al esfuerzo o complejidad
+     * del item, representado en la serie fibonacci (1,2,3,5,8,13....)
+     * @ORM\Column(name="item_effort_fibonacci", type="integer", nullable=true)
+     */
+    protected $effortFibonacci;
+    
+    /**
+     * Valor correspondiente al esfuerzo o complejidad
+     * del item, representado en tallas de camisetas (XS, S, M, L, XL, XXL)
+     * @ORM\Column(name="item_effort_tshirt", type="string", nullable=true)
+     */
+    protected $effortTShirt;
 
     function getId() {
         return $this->id;
@@ -255,6 +269,22 @@ class Item {
 
     function setParent(Item $parent = null) {
         $this->parent = $parent;
+    }
+    
+    function getEffortFibonacci() {
+        return $this->effortFibonacci;
+    }
+
+    function getEffortTShirt() {
+        return $this->effortTShirt;
+    }
+
+    function setEffortFibonacci($effortFibonacci) {
+        $this->effortFibonacci = $effortFibonacci;
+    }
+
+    function setEffortTShirt($effortTShirt) {
+        $this->effortTShirt = $effortTShirt;
     }
 
     /**

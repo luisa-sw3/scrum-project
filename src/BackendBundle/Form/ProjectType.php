@@ -28,6 +28,8 @@ class ProjectType extends AbstractType {
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
+        $effortOptions = $this->container->get('form_helper')->getProjectEffortMethodOptions();
+        
         $project = null;
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($builder) {
             $form = $event->getForm();
@@ -37,7 +39,6 @@ class ProjectType extends AbstractType {
                 $project = $data;
             }
         });
-
 
         $builder
                 ->add('name', Type\TextType::class, array(
@@ -69,6 +70,11 @@ class ProjectType extends AbstractType {
                     ),
                     'format' => ($project != null ? $project->getSettings()->getPHPDateFormat() : 'y-M-d'),
                     'years' => Util::getYearstoForm(4),
+                ))
+                ->add('effortEstimationMethod', Type\ChoiceType::class, array(
+                    'required' => true,
+                    'label' => $this->translator->trans('backend.project.effort_method'),
+                    'choices' => $effortOptions,
                 ))
         ;
     }
