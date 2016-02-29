@@ -19,17 +19,29 @@
 
     <div class="row">
         {{ form_start(edit_form, {'action': path('backend_project_sprints_edit',{'id':project.id, 'sprintId':sprint.id}), 'method': 'POST'}) }}
+        {% set dateFormat = project.settings.dateFormat %}
+        {% set enableDateEdit = true %}
+        {% if sprint.status == constant('BackendBundle\\Entity\\Sprint::STATUS_FINISHED') %}
+            {% set enableDateEdit = false %}
+        {% endif %}
+        
         <div class="col-lg-12">
                 <div class="form-group">
                     {{ form_label(edit_form.name)}}<em>*</em>
                     {{ form_widget(edit_form.name, {'attr':{'class':'form-control'}}) }}
                     {{ form_errors(edit_form.name) }}
                 </div>
-                <div class="form-group">
+                <div class="form-group" {% if not enableDateEdit %}style="display: none;"{% endif %}>
                     {{ form_label(edit_form.isWorkingWeekends)}}
                     {{ form_widget(edit_form.isWorkingWeekends, {'attr':{'class':''}}) }}
                     {{ form_errors(edit_form.isWorkingWeekends) }}
                 </div>
+                {% if not enableDateEdit %}
+                <div class="form-group">
+                    <label>{{ 'backend.sprint.work_weekends'|trans }}</label>
+                    <p>{{sprint.getTextWorkWeekends()|trans}}</p>
+                </div>
+                {% endif %}
                 <div style="display: none;">
                     {{ form_widget(edit_form.startDate, {'attr':{'class':'date-selector-sm'}}) }}
                     {{ form_errors(edit_form.startDate) }}
@@ -39,11 +51,17 @@
                 </div>
                 <div class="form-group col-lg-3 col-md-4 col-xs-10 no-padding-left">
                     {{ form_label(edit_form.startDate)}}
-                    <div id='startDate'></div>
+                    <div id='startDate' {% if not enableDateEdit %}style="display: none;"{% endif %}></div>
+                    {% if not enableDateEdit %}
+                        <p>{{ sprint.startDate|date(dateFormat)}}</p>
+                    {% endif %}
                 </div>
                 <div class="form-group col-lg-3 col-md-4 col-xs-10 no-padding-right">
                     {{ form_label(edit_form.estimatedDate)}}
-                    <div id='estimatedDate'></div>
+                    <div id='estimatedDate' {% if not enableDateEdit %}style="display: none;"{% endif %}></div>
+                    {% if not enableDateEdit %}
+                        <p>{{ sprint.estimatedDate|date(dateFormat)}}</p>
+                    {% endif %}
                 </div>
                 
                 <div class="form-group col-lg-6 col-md-6 col-xs-12" id="sprint-dates">
@@ -74,138 +92,143 @@
 {% block scripts %}
     singleHtmlEditor('textarea', 200);
     
-    $('#startDate').datetimepicker({
-        inline: true,
-        format: 'DD/MM/YYYY',
-        showTodayButton: true,
-        date: "{{sprint.startDate|date('m/d/Y')}}"
-    });
-
-    $('#estimatedDate').datetimepicker({
-        useCurrent: false,
-        inline: true,
-        format: 'DD/MM/YYYY',
-        showTodayButton: true,
-        date: "{{sprint.estimatedDate|date('m/d/Y')}}"
-    });
-    
-    $("#startDate").on("dp.change", function (e) {
-        $('#estimatedDate').data("DateTimePicker").minDate(e.date);
-        var date1 = $('#startDate').data("DateTimePicker").date();
-        $("#backendbundle_sprint_type_startDate_year").val(date1.format('Y'));
-        $("#backendbundle_sprint_type_startDate_month").val(date1.format('M'));
-        $("#backendbundle_sprint_type_startDate_day").val(date1.format('D'));
-        updateSprintDates();
-    });
-    $("#estimatedDate").on("dp.change", function (e) {
-        $('#startDate').data("DateTimePicker").maxDate(e.date);
-        var date2 = $('#estimatedDate').data("DateTimePicker").date();
-        $("#backendbundle_sprint_type_estimatedDate_year").val(date2.format('Y'));
-        $("#backendbundle_sprint_type_estimatedDate_month").val(date2.format('M'));
-        $("#backendbundle_sprint_type_estimatedDate_day").val(date2.format('D'));
-        updateSprintDates();
-    });
-    
-    
-    
-    $("#backendbundle_sprint_type_isWorkingWeekends").change(function(){
-        var object = $(this);
-        var workWeekends = object.is(":checked");
-        var disabledDays = [];
-        if (workWeekends) {
-            disabledDays = [];
-        } else {
-            disabledDays = [0, 6];
-        }
-        $('#startDate').data("DateTimePicker").daysOfWeekDisabled(disabledDays);
-        $('#estimatedDate').data("DateTimePicker").daysOfWeekDisabled(disabledDays);
-        
-        if (pageLoaded) {
-            updateSprintDates();
-        }
-        
-        pageLoaded = true;
-    });
-    
-    $("#sprint-dates").on( "click", "#all-days", function() {
-        
-        console.log('entra');
-        var object = $(this);
-        var allDays = object.is(":checked");
-        
-        $('.working-check-day').each(function() {
-            
-            var isChecked = $(this).is(":checked");
-            
-            if (allDays) {
-                if (!isChecked) {
-                    $(this).prop('checked', true);
-                }
-            } else {
-                if (isChecked) {
-                    $(this).prop('checked',false)
-                }
-            }
+    {% if sprint.status != constant('BackendBundle\\Entity\\Sprint::STATUS_FINISHED') %}
+        $('#startDate').datetimepicker({
+            inline: true,
+            format: 'DD/MM/YYYY',
+            showTodayButton: true,
+            date: "{{sprint.startDate|date('m/d/Y')}}"
         });
-    });
-    
-    
-    $("#backendbundle_sprint_type_isWorkingWeekends").trigger('change');
+
+        $('#estimatedDate').datetimepicker({
+            useCurrent: false,
+            inline: true,
+            format: 'DD/MM/YYYY',
+            showTodayButton: true,
+            date: "{{sprint.estimatedDate|date('m/d/Y')}}"
+        });
+
+        $("#startDate").on("dp.change", function (e) {
+            $('#estimatedDate').data("DateTimePicker").minDate(e.date);
+            var date1 = $('#startDate').data("DateTimePicker").date();
+            $("#backendbundle_sprint_type_startDate_year").val(date1.format('Y'));
+            $("#backendbundle_sprint_type_startDate_month").val(date1.format('M'));
+            $("#backendbundle_sprint_type_startDate_day").val(date1.format('D'));
+            updateSprintDates();
+        });
+        $("#estimatedDate").on("dp.change", function (e) {
+            $('#startDate').data("DateTimePicker").maxDate(e.date);
+            var date2 = $('#estimatedDate').data("DateTimePicker").date();
+            $("#backendbundle_sprint_type_estimatedDate_year").val(date2.format('Y'));
+            $("#backendbundle_sprint_type_estimatedDate_month").val(date2.format('M'));
+            $("#backendbundle_sprint_type_estimatedDate_day").val(date2.format('D'));
+            updateSprintDates();
+        });
+
+
+
+        $("#backendbundle_sprint_type_isWorkingWeekends").change(function(){
+            var object = $(this);
+            var workWeekends = object.is(":checked");
+            var disabledDays = [];
+            if (workWeekends) {
+                disabledDays = [];
+            } else {
+                disabledDays = [0, 6];
+            }
+            $('#startDate').data("DateTimePicker").daysOfWeekDisabled(disabledDays);
+            $('#estimatedDate').data("DateTimePicker").daysOfWeekDisabled(disabledDays);
+
+            if (pageLoaded) {
+                updateSprintDates();
+            }
+
+            pageLoaded = true;
+        });
+
+        $("#sprint-dates").on( "click", "#all-days", function() {
+
+            console.log('entra');
+            var object = $(this);
+            var allDays = object.is(":checked");
+
+            $('.working-check-day').each(function() {
+
+                var isChecked = $(this).is(":checked");
+
+                if (allDays) {
+                    if (!isChecked) {
+                        $(this).prop('checked', true);
+                    }
+                } else {
+                    if (isChecked) {
+                        $(this).prop('checked',false)
+                    }
+                }
+            });
+        });
+
+
+        $("#backendbundle_sprint_type_isWorkingWeekends").trigger('change');
+    {% endif %}
 {% endblock %}
 
 
 {% block functions_javascript %}
     
-    var pageLoaded = false;
-    
-    function updateSprintDates() {
-        
-        var startDate = getStartDateValue();
-        var estimatedDate = getEstimatedDateValue();
-        var workingWeekends = $("#backendbundle_sprint_type_isWorkingWeekends").is(":checked");
-        
-        if (startDate != '' && estimatedDate != '') {
-            $("#loading, #sprint-dates").toggle();
-            $.ajax({
-                type: 'POST',
-                url: "{{path('backend_project_sprints_html_sprint_days',{'id':project.id, 'sprintId':sprint.id})}}",
-                dataType: 'json',
-                data: {startDate: startDate, estimatedDate: estimatedDate, workingWeekends:workingWeekends},
-                success: function (resp)
-                {
-                    $("#loading, #sprint-dates").toggle();
-                    if (resp.result == '__OK__') {
-                        $("#sprint-dates").html(resp.html);
-                    } else {
-                        bootbox.alert(resp.msg);
+    {% if sprint.status != constant('BackendBundle\\Entity\\Sprint::STATUS_FINISHED') %}
+
+        var pageLoaded = false;
+
+        function updateSprintDates() {
+
+            var startDate = getStartDateValue();
+            var estimatedDate = getEstimatedDateValue();
+            var workingWeekends = $("#backendbundle_sprint_type_isWorkingWeekends").is(":checked");
+
+            if (startDate != '' && estimatedDate != '') {
+                $("#loading, #sprint-dates").toggle();
+                $.ajax({
+                    type: 'POST',
+                    url: "{{path('backend_project_sprints_html_sprint_days',{'id':project.id, 'sprintId':sprint.id})}}",
+                    dataType: 'json',
+                    data: {startDate: startDate, estimatedDate: estimatedDate, workingWeekends:workingWeekends},
+                    success: function (resp)
+                    {
+                        $("#loading, #sprint-dates").toggle();
+                        if (resp.result == '__OK__') {
+                            $("#sprint-dates").html(resp.html);
+                        } else {
+                            bootbox.alert(resp.msg);
+                        }
+                    },
+                    error: function (resp)
+                    {
+                        $("#loading, #sprint-dates").toggle();
+                        bootbox.alert("{{'backend.global.unknown_error'|trans}}")
                     }
-                },
-                error: function (resp)
-                {
-                    $("#loading, #sprint-dates").toggle();
-                    bootbox.alert("{{'backend.global.unknown_error'|trans}}")
-                }
-            });
+                });
+            }
         }
-    }
-    
-    function getStartDateValue() {
-        var year = $("#backendbundle_sprint_type_startDate_year").val();
-        var month = $("#backendbundle_sprint_type_startDate_month").val();
-        var day = $("#backendbundle_sprint_type_startDate_day").val();
-        
-        if( year != '' && month !='' && day != '') {
-            return year+'-'+month+'-'+day;
+
+        function getStartDateValue() {
+            var year = $("#backendbundle_sprint_type_startDate_year").val();
+            var month = $("#backendbundle_sprint_type_startDate_month").val();
+            var day = $("#backendbundle_sprint_type_startDate_day").val();
+
+            if( year != '' && month !='' && day != '') {
+                return year+'-'+month+'-'+day;
+            }
+            return '';
         }
-        return '';
-    }
-    function getEstimatedDateValue() {
-        var year = $("#backendbundle_sprint_type_estimatedDate_year").val();
-        var month = $("#backendbundle_sprint_type_estimatedDate_month").val();
-        var day = $("#backendbundle_sprint_type_estimatedDate_day").val();
-        if (year != '' && month !='' && day != '') {
-            return year+'-'+month+'-'+day;
+        function getEstimatedDateValue() {
+            var year = $("#backendbundle_sprint_type_estimatedDate_year").val();
+            var month = $("#backendbundle_sprint_type_estimatedDate_month").val();
+            var day = $("#backendbundle_sprint_type_estimatedDate_day").val();
+            if (year != '' && month !='' && day != '') {
+                return year+'-'+month+'-'+day;
+            }
+            return '';
         }
-        return '';
-    }
+    {% endif %}
 {% endblock %}

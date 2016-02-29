@@ -1,4 +1,10 @@
 {% spaceless %}
+    
+    {% set enableDateEdit = true %}
+    {% if sprint.status == constant('BackendBundle\\Entity\\Sprint::STATUS_FINISHED') %}
+        {% set enableDateEdit = false %}
+    {% endif %}
+    
     {# Metemos en un arreglo de strings los dias del Sprint #}
     {% set sprintDays = [] %}
     {% for sprintDay in sprint.sprintDays %}
@@ -42,8 +48,9 @@
                             {% endif %}
                         {% endif %}
 
-
-                        <input class="working-check-day" {{checked}} type="checkbox" name="{{ x|date('Y-m-d')}}" value="{{ x|date('Y-m-d') }}">
+                        {% if enableDateEdit %}
+                            <input class="working-check-day" {{checked}} type="checkbox" name="{{ x|date('Y-m-d')}}" value="{{ x|date('Y-m-d') }}">
+                        {% endif %}
                         <strong>{{loop.index}} </strong>. {{ x|date('D')}} {{ x|date(project.settings.dateFormat)}}
                     </label>
                 </div>

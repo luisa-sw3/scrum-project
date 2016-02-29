@@ -74,7 +74,11 @@
                 <strong>{{ item.getTextType()|trans }} # {{item.consecutive}}</strong>
             </div>
             <div class="col-lg-12 col-md-12 col-xs-12 no-padding-sides">
-                <a href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id}) }}" class="popover-menu" title="{{ item.title }}" content="{{item.description|raw}}">{{ item.title }}</a>
+                {% set edithPath = path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id}) %}
+                {% if sprint is not empty %}
+                    {% set edithPath = path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id, 'sprintId':sprint.id}) %}
+                {% endif %}
+                <a href="{{ edithPath }}" class="popover-menu" title="{{ item.title }}" content="{{item.description|raw}}">{{ item.title }}</a>
             </div>
             <hr class='hr'>
             <div class="col-lg-3 col-md-3 col-xs-6 no-padding-sides">
