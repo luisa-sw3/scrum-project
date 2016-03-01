@@ -49,6 +49,7 @@ backend:
         example: "Example"
         hours: Hours
         all: "All"
+        user: "User"
         
     user:
         edit_profile: "Edit Profile"
@@ -311,6 +312,10 @@ backend:
         binnacle: "Binnacle"
         
     item_history:
+        history: "History"
+        event: "Event"
+        before: "Before"
+        after: "After"
         item_created: "The item has been created"
         item_type_modified: "The item type has been modified"
         item_title_modified: "The item title has been modified"

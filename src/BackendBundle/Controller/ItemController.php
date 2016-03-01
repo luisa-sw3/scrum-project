@@ -146,10 +146,10 @@ class ItemController extends Controller {
 
             $em->persist($item);
             $em->flush();
-            
+
             //solicitamos al historial verificar los cambios realizados sobre el item
             $this->container->get('app_history')->findItemChanges($previousItem, $item);
-            
+
             $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.item.update_success_message'));
 
             if (!empty($request->get('sprintId'))) {
@@ -162,13 +162,15 @@ class ItemController extends Controller {
         $search = array('item' => $itemId);
         $order = array('uploadDate' => 'DESC');
         $attachments = $em->getRepository('BackendBundle:ItemAttachment')->findBy($search, $order);
+        $itemHistory = $em->getRepository('BackendBundle:ItemHistory')->findBy($search, array('date' => 'DESC'));
 
         return $this->render('BackendBundle:Project/ProductBacklog:edit.html.twig', array(
                     'item' => $item,
                     'attachments' => $attachments,
+                    'itemHistory' => $itemHistory,
                     'project' => $item->getProject(),
                     'edit_form' => $editForm->createView(),
-                    'menu' => self::MENU
+                    'menu' => self::MENU,
         ));
     }
 

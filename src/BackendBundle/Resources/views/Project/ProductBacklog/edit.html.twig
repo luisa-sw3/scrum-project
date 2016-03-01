@@ -22,143 +22,190 @@
         {% if app.request.get('sprintId') is not empty %}
             {% set  form_params = form_params|merge({'sprintId':app.request.get('sprintId')}) %}
         {% endif %}
-        
+
         {{ form_start(edit_form, {'action': path('backend_project_product_backlog_edit',form_params), 'method': 'POST'}) }}
-        <div class="col-lg-6">
-            <div class="form-group">
-                {{ form_label(edit_form.type)}}<em>*</em>
-                {{ form_widget(edit_form.type, {'attr':{'class':'form-control'}}) }}
-                {{ form_errors(edit_form.type) }}
-            </div>
-            <div class="form-group">
-                {{ form_label(edit_form.title)}}<em>*</em>
-                {{ form_widget(edit_form.title, {'attr':{'class':'form-control'}}) }}
-                {{ form_errors(edit_form.title) }}
-            </div>
-            <div class="form-group">
-                <div class="col-xs-11" style="padding-left: 0px;">
-                    {{ form_label(edit_form.priority)}}
-                    {{ form_widget(edit_form.priority, {'attr':{'style':'cursor:pointer;','onchange':'rangevalue.value=value'},}) }}
+        <div class="col-lg-12 no-padding-sides">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    {{ form_label(edit_form.type)}}<em>*</em>
+                    {{ form_widget(edit_form.type, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(edit_form.type) }}
                 </div>
-                <output class="alert alert-box col-xs-1 text-center pull-right no-margin-bottom" id="rangevalue">{{item.priority|default(0)}}</output>
-            </div>
-            <div class="form-group col-xs-6 no-padding-left">
-                {{ form_label(edit_form.designedUser)}}
-                {{ form_widget(edit_form.designedUser, {'attr':{'class':'form-control'}}) }}
-                {{ form_errors(edit_form.designedUser) }}
-            </div>
-            <div class="form-group col-xs-6 no-padding-right">
-                {{ form_label(edit_form.status)}}
-                {{ form_widget(edit_form.status, {'attr':{'class':'form-control'}}) }}
-                {{ form_errors(edit_form.status) }}
-            </div>
-            {% set displayFibonacci = true %}
-            {% if project.effortEstimationMethod != constant('BackendBundle\\Entity\\Project::METHOD_FIBONACCI')%}
-                {% set displayFibonacci = false %}
-            {% endif  %}
-            <div class="form-group col-xs-6 no-padding-left" {% if not displayFibonacci %}style="display: none;"{% endif %}>
-                {{ form_label(edit_form.effortFibonacci)}}
-                {{ form_widget(edit_form.effortFibonacci, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
-                {{ form_errors(edit_form.effortFibonacci) }}
-            </div>
-            {% set displayTShirt = true %}
-            {% if project.effortEstimationMethod != constant('BackendBundle\\Entity\\Project::METHOD_TSHIRT_SIZE')%}
-                {% set displayTShirt = false %}
-            {% endif %}
-            <div class="form-group col-xs-6 no-padding-left" {% if not displayTShirt %}style="display: none;"{% endif %}>
-                {{ form_label(edit_form.effortTShirt)}}
-                {{ form_widget(edit_form.effortTShirt, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
-                {{ form_errors(edit_form.effortTShirt) }}
-            </div>
-            <div class="form-group col-xs-6 no-padding-right">
-                {{ form_label(edit_form.estimatedHours)}}
-                {{ form_widget(edit_form.estimatedHours, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
-                {{ form_errors(edit_form.estimatedHours) }}
-            </div>
-            <div class="form-group col-xs-6 no-padding-left">
-                {{ form_label(edit_form.workedHours)}}
-                {{ form_widget(edit_form.workedHours, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
-                {{ form_errors(edit_form.workedHours) }}
-            </div>
-            <div class="form-group col-xs-6 no-padding-right">
-                {{ form_label(edit_form.sprint)}}
-                {{ form_widget(edit_form.sprint, {'attr':{'class':'form-control'}}) }}
-                {{ form_errors(edit_form.sprint) }}
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="form-group">
-                {{ form_label(edit_form.description)}}
-                {{ form_widget(edit_form.description, {'attr':{'class':'form-control'}}) }}
-                {{ form_errors(edit_form.description) }}
-            </div>
-        </div>
-
-        <div class="col-lg-6">
-            <legend>{{'backend.attachment.attachments'|trans}}</legend>
-            <div class="form-group alert alert-info">
-                <label>{{'backend.attachment.upload_files'|trans}}</label>
-                <input type="file" id="uploadfiles" multiple="multiple"/><br>
-                <div class="progress" id="progress-bar" style="display: none;">
-                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                <div class="form-group">
+                    {{ form_label(edit_form.title)}}<em>*</em>
+                    {{ form_widget(edit_form.title, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(edit_form.title) }}
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-11" style="padding-left: 0px;">
+                        {{ form_label(edit_form.priority)}}
+                        {{ form_widget(edit_form.priority, {'attr':{'style':'cursor:pointer;','onchange':'rangevalue.value=value'},}) }}
                     </div>
+                    <output class="alert alert-box col-xs-1 text-center pull-right no-margin-bottom" id="rangevalue">{{item.priority|default(0)}}</output>
                 </div>
-                <p id="upload-message"></p>
+                <div class="form-group col-xs-6 no-padding-left">
+                    {{ form_label(edit_form.designedUser)}}
+                    {{ form_widget(edit_form.designedUser, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(edit_form.designedUser) }}
+                </div>
+                <div class="form-group col-xs-6 no-padding-right">
+                    {{ form_label(edit_form.status)}}
+                    {{ form_widget(edit_form.status, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(edit_form.status) }}
+                </div>
+                {% set displayFibonacci = true %}
+                {% if project.effortEstimationMethod != constant('BackendBundle\\Entity\\Project::METHOD_FIBONACCI')%}
+                    {% set displayFibonacci = false %}
+                {% endif  %}
+                <div class="form-group col-xs-6 no-padding-left" {% if not displayFibonacci %}style="display: none;"{% endif %}>
+                    {{ form_label(edit_form.effortFibonacci)}}
+                    {{ form_widget(edit_form.effortFibonacci, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
+                    {{ form_errors(edit_form.effortFibonacci) }}
+                </div>
+                {% set displayTShirt = true %}
+                {% if project.effortEstimationMethod != constant('BackendBundle\\Entity\\Project::METHOD_TSHIRT_SIZE')%}
+                    {% set displayTShirt = false %}
+                {% endif %}
+                <div class="form-group col-xs-6 no-padding-left" {% if not displayTShirt %}style="display: none;"{% endif %}>
+                    {{ form_label(edit_form.effortTShirt)}}
+                    {{ form_widget(edit_form.effortTShirt, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
+                    {{ form_errors(edit_form.effortTShirt) }}
+                </div>
+                <div class="form-group col-xs-6 no-padding-right">
+                    {{ form_label(edit_form.estimatedHours)}}
+                    {{ form_widget(edit_form.estimatedHours, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
+                    {{ form_errors(edit_form.estimatedHours) }}
+                </div>
+                <div class="form-group col-xs-6 no-padding-left">
+                    {{ form_label(edit_form.workedHours)}}
+                    {{ form_widget(edit_form.workedHours, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
+                    {{ form_errors(edit_form.workedHours) }}
+                </div>
+                <div class="form-group col-xs-6 no-padding-right">
+                    {{ form_label(edit_form.sprint)}}
+                    {{ form_widget(edit_form.sprint, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(edit_form.sprint) }}
+                </div>
             </div>
-            <div class="form-group">
-                <table class="table table-bordered table-attachments">
-                    <tr id="table-header">
-                        <th>{{'backend.attachment.file_name'|trans}}</th>
-                        <th>{{'backend.attachment.file_information'|trans}}</th>
-                        <th width="86px">{{'backend.global.options'|trans}}</th>
-                    </tr>
-                    {% for attach in attachments %}
-                        <tr>
-                            <td>
-                                {% if attach.isAudioFile %}
-                                    <audio controls>
-                                        <source src="{{ asset('uploads/items/'~attach.filePath)}}" type="audio/{{attach.fileExtension}}">
-                                        {{'backend.attachment.no_support_audio'|trans}}
-                                    </audio>
-                                {% elseif attach.isVideoFile %}
-                                    <video controls>
-                                        <source src="{{ asset('uploads/items/'~attach.filePath)}}" type="video/{{attach.fileExtension}}">
-                                        {{'backend.attachment.no_support_video'|trans}}
-                                        <!-- You can embed a Flash player here, to play your mp4 video in older browsers -->
-                                    </video>
-                                {% elseif attach.isImageFile %}
-                                    <a class="fancybox" href="{{asset('uploads/items/'~attach.filePath)}}">
-                                        <img class="thumbnail" src="{{ asset('uploads/items/'~attach.filePath) | imagine_filter('thumbnail_120_90')}}"/>
-                                    </a>
-                                {% else %}
-                                    <i class="fa fa-file fa-5x" title="{{'backend.attachment.preview_no_available'|trans}}"></i>
-                                {% endif %}
-                                <p>{{ attach }}</p>
-                            </td>
-                            <td>
-                                <p title="{{'backend.attachment.file_extension'|trans}}"><i class="fa fa-file-o"></i> {{ attach.fileExtension }}</p>
-                                <p title="{{'backend.attachment.uploader'|trans}}"><i class="fa fa-user"></i> {{ attach.userOwner }}</p>
-                                <p title="{{'backend.attachment.upload_date'|trans}}"><i class="fa fa-calendar"></i> {{ attach.uploadDate|date(project.settings.fullDateFormat) }}</p>
-                            </td>
-                            <td>
-                                <a href="{{ asset('uploads/items/'~attach.filePath)}}" download class="btn btn-success btn-sm"><i class="fa fa-download"></i></a>
-                                <a href="javascript:void(0);" class="btn btn-danger btn-sm pull-right delete-attach" attach-id="{{attach.id}}"><i class="fa fa-times"></i></a>
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="3">
-                                {{'backend.attachment.empty_list'|trans}}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    {{ form_label(edit_form.description)}}
+                    {{ form_widget(edit_form.description, {'attr':{'class':'form-control'}}) }}
+                    {{ form_errors(edit_form.description) }}
+                </div>
             </div>
         </div>
+        <div class="col-lg-12 no-padding-sides">
+            <div class="col-lg-6">
+                <legend>{{'backend.item_history.history'|trans}}</legend>
+                <div class="form-group no-margin-bottom">
+                    <table class="table table-bordered no-margin-bottom">
+                        <tr id="table-header">
+                            <th width="100px;">{{'backend.global.date'|trans}}</th>
+                            <th>{{'backend.item_history.event'|trans}}</th>
+                            <th width="100px;">{{'backend.global.user'|trans}}</th>
+                        </tr>
+                    </table>
+                </div>
+                <div class="form-group" style="max-height: 250px; height: 250px; overflow-y: auto;">
+                    <table class="table table-bordered table-hover">
+                        {% for event in itemHistory %}
+                            <tr>
+                                <td width="100px;">
+                                    {{event.date|date(project.settings.dateFormat)}}<br>
+                                    {{event.date|date(project.settings.hourFormat)}}
+                                </td>
+                                <td>
+                                    {{ event.getTextAction|trans ~event.actionSufix }}
+                                    {% if event.additionalData is not empty %}
+                                        {% set data = event.additionalData|json_decode %}
+                                        <table class="table table-striped">
+                                            <tr>
+                                                <th width="50%">{{'backend.item_history.before'|trans}}</th>
+                                                <th width="50%">{{'backend.item_history.after'|trans}}</th>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    {{ data.before|raw }}
+                                                </td>
+                                                <td>
+                                                    {{ data.after|raw }}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    {% endif %}
+                                </td>
+                                <td width="100px;">
+                                    {{event.userOwner}}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
 
-
-
-
+            <div class="col-lg-6">
+                <legend>{{'backend.attachment.attachments'|trans}}</legend>
+                <div class="form-group alert alert-info">
+                    <label>{{'backend.attachment.upload_files'|trans}}</label>
+                    <input type="file" id="uploadfiles" multiple="multiple"/><br>
+                    <div class="progress" id="progress-bar" style="display: none;">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                        </div>
+                    </div>
+                    <p id="upload-message"></p>
+                </div>
+                <div class="form-group">
+                    <table class="table table-bordered table-attachments">
+                        <tr id="table-header">
+                            <th>{{'backend.attachment.file_name'|trans}}</th>
+                            <th>{{'backend.attachment.file_information'|trans}}</th>
+                            <th width="86px">{{'backend.global.options'|trans}}</th>
+                        </tr>
+                        {% for attach in attachments %}
+                            <tr>
+                                <td>
+                                    {% if attach.isAudioFile %}
+                                        <audio controls>
+                                            <source src="{{ asset('uploads/items/'~attach.filePath)}}" type="audio/{{attach.fileExtension}}">
+                                            {{'backend.attachment.no_support_audio'|trans}}
+                                        </audio>
+                                    {% elseif attach.isVideoFile %}
+                                        <video controls>
+                                            <source src="{{ asset('uploads/items/'~attach.filePath)}}" type="video/{{attach.fileExtension}}">
+                                            {{'backend.attachment.no_support_video'|trans}}
+                                            <!-- You can embed a Flash player here, to play your mp4 video in older browsers -->
+                                        </video>
+                                    {% elseif attach.isImageFile %}
+                                        <a class="fancybox" href="{{asset('uploads/items/'~attach.filePath)}}">
+                                            <img class="thumbnail" src="{{ asset('uploads/items/'~attach.filePath) | imagine_filter('thumbnail_120_90')}}"/>
+                                        </a>
+                                    {% else %}
+                                        <i class="fa fa-file fa-5x" title="{{'backend.attachment.preview_no_available'|trans}}"></i>
+                                    {% endif %}
+                                    <p>{{ attach }}</p>
+                                </td>
+                                <td>
+                                    <p title="{{'backend.attachment.file_extension'|trans}}"><i class="fa fa-file-o"></i> {{ attach.fileExtension }}</p>
+                                    <p title="{{'backend.attachment.uploader'|trans}}"><i class="fa fa-user"></i> {{ attach.userOwner }}</p>
+                                    <p title="{{'backend.attachment.upload_date'|trans}}"><i class="fa fa-calendar"></i> {{ attach.uploadDate|date(project.settings.fullDateFormat) }}</p>
+                                </td>
+                                <td>
+                                    <a href="{{ asset('uploads/items/'~attach.filePath)}}" download class="btn btn-success btn-sm"><i class="fa fa-download"></i></a>
+                                    <a href="javascript:void(0);" class="btn btn-danger btn-sm pull-right delete-attach" attach-id="{{attach.id}}"><i class="fa fa-times"></i></a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="3">
+                                    {{'backend.attachment.empty_list'|trans}}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
         <div class="col-lg-12">
             {{ form_widget(edit_form._token) }} 
             <button type="submit"class="btn btn-primary pull-right">{{ 'backend.global.save_changes'|trans }}</button>
@@ -177,8 +224,8 @@
                 uploadFile(this.files[i]);
             }
         });
-        
-        $(".table-attachments").on( "click", ".delete-attach", function() {
+
+        $(".table-attachments").on("click", ".delete-attach", function () {
             var object = $(this);
             var attachId = object.attr('attach-id');
             bootbox.confirm({
@@ -240,11 +287,11 @@
                     $("#upload-message").html(response.msg);
                     $("#progress-bar").toggle();
                     if (response.result == "__OK__") {
-                        $("#upload-message").attr('class','success');
+                        $("#upload-message").attr('class', 'success');
                         $("#table-header").after(response.html);
                         $("#uploadfiles").val('');
                     } else {
-                        $("#upload-message").attr('class','danger');
+                        $("#upload-message").attr('class', 'danger');
                     }
                 }
             };

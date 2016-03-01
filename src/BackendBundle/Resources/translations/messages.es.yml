@@ -49,6 +49,7 @@ backend:
         example: "Ejemplo"
         hours: Horas
         all: "Todos"
+        user: "Usuario"
         
     user:
         edit_profile: "Editar Perfil"
@@ -310,6 +311,10 @@ backend:
         binnacle: "Bitácora"
         
     item_history:
+        history: "Historial"
+        event: "Evento"
+        before: "Antes"
+        after: "Despues"
         item_created: "El elemento ha sido creado"
         item_type_modified: "El tipo del elemento ha sido modificado"
         item_title_modified: "El título del elemento ha sido modificado"
