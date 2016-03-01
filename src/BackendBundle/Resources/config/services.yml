@@ -40,6 +40,7 @@ services:
         arguments:
             entityManager:  "@doctrine.orm.entity_manager"
             tokenStorage:   "@security.token_storage"
+            container:      "@service_container"
     
     #servicio para pasarle el container a los formualrios (traduccion)
     backend.form.type.user.profile:

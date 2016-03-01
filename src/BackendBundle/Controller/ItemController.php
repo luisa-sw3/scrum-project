@@ -128,7 +128,7 @@ class ItemController extends Controller {
     public function editAction(Request $request, $id, $itemId) {
         $em = $this->getDoctrine()->getManager();
         $item = $em->getRepository('BackendBundle:Item')->find($itemId);
-
+        $previousItem = clone $item;
         if (!$this->container->get('access_control')->isAllowedProject($id)) {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
             return $this->redirectToRoute('backend_projects');
@@ -146,7 +146,10 @@ class ItemController extends Controller {
 
             $em->persist($item);
             $em->flush();
-
+            
+            //solicitamos al historial verificar los cambios realizados sobre el item
+            $this->container->get('app_history')->findItemChanges($previousItem, $item);
+            
             $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.item.update_success_message'));
 
             if (!empty($request->get('sprintId'))) {

@@ -9,10 +9,14 @@ class AppHistory {
 
     private $em;
     private $tokenStorage;
+    private $container;
+    private $translator;
 
-    public function __construct(EntityManager $em, $tokenStorage) {
+    public function __construct(EntityManager $em, $tokenStorage, $container) {
         $this->em = $em;
         $this->tokenStorage = $tokenStorage;
+        $this->container = $container;
+        $this->translator = $this->container->get('translator');
     }
 
     /**
@@ -36,6 +40,14 @@ class AppHistory {
 
         $this->em->persist($history);
         $this->em->flush();
+    }
+
+    public function findItemChanges(Entity\Item $previousItem, Entity\Item $newItem) {
+
+        if ($previousItem->getType() != $newItem->getType()) {
+            $changes = array('before' => $this->translator->trans($previousItem->getTextType()), 'after' => $this->translator->trans($newItem->getTextType()));
+            $this->saveItemHistory($newItem, Entity\ItemHistory::ITEM_TYPE_MODIFIED, $changes);
+        }
     }
 
 }
