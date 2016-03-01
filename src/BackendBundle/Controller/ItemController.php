@@ -84,7 +84,7 @@ class ItemController extends Controller {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
             return $this->redirectToRoute('backend_projects');
         }
-        
+
         $item = new Entity\Item();
         $item->setProject($project);
 
@@ -101,10 +101,12 @@ class ItemController extends Controller {
 
             $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.item.creation_success_message'));
 
+            //guardamos el registro en el historial
+            $this->container->get('app_history')->saveItemHistory($item, Entity\ItemHistory::ITEM_CREATED);
+
             if (!empty($request->get('sprintId'))) {
                 return $this->redirectToRoute('backend_project_sprints_backlog', array('id' => $project->getId(), 'sprintId' => $request->get('sprintId')));
             }
-
             return $this->redirectToRoute('backend_project_product_backlog', array('id' => $project->getId()));
         }
 
@@ -131,12 +133,12 @@ class ItemController extends Controller {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
             return $this->redirectToRoute('backend_projects');
         }
-        
+
         if (!$item || ($item && $item->getProject()->getId() != $id)) {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.item.not_found_message'));
             return $this->redirectToRoute('backend_project_product_backlog', array('id' => $id));
         }
-        
+
         $editForm = $this->createForm(ItemType::class, $item);
         $editForm->handleRequest($request);
 
@@ -186,13 +188,13 @@ class ItemController extends Controller {
             $response['msg'] = $this->get('translator')->trans('backend.item.not_found_message');
             return new JsonResponse($response);
         }
-        
+
         if (!$this->container->get('access_control')->isAllowedProject($id)) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
             return new JsonResponse($response);
         }
-        
+
 
         $attachment = new Entity\ItemAttachment();
 
@@ -222,6 +224,9 @@ class ItemController extends Controller {
                         if (move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $directory . $fileName)) {
                             $em->persist($attachment);
                             $em->flush();
+
+                            //guardamos el registro en el historial
+                            $this->container->get('app_history')->saveItemHistory($item, Entity\ItemHistory::ITEM_ATTACHMENT_ADDED, null, $attachment->getName());
 
                             $html = $this->renderView('BackendBundle:Project/ProductBacklog:attachmentDetails.html.twig', array(
                                 'attach' => $attachment,
@@ -270,7 +275,7 @@ class ItemController extends Controller {
             $response['msg'] = $this->get('translator')->trans('backend.attachment.not_found');
             return new JsonResponse($response);
         }
-        
+
         if (!$this->container->get('access_control')->isAllowedProject($id)) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
@@ -283,6 +288,9 @@ class ItemController extends Controller {
 
             $em->remove($attachment);
             $em->flush();
+
+            //guardamos el registro en el historial
+            $this->container->get('app_history')->saveItemHistory($attachment->getItem(), Entity\ItemHistory::ITEM_ATTACHMENT_DELETED, null, $attachment->getName());
         } catch (\Exception $ex) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.global.unknown_error');
@@ -332,6 +340,9 @@ class ItemController extends Controller {
             $em->persist($relatedItem);
             $em->flush();
 
+            //guardamos el registro en el historial
+            $this->container->get('app_history')->saveItemHistory($relatedItem, Entity\ItemHistory::ITEM_CREATED);
+
             $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.item.creation_success_message'));
             $closeFancy = true;
         }
@@ -372,7 +383,7 @@ class ItemController extends Controller {
             $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
             return new JsonResponse($response);
         }
-        
+
         $directory = $this->container->getParameter('item_attachments_folder');
 
         try {
@@ -434,15 +445,16 @@ class ItemController extends Controller {
         $response = array('result' => '__OK__', 'msg' => $this->get('translator')->trans('backend.item.update_success_message'));
         $em = $this->getDoctrine()->getManager();
         $itemId = $request->request->get('itemId');
-        $priority = (int)$request->request->get('priority');
+        $priority = (int) $request->request->get('priority');
         $item = $em->getRepository('BackendBundle:Item')->find($itemId);
+        $previousPriority = (int) $item->getPriority();
 
         if (!$item || ($item && $item->getProject()->getId() != $id)) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.item.not_found_message');
             return new JsonResponse($response);
         }
-        
+
         if (!$this->container->get('access_control')->isAllowedProject($id)) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
@@ -453,6 +465,10 @@ class ItemController extends Controller {
             $item->setPriority($priority);
             $em->persist($item);
             $em->flush();
+
+            //guardamos el registro en el historial
+            $changes = array('before' => $previousPriority, 'after' => (int) $item->getPriority());
+            $this->container->get('app_history')->saveItemHistory($item, Entity\ItemHistory::ITEM_PRIORITY_MODIFIED, $changes);
         } catch (\Exception $ex) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.global.unknown_error');
@@ -460,7 +476,7 @@ class ItemController extends Controller {
 
         return new JsonResponse($response);
     }
-    
+
     /**
      * Permite obtener el html necesario para editar la estimacion de un item
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 02/15/2016
@@ -470,7 +486,7 @@ class ItemController extends Controller {
      */
     public function getHtmlEditEstimationAction(Request $request, $id) {
         $response = array('result' => '__OK__', 'html' => '');
-        
+
         $itemId = $request->request->get('itemId');
         $estimation = $request->request->get('estimation');
 
@@ -478,11 +494,11 @@ class ItemController extends Controller {
             'itemId' => $itemId,
             'estimation' => $estimation,
         ));
-        $response['html'] = $html;  
+        $response['html'] = $html;
 
         return new JsonResponse($response);
     }
-    
+
     /**
      * Permite editar la estimacion de un item
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 02/15/2016
@@ -496,13 +512,14 @@ class ItemController extends Controller {
         $itemId = $request->request->get('itemId');
         $estimation = $request->request->get('estimation');
         $item = $em->getRepository('BackendBundle:Item')->find($itemId);
+        $previousEstimation = $item->getEstimatedHours();
 
         if (!$item || ($item && $item->getProject()->getId() != $id)) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.item.not_found_message');
             return new JsonResponse($response);
         }
-        
+
         if (!$this->container->get('access_control')->isAllowedProject($id)) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
@@ -513,6 +530,10 @@ class ItemController extends Controller {
             $item->setEstimatedHours($estimation);
             $em->persist($item);
             $em->flush();
+
+            //guardamos el registro en el historial
+            $changes = array('before' => $previousEstimation, 'after' => $item->getEstimatedHours());
+            $this->container->get('app_history')->saveItemHistory($item, Entity\ItemHistory::ITEM_ESTIMATED_HOURS_MODIFIED, $changes);
         } catch (\Exception $ex) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.global.unknown_error');
@@ -520,7 +541,7 @@ class ItemController extends Controller {
 
         return new JsonResponse($response);
     }
-    
+
     /**
      * Permite obtener el html necesario para editar el tiempo invertido en un item
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 02/15/2016
@@ -530,7 +551,7 @@ class ItemController extends Controller {
      */
     public function getHtmlEditWorkedTimeAction(Request $request, $id) {
         $response = array('result' => '__OK__', 'html' => '');
-        
+
         $itemId = $request->request->get('itemId');
         $workedTime = $request->request->get('workedTime');
 
@@ -538,11 +559,11 @@ class ItemController extends Controller {
             'itemId' => $itemId,
             'workedTime' => $workedTime,
         ));
-        $response['html'] = $html;  
+        $response['html'] = $html;
 
         return new JsonResponse($response);
     }
-    
+
     /**
      * Permite editar el tiempo trabajado en un item
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 02/15/2016
@@ -556,13 +577,14 @@ class ItemController extends Controller {
         $itemId = $request->request->get('itemId');
         $workedTime = $request->request->get('workedTime');
         $item = $em->getRepository('BackendBundle:Item')->find($itemId);
+        $previousWorked = $item->getWorkedHours();
 
         if (!$item || ($item && $item->getProject()->getId() != $id)) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.item.not_found_message');
             return new JsonResponse($response);
         }
-        
+
         if (!$this->container->get('access_control')->isAllowedProject($id)) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
@@ -573,6 +595,10 @@ class ItemController extends Controller {
             $item->setWorkedHours($workedTime);
             $em->persist($item);
             $em->flush();
+
+            //guardamos el registro en el historial
+            $changes = array('before' => $previousWorked, 'after' => $item->getWorkedHours());
+            $this->container->get('app_history')->saveItemHistory($item, Entity\ItemHistory::ITEM_WORKED_HOURS_MODIFIED, $changes);
         } catch (\Exception $ex) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.global.unknown_error');
@@ -580,7 +606,7 @@ class ItemController extends Controller {
 
         return new JsonResponse($response);
     }
-    
+
     /**
      * Permite obtener el html necesario para editar el estado de un item
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 02/16/2016
@@ -590,7 +616,7 @@ class ItemController extends Controller {
      */
     public function getHtmlChangeStatusAction(Request $request, $id) {
         $response = array('result' => '__OK__', 'html' => '');
-        
+
         $itemId = $request->request->get('itemId');
         $status = $request->request->get('status');
 
@@ -599,11 +625,11 @@ class ItemController extends Controller {
             'status' => $status,
             'statusList' => $this->get('form_helper')->getItemStatusOptions(),
         ));
-        $response['html'] = $html;  
+        $response['html'] = $html;
 
         return new JsonResponse($response);
     }
-    
+
     /**
      * Permite editar el estado de un item
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 02/16/2016
@@ -617,13 +643,14 @@ class ItemController extends Controller {
         $itemId = $request->request->get('itemId');
         $status = $request->request->get('status');
         $item = $em->getRepository('BackendBundle:Item')->find($itemId);
+        $previousStatus = $this->container->get('translator')->trans($item->getTextStatus());
 
         if (!$item || ($item && $item->getProject()->getId() != $id)) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.item.not_found_message');
             return new JsonResponse($response);
         }
-        
+
         if (!$this->container->get('access_control')->isAllowedProject($id)) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
@@ -634,6 +661,11 @@ class ItemController extends Controller {
             $item->setStatus($status);
             $em->persist($item);
             $em->flush();
+
+            //guardamos el registro en el historial
+            $newStatus = $this->container->get('translator')->trans($item->getTextStatus());
+            $changes = array('before' => $previousStatus, 'after' => $newStatus);
+            $this->container->get('app_history')->saveItemHistory($item, Entity\ItemHistory::ITEM_STATUS_MODIFIED, $changes);
         } catch (\Exception $ex) {
             $response['result'] = '__KO__';
             $response['msg'] = $this->get('translator')->trans('backend.global.unknown_error');

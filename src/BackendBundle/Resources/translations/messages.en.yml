@@ -308,3 +308,22 @@ backend:
         
     binnacle:
         binnacle: "Binnacle"
+        
+    item_history:
+        item_created: "The item has been created"
+        item_type_modified: "The item type has been modified"
+        item_title_modified: "The item title has been modified"
+        item_description_modified: "The item description has been modified"
+        item_priority_modified: "The item priority has been modified"
+        item_user_assigned: "The item has been assigned to"
+        item_user_reassigned: "The item has been reassigned to"
+        item_estimated_hours_modified: "The item estimated hours has been modified"
+        item_estimated_effort_modified: "The item estimated effort has been modified"
+        item_worked_hours_modified: "The item worked hours has been modified"
+        item_sprint_assigned: "The item has been assigned to sprint"
+        item_sprint_moved: "The item has been moved to sprint"
+        item_moved_product_backlog: "The item has been moved to Product Backlog"
+        item_attachment_added: "An attachment has been uploaded"
+        item_attachment_deleted: "An attachment has been deleted"
+        item_status_modified: "The item status has been modified"
+        

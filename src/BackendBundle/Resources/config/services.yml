@@ -34,6 +34,13 @@ services:
             entityManager:  "@doctrine.orm.entity_manager"
             tokenStorage:   "@security.token_storage"
     
+    #servicio para clase que administra los historiales de la aplicación
+    app_history:
+        class: BackendBundle\Services\AppHistory
+        arguments:
+            entityManager:  "@doctrine.orm.entity_manager"
+            tokenStorage:   "@security.token_storage"
+    
     #servicio para pasarle el container a los formualrios (traduccion)
     backend.form.type.user.profile:
         class: BackendBundle\Form\UserProfileType

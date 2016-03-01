@@ -25,7 +25,7 @@ backend:
         cant_delete_message: "Este elemento no puede ser eliminado"
         send: "Enviar"
         cancel: "Cancelar"
-        unknown_error: "Error desconocido, intentelo de nuevo"
+        unknown_error: "Error desconocido, inténtelo de nuevo"
         logout: "Salir"
         save_changes: "Guardar Cambios"
         language: "Lenguaje"
@@ -60,14 +60,14 @@ backend:
         email: "Correo electrónico"
         username: "Nombre de usuario"
         biography: "Biografia / Perfil"
-        profile_image: "Foto de Perfíl"
-        profile_updated: "Perfíl Actualizado"
+        profile_image: "Foto de Perfil"
+        profile_updated: "Perfil Actualizado"
         name: "Nombre"
         lastname: "Apellido"
         cellphone: "Celular"
         message_email_exist: "Ya existe una cuenta registrada con el correo ingresado"
-        message_account_created_1: "Cuenta creada exitosamente. Hemos enviado un correo electronico a "
-        message_account_created_2: ", por favor revice su bandeja de entrada y presione click sobre el enlace para confirmar su cuenta."
+        message_account_created_1: "Cuenta creada exitosamente. Hemos enviado un correo electrónico a "
+        message_account_created_2: ", por favor revice su bandeja de entrada y presione clic sobre el enlace para confirmar su cuenta."
         confirmed_account_message: "Cuenta confirmada exitosamente"
         not_found_message: "Usuario no encontrado"
         view: "Ver Usuario"
@@ -173,7 +173,7 @@ backend:
     project_invitation_email:
         subject: "Nueva invitación a proyecto"
         invitation_description: "Tienes una nueva invitación para participar en un proyecto:"
-        clic_message: "Clic aquí para aceptar o rechazar esta solicitud"
+        clic_message: "Clic aquí para aceptar o rechazar ésta solicitud"
         
     notification:
         notifications: "Notificaciones"
@@ -211,7 +211,7 @@ backend:
         type_task: "Tarea"
         type_bug: "Error"
         type_improvement: "Mejora"
-        type_change_request: "Solicitud de Cambio"
+        type_change_request: "Solicitúd de Cambio"
         type_idea: "Idea"
         type_investigation: "Investigación"
         
@@ -239,7 +239,7 @@ backend:
         
     backlog:
         product_backlog: "Pila del Producto"
-        empty_list: "Ningun elemento en la pila del producto"
+        empty_list: "Ningun elemento en la Pila del Producto"
         
     sprint:
         sprints: "Sprints"
@@ -247,7 +247,7 @@ backend:
         edit: "Editar Sprint"
         details: "Detalles del Sprint"
         backlog: "Pila del Sprint"
-        backlog_empty: "No hay elementos en la pila del sprint"
+        backlog_empty: "No hay elementos en la Pila del Sprint"
         name: "Nombre"
         description: "Descripción"
         start_date: "Fecha de Inicio"
@@ -259,7 +259,7 @@ backend:
         delete_unable_message: "El sprint no puede ser eliminado"
         work_weekends: "Trabajo en fines de semana ?"
         weekends: "Fines de semana"
-        empty_list: "Ningun sprint en el proyecto"
+        empty_list: "Ningún sprint en el proyecto"
         not_found_message: "Sprint no encontrado"
         status: "Estado"
         status_planned: "Planificado"
@@ -268,7 +268,7 @@ backend:
         status_finished: "Finalizado"
         working_days: "Dias Laborales"
         burndown_chart: "Burndown Chart"
-        sprint_progress_summary: "Resumen del Progreso del Sprit"
+        sprint_progress_summary: "Resumen del Progreso del Sprint"
         remaining_work: "Trabajo Restante"
         ideal_burn: "Avance Ideal"
         actual_burn: "Avance Actual"
@@ -287,7 +287,7 @@ backend:
     attachment:
         attachments: "Archivos Adjuntos"
         upload_files: "Subir Archivo(s)"
-        invalid_extension: "Extensión de archivo invalida. "
+        invalid_extension: "Extensión de archivo no válida. "
         not_found: "Archivo no encontrado"
         size_exceeded: "El archivo no puede superar los 10MB"
         error_uploading: "Error cargando el archivo"
@@ -307,7 +307,21 @@ backend:
         
     binnacle:
         binnacle: "Bitácora"
-     
-    
-  
-   
+        
+    item_history:
+        item_created: "El elemento ha sido creado"
+        item_type_modified: "El tipo del elemento ha sido modificado"
+        item_title_modified: "El título del elemento ha sido modificado"
+        item_description_modified: "La descripción del elemento ha sido modificada"
+        item_priority_modified: "La prioridad del elemento ha sido modificada"
+        item_user_assigned: "El elemento ha sido asignado a"
+        item_user_reassigned: "El elemento ha sido reasignado a"
+        item_estimated_hours_modified: "La estimación en horas del elemento ha sido modificada"
+        item_estimated_effort_modified: "La estimación de esfuerzo del elemento ha sido modificada"
+        item_worked_hours_modified: "El tiempo en horas de trabajo sobre el elemento ha sido modificado"
+        item_sprint_assigned: "El elemento ha sido asignado al sprint"
+        item_sprint_moved: "El elemento se ha movido al sprint"
+        item_moved_product_backlog: "El elemento se ha movido a la Pila del Producto"
+        item_attachment_added: "Se ha subido un archivo adjunto"
+        item_attachment_deleted: "Se ha eliminado un archivo adjunto"
+        item_status_modified: "El estado del elemento ha sido modificado"
