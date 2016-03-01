@@ -29,11 +29,12 @@ class ItemHistory {
     const ITEM_ESTIMATED_EFFORT_MODIFIED = 9; //the item estimated effort has been modified
     const ITEM_WORKED_HOURS_MODIFIED = 10; //the item worked hours has been modified
     const ITEM_SPRINT_ASSIGNED = 11; //the item has been assigned to sprint
-    const ITEM_SPRINT_MOVED = 12; //the item has been moved to other sprint
+    const ITEM_SPRINT_MOVED = 12; //the item has been moved to sprint
     const ITEM_MOVED_PRODUCT_BACKLOG = 13; //The item has been moved to Product Backlog
     const ITEM_ATTACHMENT_ADDED = 14; //An attachment has been uploaded
     const ITEM_ATTACHMENT_DELETED = 15; //An attachment has been deleted
-    const ITEM_STATUS_MODIFIED = 16; //the item title has been modified
+    const ITEM_STATUS_MODIFIED = 16; //the item status has been modified
+    const ITEM_USER_ASSIGN_CLEARED = 17; //the item asignation has been cleared
     
     /**
      * @ORM\Id
@@ -209,6 +210,9 @@ class ItemHistory {
                 break;
             case self::ITEM_STATUS_MODIFIED:
                 $langVar = 'backend.item_history.item_status_modified';
+                break;
+            case self::ITEM_USER_ASSIGN_CLEARED:
+                $langVar = 'backend.item_history.item_assign_cleared';
                 break;
             default:
                 break;

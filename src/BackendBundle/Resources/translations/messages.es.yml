@@ -230,6 +230,7 @@ backend:
         
         create_related_item: "Crear item relacionado"
         assign_user: "Asignar Usuario"
+        no_user: "Sin usuario"
         change_priority: "Cambiar Prioridad"
         edit_estimation: "Editar Estimación"
         edit_worked_time: "Editar Tiempo Trabajado"
@@ -325,3 +326,4 @@ backend:
         item_attachment_added: "Se ha subido un archivo adjunto"
         item_attachment_deleted: "Se ha eliminado un archivo adjunto"
         item_status_modified: "El estado del elemento ha sido modificado"
+        item_assign_cleared: "Se ha desasignado el usuario del elemento"
