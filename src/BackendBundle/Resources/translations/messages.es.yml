@@ -315,6 +315,7 @@ backend:
         event: "Evento"
         before: "Antes"
         after: "Despues"
+        empty_list: "Ningún evento en el historial"
         item_created: "El elemento ha sido creado"
         item_type_modified: "El tipo del elemento ha sido modificado"
         item_title_modified: "El título del elemento ha sido modificado"

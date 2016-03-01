@@ -126,10 +126,10 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    {{ data.before|raw }}
+                                                    {{ data.before|default('~')|raw }}
                                                 </td>
                                                 <td>
-                                                    {{ data.after|raw }}
+                                                    {{ data.after|default('~')|raw }}
                                                 </td>
                                             </tr>
                                         </table>
@@ -138,6 +138,10 @@
                                 <td width="100px;">
                                     {{event.userOwner}}
                                 </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="3">{{'backend.item_history.empty_list'|trans}}</td>
                             </tr>
                         {% endfor %}
                     </table>
