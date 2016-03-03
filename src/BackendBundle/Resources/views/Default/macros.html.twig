@@ -87,10 +87,11 @@
             <div class="col-lg-9 col-md-9 col-xs-6 no-padding-sides">
                 <span title="{{ 'backend.global.creation_date'|trans }}"><i class="fa fa-calendar"></i> {{ item.creationDate|date(dateFormat) }}</span>
             </div>
-            <div class="col-lg-3 col-md-3 col-xs-6 no-padding-sides">
+            <div class="col-lg-3 col-md-3 col-xs-6 no-padding-sides small-margin-top">
                 <span title="{{ 'backend.item.priority'|trans }}"><i class="fa fa-reorder"></i> {{ item.priority|default(0) }}</span>
+                <span title="{{ 'backend.item.effort_estimation'|trans }}" class="span-effort"><i><img src="{{asset('bundles/backend/images/complexity.png')}}"/></i> {{item.getEffortEstimation()|default('~')}}</span>
             </div>
-            <div class="col-lg-9 col-md-9 col-xs-6 no-padding-sides">
+            <div class="col-lg-9 col-md-9 col-xs-6 no-padding-sides small-margin-top">
                 <span title="{{ 'backend.item.designed_user'|trans }}">
                     <i class="fa fa-user"></i> 
                     {% if item.designedUser is not empty %}
@@ -103,7 +104,9 @@
         </div>
         <div class="col-xs-2 col-md-2 pull-right no-padding-sides">
             {% if sprint is not empty %}
-                <label title="{{'backend.item.worked_estimated_time'|trans}}" class="col-xs-12 text-right label-item-times">{{ item.workedHours|default(0) }} / {{ item.estimatedHours|default(0) }}</label>
+                {% if item.type != constant('BackendBundle\\Entity\\Item::TYPE_USER_HISTORY') %}
+                    <label title="{{'backend.item.worked_estimated_time'|trans}}" class="col-xs-12 text-right label-item-times">{{ item.workedHours|default(0) }} / {{ item.estimatedHours|default(0) }}</label>
+                {% endif %}
                 <div class="btn-group pull-right small-btn-group">
                     <a class="btn btn-default btn-sm border-radius-left" title="{{ 'backend.item.edit'|trans }}" href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id, 'sprintId':sprint.id}) }}">
                         <i class="fa fa-pencil"></i>

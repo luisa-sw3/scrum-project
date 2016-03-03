@@ -148,14 +148,14 @@ class Item {
      * @ORM\OneToMany(targetEntity="Item", mappedBy="parent")
      */
     protected $children;
-    
+
     /**
      * Valor correspondiente al esfuerzo o complejidad
      * del item, representado en la serie fibonacci (1,2,3,5,8,13....)
      * @ORM\Column(name="item_effort_fibonacci", type="integer", nullable=true)
      */
     protected $effortFibonacci;
-    
+
     /**
      * Valor correspondiente al esfuerzo o complejidad
      * del item, representado en tallas de camisetas (XS, S, M, L, XL, XXL)
@@ -270,7 +270,7 @@ class Item {
     function setParent(Item $parent = null) {
         $this->parent = $parent;
     }
-    
+
     function getEffortFibonacci() {
         return $this->effortFibonacci;
     }
@@ -297,7 +297,7 @@ class Item {
         $comparer = ($order === 'DESC') ? "return -strcmp(\$a->get{$on}(),\$b->get{$on}());" : "return strcmp(\$a->get{$on}(),\$b->get{$on}());";
         usort($objects, create_function('$a,$b', $comparer));
     }
-    
+
     /**
      * Sort array of objects by integer fields
      * @param array $objects Array of objects to sort.
@@ -511,6 +511,18 @@ class Item {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Permite obtener la estimacion de esfuerzo acorde a la configuracion del proyecto
+     * @return type
+     */
+    public function getEffortEstimation() {
+        if ($this->getProject()->getEffortEstimationMethod() == Project::METHOD_TSHIRT_SIZE) {
+            return $this->getEffortTShirt();
+        } else {
+            return $this->getEffortFibonacci();
+        }
     }
 
 }

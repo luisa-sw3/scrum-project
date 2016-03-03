@@ -23,7 +23,7 @@
             {% set  form_params = form_params|merge({'sprintId':app.request.get('sprintId')}) %}
         {% endif %}
         {{ form_start(form, {'action': path('backend_project_product_backlog_new', form_params), 'method': 'POST'}) }}
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-md-12 col-xs-12">
                 <div class="form-group">
                     {{ form_label(form.type)}}<em>*</em>
                     {{ form_widget(form.type, {'attr':{'class':'form-control'}}) }}
@@ -69,12 +69,12 @@
                     {{ form_widget(form.effortTShirt, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
                     {{ form_errors(form.effortTShirt) }}
                 </div>
-                <div class="form-group col-xs-6 no-padding-right">
+                <div class="form-group col-xs-6 no-padding-right estimation">
                     {{ form_label(form.estimatedHours)}}
                     {{ form_widget(form.estimatedHours, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
                     {{ form_errors(form.estimatedHours) }}
                 </div>
-                <div class="form-group  col-xs-6 no-padding-left">
+                <div class="form-group  col-xs-6 no-padding-left estimation">
                     {{ form_label(form.workedHours)}}
                     {{ form_widget(form.workedHours, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
                     {{ form_errors(form.workedHours) }}
@@ -85,7 +85,7 @@
                     {{ form_errors(form.sprint) }}
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-md-12 col-xs-12">
                 <div class="form-group">
                     {{ form_label(form.description)}}
                     {{ form_widget(form.description, {'attr':{'class':'form-control'}}) }}
@@ -106,4 +106,17 @@
     {% if app.request.get('sprintId') is not empty %}
         $("#backendbundle_item_type_sprint").val("{{app.request.get('sprintId')}}");
     {% endif %}
+    
+    {# Codigo para ocultar los divs de tiempo estimado y trabajado cuando se trata de una historia de usuario #}
+    $("#backendbundle_item_type_type").change(function(){
+        var itemType = $(this).val();
+        if (itemType != "{{constant('BackendBundle\\Entity\\Item::TYPE_USER_HISTORY')}}") {
+            $(".estimation").css('display','');
+        } else {
+            $(".estimation").css('display','none');
+        }
+    });
+    $("#backendbundle_item_type_type").trigger('change');
+    
+    
 {% endblock %}

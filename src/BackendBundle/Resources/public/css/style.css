@@ -169,3 +169,12 @@ h1.page-header {
 .panel-head-details h3 {
     line-height: 26px;
 }
+
+.small-margin-top {
+    margin-top: 4px;
+}
+
+.span-effort img {
+    width: 19px;
+    margin-left: 10px;
+}
