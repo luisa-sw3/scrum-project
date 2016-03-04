@@ -450,9 +450,9 @@ class ItemController extends Controller {
         $response = array('result' => '__OK__', 'msg' => $this->get('translator')->trans('backend.item.update_success_message'));
         $em = $this->getDoctrine()->getManager();
         $itemId = $request->request->get('itemId');
-        $priority = (int) $request->request->get('priority');
+        $priority = $request->request->get('priority');
         $item = $em->getRepository('BackendBundle:Item')->find($itemId);
-        $previousPriority = (int) $item->getPriority();
+        $previousPriority = $item->getPriority();
 
         if (!$item || ($item && $item->getProject()->getId() != $id)) {
             $response['result'] = '__KO__';
@@ -472,7 +472,7 @@ class ItemController extends Controller {
             $em->flush();
 
             //guardamos el registro en el historial
-            $changes = array('before' => $previousPriority, 'after' => (int) $item->getPriority());
+            $changes = array('before' => $previousPriority, 'after' => $item->getPriority());
             $this->container->get('app_history')->saveItemHistory($item, Entity\ItemHistory::ITEM_PRIORITY_MODIFIED, $changes);
         } catch (\Exception $ex) {
             $response['result'] = '__KO__';

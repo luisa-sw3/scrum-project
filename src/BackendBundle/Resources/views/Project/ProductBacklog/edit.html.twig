@@ -54,7 +54,7 @@
                     {{ form_errors(edit_form.status) }}
                 </div>
                 {% set displayFibonacci = true %}
-                {% if project.effortEstimationMethod != constant('BackendBundle\\Entity\\Project::METHOD_FIBONACCI')%}
+                {% if project.effortEstimationMethod != constant('BackendBundle\\Entity\\Project::METHOD_FIBONACCI') %}
                     {% set displayFibonacci = false %}
                 {% endif  %}
                 <div class="form-group col-xs-6 no-padding-left" {% if not displayFibonacci %}style="display: none;"{% endif %}>
@@ -63,7 +63,7 @@
                     {{ form_errors(edit_form.effortFibonacci) }}
                 </div>
                 {% set displayTShirt = true %}
-                {% if project.effortEstimationMethod != constant('BackendBundle\\Entity\\Project::METHOD_TSHIRT_SIZE')%}
+                {% if project.effortEstimationMethod != constant('BackendBundle\\Entity\\Project::METHOD_TSHIRT_SIZE') %}
                     {% set displayTShirt = false %}
                 {% endif %}
                 <div class="form-group col-xs-6 no-padding-left" {% if not displayTShirt %}style="display: none;"{% endif %}>

@@ -88,7 +88,7 @@
                 <span title="{{ 'backend.global.creation_date'|trans }}"><i class="fa fa-calendar"></i> {{ item.creationDate|date(dateFormat) }}</span>
             </div>
             <div class="col-lg-3 col-md-3 col-xs-6 no-padding-sides small-margin-top">
-                <span title="{{ 'backend.item.priority'|trans }}"><i class="fa fa-reorder"></i> {{ item.priority|default(0) }}</span>
+                <span title="{{ 'backend.item.priority'|trans }}"><i class="fa fa-reorder"></i> <a class="container-priority" href="javascript:void(0);">{{ item.priority|default(0) }}</a></span>
                 <span title="{{ 'backend.item.effort_estimation'|trans }}" class="span-effort"><i><img src="{{asset('bundles/backend/images/complexity.png')}}"/></i> {{item.getEffortEstimation()|default('~')}}</span>
             </div>
             <div class="col-lg-9 col-md-9 col-xs-6 no-padding-sides small-margin-top">

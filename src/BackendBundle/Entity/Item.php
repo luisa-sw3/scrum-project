@@ -104,7 +104,7 @@ class Item {
 
     /**
      * Prioridad del item (100 = Urgente , 0 = No es prioridad)
-     * @ORM\Column(name="item_priority", type="integer", nullable=true)
+     * @ORM\Column(name="item_priority", type="float", nullable=true)
      */
     protected $priority;
 

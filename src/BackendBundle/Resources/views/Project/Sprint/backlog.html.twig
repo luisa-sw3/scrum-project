@@ -85,35 +85,35 @@
         <div class="col-lg-12">
             <div class="rstable">
                 
-                <ol class="default vertical" parent="">
+                <ol parent="empty" class="default vertical">
                 {% for item in sprintBacklog %}
                     
-                    <li item-id='{{item.consecutive}}' class="backlog-item">
+                    <li item-id='{{item.id}}' parent="empty" priority="{{item.priority|default(0)}}" class="backlog-item">
                         {{ filters.itemDescription(item, project, sprint, true) }}
                         {% if item.children is not empty %}
                             <ol parent='{{item.consecutive}}'>
                                 {% for firstChild in item.children %}
-                                    <li item-id='{{firstChild.consecutive}}' class="backlog-item">
+                                    <li item-id='{{firstChild.id}}' parent='{{item.consecutive}}' priority="{{firstChild.priority|default(0)}}" class="backlog-item">
                                         {{ filters.itemDescription(firstChild, project, sprint, true) }}
                                         {% if firstChild.children is not empty %}
                                             <ol parent='{{firstChild.consecutive}}'>
                                                 {% for secondChild in firstChild.children %}
-                                                    <li item-id='{{secondChild.consecutive}}' class="backlog-item">
+                                                    <li item-id='{{secondChild.id}}' parent='{{firstChild.consecutive}}' priority="{{secondChild.priority|default(0)}}" class="backlog-item">
                                                         {{ filters.itemDescription(secondChild, project, sprint, true) }}
                                                         {% if secondChild.children is not empty %}
                                                             <ol parent='{{secondChild.consecutive}}'>
                                                                 {% for thirdChild in secondChild.children %}
-                                                                    <li item-id='{{thirdChild.consecutive}}' class="backlog-item">
+                                                                    <li item-id='{{thirdChild.id}}' parent='{{secondChild.consecutive}}' priority="{{thirdChild.priority|default(0)}}" class="backlog-item">
                                                                         {{ filters.itemDescription(thirdChild, project, sprint, true) }}
                                                                         {% if thirdChild.children is not empty %}
                                                                             <ol parent='{{thirdChild.consecutive}}'>
                                                                                 {% for fourtChild in thirdChild.children %}
-                                                                                    <li item-id='{{fourtChild.consecutive}}' class="backlog-item">
+                                                                                    <li item-id='{{fourtChild.id}}' parent='{{thirdChild.consecutive}}' priority="{{fourtChild.priority|default(0)}}" class="backlog-item">
                                                                                         {{ filters.itemDescription(fourtChild, project, sprint, false) }}
                                                                                         {% if fourtChild.children is not empty %}
                                                                                             <ol parent='{{fourtChild.consecutive}}'>
                                                                                                 {% for fifthChild in fourtChild.children %}
-                                                                                                    <li item-id='{{fifthChild.consecutive}}' class="backlog-item">
+                                                                                                    <li item-id='{{fifthChild.id}}' parent='{{fourtChild.consecutive}}' priority="{{fifthChild.priority|default(0)}}" class="backlog-item">
                                                                                                         {{ filters.itemDescription(fifthChild, project, sprint, false) }}
                                                                                                     </li>
                                                                                                 {% endfor %}
@@ -252,7 +252,7 @@
                     $clonedItem.detach();
                     _super($item, container);
                     //container el es el contenedor en donde se esta moviendo el elemento
-                    console.log('se mueve el elemento '+ $item.attr('item-id')+' al contenedor '+ container.el.attr('parent'));
+                    moveItem($item, container);
                 });
             },
 
@@ -319,7 +319,6 @@
             });
         });
         
-
         {# Codigo para cambiar la prioridad de los items #}
         $(".change-priority").click(function() {
             var object = $(this);
@@ -343,24 +342,7 @@
                     if (result != '') {
                         var newPriority = parseInt(result);
                         if (newPriority >= 0 && newPriority <= 100) {
-                            $.ajax({
-                                type: 'POST',
-                                url: "{{path('backend_project_product_backlog_change_priority',{'id':project.id})}}",
-                                dataType: 'json',
-                                data: {itemId: itemId, priority: newPriority},
-                                success: function (r)
-                                {
-                                    if (r.result == '__OK__') {
-                                        window.location.reload();
-                                    } else {
-                                        bootbox.alert(r.msg);
-                                    }
-                                },
-                                error: function (r)
-                                {
-                                    bootbox.alert("{{'backend.global.unknown_error'|trans}}")
-                                }
-                            });
+                            modifyPriority(newPriority, itemId, true);
                         } else {
                             $(".bootbox-input").select();
                             return false;
@@ -757,6 +739,84 @@
             });
         }
         
+        {# Funcion para controlar cuando se mueve un item, editar prioridad, dependencias, etc #}
+        function moveItem (item, container) {
+        
+            var currentParent = item.attr('parent');
+            var itemId = item.attr('item-id')
+            console.log('current parent '+currentParent);
+            
+            if (currentParent == container.el.attr('parent')) {
+                {# si el padre es el mismo, significa que se esta editando la prioridad de un item #}
+                var currentPriority = item.attr('priority');
+                console.log('Prioridad actual '+currentPriority);
+                
+                {# buscamos la prioridad del item a continuacion#}
+                var nextLi = item.next();
+                var nextPriority = parseInt(nextLi.attr('priority'));
+                
+                {# buscamos la prioridad del anterior item #}
+                var prevLi = item.prev();
+                var previousPriority = parseInt(prevLi.attr('priority'));
+                var newPriority = '';
+                
+                if (nextPriority >=0 && previousPriority >=0) {
+                    {# si existe un item atras y uno adelante, colocamos la prioridad entre ambos #}
+                    newPriority = nextPriority + (previousPriority - nextPriority)/2;
+                } else if (nextPriority >= 0) {
+                    {# Si no hay un item arriba, colocamos la prioridad del siguiente mas 1 #}
+                    newPriority = nextPriority + 1;
+                } else if (previousPriority >= 0) {
+                    {# Si no hay un item abajo, colocamos la prioridad del anterior menos 1 #}
+                    newPriority = previousPriority - 1;
+                }
+                
+                if (newPriority != '') {
+                    {# enviar ajax para modificar prioridad #}
+                    var success = modifyPriority (newPriority, itemId, false);
+                    
+                    if (success) {
+                        item.attr('priority',newPriority);
+                        var containerPriority = item.find("a.container-priority").first();
+                        containerPriority.html(newPriority);
+                    } else {
+                        window.location.reload();
+                    }
+                }
+            } else {
+                {# si el padre es distinto, significa que se esta moviendo el item a otro item #}
+                console.log('se desea cambiar el padre');
+                console.log('se quiere mover el elemento '+ item.attr('item-id')+' al contenedor '+ container.el.attr('parent'));
+            }
+        }
+        
+        {# esta funcion permite enviar un ajax para modificar la prioridad de un item #}
+        function modifyPriority(newPriority, itemId, reloadPage) {
+            var success = false;
+            $.ajax({
+                type: 'POST',
+                url: "{{path('backend_project_product_backlog_change_priority',{'id':project.id})}}",
+                dataType: 'json',
+                data: {itemId: itemId, priority: newPriority},
+                async: false,
+                success: function (r)
+                {
+                    if (r.result == '__OK__') {
+                        success = true;
+                        if (reloadPage) {
+                            window.location.reload();
+                        }
+                    } else {
+                        bootbox.alert(r.msg);
+                    }
+                },
+                error: function (r)
+                {
+                    bootbox.alert("{{'backend.global.unknown_error'|trans}}")
+                }
+            });
+            return success;
+        }
         
         
 
