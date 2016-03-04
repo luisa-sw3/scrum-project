@@ -483,6 +483,55 @@ class ItemController extends Controller {
     }
 
     /**
+     * Permite editar la prioridad de un item
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 02/15/2016
+     * @param Request $request datos de la solicitud
+     * @param string $id identificador del proyecto
+     * @return JsonResponse JSON con mensaje de respuesta
+     */
+    public function changeParentAction(Request $request, $id) {
+        $response = array('result' => '__OK__', 'msg' => $this->get('translator')->trans('backend.item.update_success_message'));
+        $em = $this->getDoctrine()->getManager();
+        $itemId = $request->request->get('itemId');
+        $parentId = $request->request->get('newParent');
+        $item = $em->getRepository('BackendBundle:Item')->find($itemId);
+        
+        $parent = null;
+        if ($parentId != Entity\Item::EMPTY_PARENT) {
+            $parent = $em->getRepository('BackendBundle:Item')->find($parentId);
+        }
+
+        if (!$item || ($item && $item->getProject()->getId() != $id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.item.not_found_message');
+            return new JsonResponse($response);
+        }
+        
+        if ($parentId != Entity\Item::EMPTY_PARENT && (!$parent || ($parent && $parent->getProject()->getId() != $id))) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.item.not_found_message');
+            return new JsonResponse($response);
+        }
+
+        if (!$this->container->get('access_control')->isAllowedProject($id)) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.project.not_found_message');
+            return new JsonResponse($response);
+        }
+
+        try {
+            $item->setParent($parent);   
+            $em->persist($item);
+            $em->flush();
+        } catch (\Exception $ex) {
+            $response['result'] = '__KO__';
+            $response['msg'] = $this->get('translator')->trans('backend.global.unknown_error');
+        }
+
+        return new JsonResponse($response);
+    }
+
+    /**
      * Permite obtener el html necesario para editar la estimacion de un item
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 02/15/2016
      * @param Request $request

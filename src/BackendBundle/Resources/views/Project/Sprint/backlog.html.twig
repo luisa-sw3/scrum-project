@@ -85,131 +85,68 @@
         <div class="col-lg-12">
             <div class="rstable">
                 
-                <ol parent="empty" class="default vertical">
+                <ol parent="{{constant('BackendBundle\\Entity\\Item::EMPTY_PARENT')}}" class="default vertical">
                 {% for item in sprintBacklog %}
                     
-                    <li item-id='{{item.id}}' parent="empty" priority="{{item.priority|default(0)}}" class="backlog-item">
+                    <li item-id='{{item.id}}' parent="{{constant('BackendBundle\\Entity\\Item::EMPTY_PARENT')}}" priority="{{item.priority|default(0)}}" class="backlog-item">
                         {{ filters.itemDescription(item, project, sprint, true) }}
                         {% if item.children is not empty %}
-                            <ol parent='{{item.consecutive}}'>
+                            <ol parent='{{item.id}}' >
                                 {% for firstChild in item.children %}
-                                    <li item-id='{{firstChild.id}}' parent='{{item.consecutive}}' priority="{{firstChild.priority|default(0)}}" class="backlog-item">
+                                    <li item-id='{{firstChild.id}}' parent='{{item.id}}' priority="{{firstChild.priority|default(0)}}" class="backlog-item">
                                         {{ filters.itemDescription(firstChild, project, sprint, true) }}
                                         {% if firstChild.children is not empty %}
-                                            <ol parent='{{firstChild.consecutive}}'>
+                                            <ol parent='{{firstChild.id}}'>
                                                 {% for secondChild in firstChild.children %}
-                                                    <li item-id='{{secondChild.id}}' parent='{{firstChild.consecutive}}' priority="{{secondChild.priority|default(0)}}" class="backlog-item">
+                                                    <li item-id='{{secondChild.id}}' parent='{{firstChild.id}}' priority="{{secondChild.priority|default(0)}}" class="backlog-item">
                                                         {{ filters.itemDescription(secondChild, project, sprint, true) }}
                                                         {% if secondChild.children is not empty %}
-                                                            <ol parent='{{secondChild.consecutive}}'>
+                                                            <ol parent='{{secondChild.id}}'>
                                                                 {% for thirdChild in secondChild.children %}
-                                                                    <li item-id='{{thirdChild.id}}' parent='{{secondChild.consecutive}}' priority="{{thirdChild.priority|default(0)}}" class="backlog-item">
+                                                                    <li item-id='{{thirdChild.id}}' parent='{{secondChild.id}}' priority="{{thirdChild.priority|default(0)}}" class="backlog-item">
                                                                         {{ filters.itemDescription(thirdChild, project, sprint, true) }}
                                                                         {% if thirdChild.children is not empty %}
-                                                                            <ol parent='{{thirdChild.consecutive}}'>
+                                                                            <ol parent='{{thirdChild.id}}'>
                                                                                 {% for fourtChild in thirdChild.children %}
-                                                                                    <li item-id='{{fourtChild.id}}' parent='{{thirdChild.consecutive}}' priority="{{fourtChild.priority|default(0)}}" class="backlog-item">
+                                                                                    <li item-id='{{fourtChild.id}}' parent='{{thirdChild.id}}' priority="{{fourtChild.priority|default(0)}}" class="backlog-item">
                                                                                         {{ filters.itemDescription(fourtChild, project, sprint, false) }}
                                                                                         {% if fourtChild.children is not empty %}
-                                                                                            <ol parent='{{fourtChild.consecutive}}'>
+                                                                                            <ol parent='{{fourtChild.id}}'>
                                                                                                 {% for fifthChild in fourtChild.children %}
-                                                                                                    <li item-id='{{fifthChild.id}}' parent='{{fourtChild.consecutive}}' priority="{{fifthChild.priority|default(0)}}" class="backlog-item">
+                                                                                                    <li item-id='{{fifthChild.id}}' parent='{{fourtChild.id}}' priority="{{fifthChild.priority|default(0)}}" class="backlog-item">
                                                                                                         {{ filters.itemDescription(fifthChild, project, sprint, false) }}
                                                                                                     </li>
                                                                                                 {% endfor %}
                                                                                             </ol>
-                                                                                        {% else %}
-                                                                                            <ol parent="{{fourtChild.consecutive}}"></ol>
                                                                                         {% endif %}
                                                                                     </li>
                                                                                 {% endfor %}
                                                                             </ol>
                                                                         {% else %}
-                                                                            <ol parent="{{thirdChild.consecutive}}"></ol>
+                                                                            <ol parent="{{thirdChild.id}}"></ol>
                                                                         {% endif %}
                                                                     </li>
                                                                 {% endfor %}
                                                             </ol>
                                                         {% else %}
-                                                            <ol parent="{{secondChild.consecutive}}"></ol>
+                                                            <ol parent="{{secondChild.id}}"></ol>
                                                         {% endif %}
                                                     </li>
                                                 {% endfor %}
                                             </ol>
                                         {% else %}
-                                            <ol parent="{{firstChild.consecutive}}"></ol>
+                                            <ol parent="{{firstChild.id}}"></ol>
                                         {% endif %}
                                     </li>
                                 {% endfor %}
                             </ol>
                         {% else %}
-                            <ol parent="{{item.consecutive}}"></ol>
+                            <ol parent="{{item.id}}"></ol>
                         {% endif %}
                     </li>
                 {% endfor %}
                 </ol>
                 
-                {#<ol class="default vertical" parent="">
-                  <li item-id="1">
-                    1
-                    <ol parent="1">
-                        <li item-id="1.1">
-                            1.1
-                            <ol parent="1.1"></ol>
-                        </li>
-                    </ol>
-                  </li>
-                  <li item-id="2">
-                    2
-                    <ol parent="2">
-                        <li  item-id="2.1">
-                            2.1
-                            <ol parent="2.1"></ol>
-                        </li>
-                    </ol>
-                  </li>
-                  <li item-id="3">
-                    3
-                    <ol parent="3">
-                      <li item-id="3.1">
-                          3.1
-                          <ol parent="3.1"></ol>
-                      </li>
-
-                      <li item-id="3.2">
-                        3.2
-                        <ol parent="3.2">
-                          <li item-id="3.2.1">
-                              3.2.1
-                              <ol parent="3.2.1"></ol>
-                          </li>
-                          <li item-id="3.2.2">
-                              3.2.2
-                              <ol parent="3.2.2"></ol>
-                          </li>
-                        </ol>
-                        <ol parent="3.2">
-                          <li item-id="3.2.3">
-                              3.2.3
-                              <ol parent="3.2.3"></ol>
-                          </li>
-                        </ol>
-                      </li>
-                    </ol>
-                  </li>
-                  <li item-id="4">
-                      4
-                      <ol parent="4"></ol>
-                  </li>
-                  <li item-id="5">
-                      5
-                      <ol parent="5"></ol>
-                  </li>
-                  <li item-id="6">
-                      6
-                      <ol parent="6"></ol>
-                  </li>
-                </ol>#}
                 <div class="col-lg-12 col-md-12 col-xs-12 no-padding-right main-item">
                     <div class="col-xs-10 col-md-10 no-padding-left text-right">
                         {{'backend.sprint.total_estimated'|trans}}
@@ -787,6 +724,14 @@
                 {# si el padre es distinto, significa que se esta moviendo el item a otro item #}
                 console.log('se desea cambiar el padre');
                 console.log('se quiere mover el elemento '+ item.attr('item-id')+' al contenedor '+ container.el.attr('parent'));
+                
+                var newParent = container.el.attr('parent');
+                if (currentParent != newParent) {
+                    {# enviar ajax para modificar el padre del item #}
+                    modifyItemParent(newParent, itemId);
+                    
+                }
+                
             }
         }
         
@@ -816,6 +761,29 @@
                 }
             });
             return success;
+        }
+        
+        {# esta funcion permite enviar un ajax para modificar la el padre de un item #}
+        function modifyItemParent(newParent, itemId) {
+            $.ajax({
+                type: 'POST',
+                url: "{{path('backend_project_product_backlog_change_parent',{'id':project.id})}}",
+                dataType: 'json',
+                data: {itemId: itemId, newParent: newParent},
+                async: false,
+                success: function (r)
+                {
+                    if (r.result == '__OK__') {
+                        window.location.reload();
+                    } else {
+                        bootbox.alert(r.msg);
+                    }
+                },
+                error: function (r)
+                {
+                    bootbox.alert("{{'backend.global.unknown_error'|trans}}")
+                }
+            });
         }
         
         

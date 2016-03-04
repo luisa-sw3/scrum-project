@@ -17,6 +17,8 @@ class Item {
 
     use Consecutive;
 
+    const EMPTY_PARENT = 'empty';
+    
     /**
      * Constantes para los tipos de items que se pueden crear
      */

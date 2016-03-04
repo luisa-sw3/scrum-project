@@ -67,3 +67,8 @@ backend_project_product_backlog_change_status:
     path:     /changeStatus
     defaults: { _controller: "BackendBundle:Item:changeStatus" }
     methods:  [POST]
+
+backend_project_product_backlog_change_parent:
+    path:     /changeParent
+    defaults: { _controller: "BackendBundle:Item:changeParent" }
+    methods:  [POST]
