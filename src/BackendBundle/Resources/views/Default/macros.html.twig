@@ -69,7 +69,44 @@
 {% macro itemDescription(item, project, sprint, moreItems) %}
     {% set dateFormat = project.settings.dateFormat %}
     <div class="list-group-item col-xs-12 {% if item.parent is empty %}custom-well{% endif %}">
-        <div class="col-xs-10 col-md-10 no-padding-left">
+        <div class="col-xs-10 col-md-11 col-lg-11 no-padding-left">
+            <div class="col-lg-8 col-md-8 col-xs-12 no-padding-sides">
+                <div class="col-lg-12 col-md-12 col-xs-12 no-padding-sides">
+                <strong>{{ item.getTextType()|trans }} # {{item.consecutive}}</strong>
+                </div>
+                <div class="col-lg-12 col-md-12 col-xs-12 no-padding-left">
+                    {% set edithPath = path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id}) %}
+                    {% if sprint is not empty %}
+                        {% set edithPath = path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id, 'sprintId':sprint.id}) %}
+                    {% endif %}
+                    <a href="{{ edithPath }}" title="{{ item.title }}" content="">{{ item.title }}</a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-xs-12 no-padding-sides">
+                <div class="col-lg-5 col-md-5 col-xs-5 no-padding-sides text-left">
+                    <span title="{{ 'backend.item.status'|trans }}" class="{{item.getLabelClassByStatus()}}"><i class="fa fa-info-circle"></i> {{ item.textStatus|trans }}</span>
+                </div>
+                <div class="col-lg-7 col-md-7 col-xs-7 no-padding-sides text-right">
+                    <span title="{{ 'backend.global.creation_date'|trans }}"><i class="fa fa-calendar"></i> {{ item.creationDate|date(dateFormat) }}</span>
+                </div>
+                <div class="col-lg-5 col-md-5 col-xs-5 no-padding-sides small-margin-top text-left">
+                    <span title="{{ 'backend.item.priority'|trans }}"><i class="fa fa-reorder"></i> <a class="container-priority" href="javascript:void(0);">{{ item.priority|default(0) }}</a></span>
+                    <span title="{{ 'backend.item.effort_estimation'|trans }}" class="span-effort"><i><img src="{{asset('bundles/backend/images/complexity.png')}}"/></i> {{item.getEffortEstimation()|default('~')}}</span>
+                </div>
+                <div class="col-lg-7 col-md-7 col-xs-7 no-padding-sides small-margin-top text-right">
+                    <span title="{{ 'backend.item.designed_user'|trans }}">
+                        <i class="fa fa-user"></i> 
+                        {% if item.designedUser is not empty %}
+                            {{ item.designedUser }}
+                        {% else %}
+                            <a href="#">{{'backend.item.assign_user'|trans}}</a>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        {#<div class="col-xs-10 col-md-10 no-padding-left">
             <div class="col-lg-12 col-md-12 col-xs-12 no-padding-sides">
                 <strong>{{ item.getTextType()|trans }} # {{item.consecutive}}</strong>
             </div>
@@ -101,8 +138,8 @@
                     {% endif %}
                 </span>
             </div>
-        </div>
-        <div class="col-xs-2 col-md-2 pull-right no-padding-sides">
+        </div>#}
+        <div class="col-xs-2 col-md-1 col-lg-1 pull-right no-padding-sides">
             {% if sprint is not empty %}
                 {% if item.type != constant('BackendBundle\\Entity\\Item::TYPE_USER_HISTORY') %}
                     <label title="{{'backend.item.worked_estimated_time'|trans}}" class="col-xs-12 text-right label-item-times">{{ item.workedHours|default(0) }} / {{ item.estimatedHours|default(0) }}</label>
