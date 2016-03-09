@@ -24,21 +24,19 @@
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    <th>{{ 'backend.global.date'|trans }}</th>
+                    <th>{{ 'backend.project_invitation.invited_by'|trans }}</th>
                     <th>{{ 'backend.project.name'|trans }}</th>
                     <th>{{ 'backend.user_project.designed_role'|trans }}</th>
-                    <th>{{ 'backend.project_invitation.invited_by'|trans }}</th>
                     <th>{{ 'backend.global.options'|trans }}</th>
                 </tr>
             </thead>
             <tbody>
-            {% set dateFormat = app_settings.getDefaultDateFormat() %}
+            {% set dateFormat = app_settings.getDefaultFullDateFormat() %}
             {% for invitation in invitations %}
                 <tr>
-                    <td>{{ invitation.date|date(dateFormat) }}</td>
+                    <td>{{ invitation.userOwner }}<br>{{ invitation.date|date(dateFormat) }}</td>
                     <td>{{ invitation.project.name }}</td>
                     <td>{{ invitation.role.name }}</td>
-                    <td>{{ invitation.userOwner }}</td>
                     <td>
                         <a class="btn btn-success btn-sm" title="{{ 'backend.project_invitation.accept'|trans }}" href="{{ path('backend_notifications_accept',{'id':invitation.id}) }}">
                             <i class="fa fa-check"></i>
@@ -50,7 +48,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="6">{{ 'backend.project_invitation.empty_list'|trans }}</td>
+                    <td colspan="5">{{ 'backend.project_invitation.empty_list'|trans }}</td>
                 </tr>
             {% endfor %}
             </tbody>

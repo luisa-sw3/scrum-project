@@ -51,6 +51,11 @@ backend:
         all: "All"
         user: "User"
         
+    login:
+        message: "Dear user, log in to access the admin area"
+        create_account: "Don't have an account? Create one"
+        forgot_password: "Forgot your password?"
+    
     user:
         edit_profile: "Edit Profile"
         password: "Password"
@@ -172,7 +177,7 @@ backend:
         confirm_account: "Confirm Account"
         
     project_invitation_email:
-        subject: "New Proyect Invitation"
+        subject: "New Project Invitation"
         invitation_description: "You have a new project invitation:"
         clic_message: "Click here to accept or reject this request"
         

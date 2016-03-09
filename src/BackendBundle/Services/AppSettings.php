@@ -55,11 +55,11 @@ class AppSettings {
     }
     
     public function getDefaultHourFormat() {
-        return Entity\Settings::HOUR_FORMAT_1;
+        return Entity\Settings::HOUR_FORMAT_3;
     }
     
     public function getDefaultFullDateFormat() {
-        return Entity\Settings::DATE_FORMAT_1.' '.Entity\Settings::DATE_FORMAT_1;
+        return Entity\Settings::DATE_FORMAT_1.' '.Entity\Settings::HOUR_FORMAT_3;
     }
 
 }

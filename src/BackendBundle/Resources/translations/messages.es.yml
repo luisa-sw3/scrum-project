@@ -50,6 +50,11 @@ backend:
         hours: Horas
         all: "Todos"
         user: "Usuario"
+    
+    login:
+        message: "Ingrese para acceder al área administrativa"
+        create_account: "No tienes una cuenta? Crea una"
+        forgot_password: "Olvidaste tu contraseña?"
         
     user:
         edit_profile: "Editar Perfil"
@@ -127,7 +132,7 @@ backend:
         project_team_roles: "Equipo del Proyecto & Roles"
         active_members: "Miembros Activos"
         assignation_date: "Fecha de Asignación"
-        designed_role: "Rol designado"
+        designed_role: "Rol"
         unassign_user: "Eliminar del proyecto"
         empty_list: "Este projecto aún no tiene colaboradores asignados"
         invite_collaborator: "Invitar Colaborador"

@@ -26,9 +26,8 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>{{ 'backend.sprint.name'|trans }}</th>
+                    <th width='150px'>{{ 'backend.sprint.name'|trans }}</th>
                     <th>{{ 'backend.sprint.description'|trans }}</th>
-                    <th>{{ 'backend.sprint.status'|trans }}</th>
                     <th>{{ 'backend.sprint.start_date'|trans }}</th>
                     <th>{{ 'backend.sprint.estimated_date'|trans }}</th>
                     <th>{{ 'backend.global.options'|trans }}</th>
@@ -44,9 +43,9 @@
                     </td>
                     <td>
                         <a href="{{ path('backend_project_sprints_backlog',{'id':project.id, 'sprintId':sprint.id}) }}" class="popover-menu" title="{{ sprint.name }}" content="{{sprint.description|raw}}">{{ sprint.name }}</a>
+                        <br><label class="{{sprint.getLabelClassByStatus()}} small-margin-top pull-left">{{ sprint.textStatus|trans }}</label>
                     </td>
                     <td>{{ sprint.description|raw }}</td>
-                    <td>{{ sprint.textStatus|trans }}</td>
                     <td>
                         {{ sprint.startDate|date(dateFormat) }}
                     </td>
@@ -64,7 +63,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="7">{{'backend.sprint.empty_list'|trans}}</td>
+                    <td colspan="6">{{'backend.sprint.empty_list'|trans}}</td>
                 </tr>
             {% endfor %}
             </tbody>
