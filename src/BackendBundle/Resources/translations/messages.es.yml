@@ -55,6 +55,7 @@ backend:
         message: "Ingrese para acceder al área administrativa"
         create_account: "No tienes una cuenta? Crea una"
         forgot_password: "Olvidaste tu contraseña?"
+        keep_logged_in: "No cerrar sesión"
         
     user:
         edit_profile: "Editar Perfil"

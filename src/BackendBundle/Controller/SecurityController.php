@@ -18,6 +18,10 @@ class SecurityController extends Controller {
     public function loginAction(Request $request) {
         $authenticationUtils = $this->get('security.authentication_utils');
 
+        //si el usuario ya esta logueado lo enviamos al listado de proyectos
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER_ACTIVE')) {
+            return $this->redirect($this->generateUrl('backend_projects'));
+        }
 
         $userId = $request->get('confirmAccount');
         if ($userId != '') {
@@ -30,7 +34,7 @@ class SecurityController extends Controller {
                 $user->setIsAccountConfirmed(true);
                 $em->persist($user);
                 $em->flush();
-                
+
                 //realizamos el logueo del usuario
                 $token = new UsernamePasswordToken(
                         $user, $user->getPassword(), "backend", $user->getRoles());
@@ -38,10 +42,10 @@ class SecurityController extends Controller {
 
                 $event = new InteractiveLoginEvent($request, $token);
                 $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
-                
-                
+
+
                 $this->get('session')->getFlashBag()->add('messageSuccess', $this->get('translator')->trans('backend.user.confirmed_account_message'));
-                
+
                 return $this->redirect($this->generateUrl('backend_homepage'));
             }
             return $this->redirect($this->generateUrl('backend_login'));

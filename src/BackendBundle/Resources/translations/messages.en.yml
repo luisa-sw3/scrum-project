@@ -55,6 +55,7 @@ backend:
         message: "Dear user, log in to access the admin area"
         create_account: "Don't have an account? Create one"
         forgot_password: "Forgot your password?"
+        keep_logged_in: "Keep me logged in"
     
     user:
         edit_profile: "Edit Profile"

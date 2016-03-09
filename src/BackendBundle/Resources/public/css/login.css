@@ -34,7 +34,7 @@ login-page .login-form {
     transition: all 550ms ease-in-out 0s;
 }
 .login-page .login-content input {
-    height: 44px;
+    /*height: 44px;*/
 }
 .login-page .login-content a {
     color: #949494;

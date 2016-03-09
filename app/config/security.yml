@@ -27,7 +27,10 @@ security:
                 target: backend_login
             anonymous: ~
             provider: backend
-            
+            remember_me:
+                secret:   '%secret%'
+                lifetime: 604800 # 1 week in seconds
+                path:     /
 
         main:
             anonymous: ~

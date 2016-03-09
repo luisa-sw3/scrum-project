@@ -6,11 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use BackendBundle\Form\UserProfileType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class UserController extends Controller {
 
     /**
      * Permite desplegar el formulario de edicion del perfil del usuario logueado
+     * @Security("has_role('ROLE_USER_ACTIVE')")
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 26/12/2015
      * @return type
      */
@@ -27,6 +29,7 @@ class UserController extends Controller {
 
     /**
      * Permite validar y almacenar los cambios en el perfil del usuario logueado
+     * @Security("has_role('ROLE_USER_ACTIVE')")
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 26/12/2015
      * @param Request $request
      * @return type
