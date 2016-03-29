@@ -1,0 +1,4 @@
+backend_project_reports:
+    path:     /
+    defaults: { _controller: "BackendBundle:Report:index" }
+    methods:  GET

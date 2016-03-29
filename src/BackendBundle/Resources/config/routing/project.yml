@@ -43,3 +43,7 @@ backend_projects_binnacle:
     path:     /{id}/binnacle
     defaults: { _controller: "BackendBundle:Project:binnacle" }
     methods:  [GET]
+    
+backend_project_reports:
+        resource: "@BackendBundle/Resources/config/routing/reports.yml"
+        prefix:   /{id}/reports
