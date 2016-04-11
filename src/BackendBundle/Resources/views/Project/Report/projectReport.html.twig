@@ -1,0 +1,220 @@
+{% extends 'BackendBundle:Default:main.html.twig' %}
+{% block title %}{{'backend.report.reports'|trans}}{% endblock %}
+
+{% block content %}
+    <!-- Page Heading -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                {{'backend.report.project'|trans}}
+                <a href="{{ app.request.headers.get('referer') }}" class="btn btn-default pull-right">{{'backend.global.back'|trans}}</a>
+            </h1>
+
+            {% set item2 = {'text': project.name, 'url':path('backend_projects_view',{'id':project.id}),'icon':'fa fa-dashboard'} %}
+            {% set item3 = {'text': 'backend.report.reports'|trans, 'url':path('backend_project_reports',{'id':project.id}),'icon':'fa fa-file-text-o'} %}
+            {% set item4 = {'text': 'backend.report.project'|trans, 'icon':'fa fa-list'} %}
+            {% set items = [item2, item3, item4] %}
+            {{ filters.breadcrum(items) }}
+        </div>
+    </div>
+    <!-- /.row -->
+    {{ filters.showMessage('messageSuccess', 'success')}}
+    {{ filters.showMessage('messageError', 'danger')}}
+
+    <div class="row">
+        <div class="col-lg-6">
+            <h2>{{'backend.report.data.data1'|trans}}</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>{{'backend.report.data.abb'|trans}}</th>
+                            <th>{{'backend.report.data.item'|trans}}</th>
+                            <th>{{'backend.report.data.sum'|trans}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>TT</td>
+                            <td>{{'backend.report.data.tt'|trans}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>TR</td>
+                            <td>{{'backend.report.data.tr'|trans}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>TTD</td>
+                            <td>{{'backend.report.data.ttd'|trans}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>TDT</td>
+                            <td>{{'backend.report.data.tdt'|trans}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>TC</td>
+                            <td>{{'backend.report.data.tc'|trans}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>TA</td>
+                            <td>{{'backend.report.data.ta'|trans}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>DE</td>
+                            <td>{{'backend.report.data.de'|trans}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>DC</td>
+                            <td>{{'backend.report.data.dc'|trans}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>TDD</td>
+                            <td>{{'backend.report.data.tdd'|trans}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>SC</td>
+                            <td>{{'backend.report.data.sc'|trans}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>SCD</td>
+                            <td>{{'backend.report.data.scd'|trans}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>TSC</td>
+                            <td>{{'backend.report.data.tsc'|trans}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>SP</td>
+                            <td>{{'backend.report.data.sp'|trans}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>SF</td>
+                            <td>{{'backend.report.data.sf'|trans}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>PTS</td>
+                            <td>{{'backend.report.data.pts'|trans}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>ECP</td>
+                            <td>{{'backend.report.data.ecp'|trans}}</td>
+                            <td></td>
+                        </tr>
+                        <tr class="warning">
+                            <td>ECS</td>
+                            <td>{{'backend.report.data.ecs'|trans}}</td>
+                            <td></td>
+                        </tr>
+                        <tr class="warning">
+                            <td>ECT</td>
+                            <td>{{'backend.report.data.ect'|trans}}</td>
+                            <td></td>
+                        </tr>
+                        <tr class="danger">
+                            <td>ECC</td>
+                            <td>{{'backend.report.data.ecc'|trans}}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <h2>{{'backend.report.metric.metrics'|trans}}</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>{{'backend.report.metric.metric'|trans}}</th>
+                            <th>{{'backend.report.metric.form'|trans}}</th>
+                            <th>{{'backend.report.metric.limit'|trans}}</th>
+                            <th>{{'backend.report.data.sum'|trans}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>{{'backend.report.metric.adv'|trans}}</th>
+                            <td>(TR/TT)*100</td>
+                            <td> ~ </td>
+                            <td>61.36%</td>
+                        </tr>
+                        <tr>
+                            <th>{{'backend.report.metric.avgHr'|trans}}</th>
+                            <td>((TT-TR)*TTD)/TR + ((DE-DC)*TDD)/DC</td>
+                            <td>~</td>
+                            <td>378.95 Hrs</td>
+                        </tr>
+                        <tr>
+                            <th>{{'backend.report.metric.foundDefect'|trans}}</th>
+                            <td>(DE/TR)*100)</td>
+                            <td><=25%</td>
+                            <td>23.7%</td>
+                        </tr>
+                        <tr>
+                            <th>{{'backend.report.metric.cancelledItem'|trans}}</th>
+                            <td>(TC/TT)*100</td>
+                            <td><=</td>
+                            <td>5%</td>
+                        </tr>
+                        <tr>
+                            <th>{{'backend.report.metric.postponedItem'|trans}}</th>
+                            <td>(TA/TT)*100</td>
+                            <td><=10%</td>
+                            <td>2.27%</td>
+                        </tr>
+                        <tr>
+                            <th>{{'backend.report.metric.avgSprint'|trans}}</th>
+                            <td>(TT-TR)/PTS</td>
+                            <td>~</td>
+                            <td>2.57 Sprint(s)</td>
+                        </tr>
+                        <tr>
+                            <th>{{'backend.report.metric.estError'|trans}}</th>
+                            <td>((DE-DC)*TDD)/DC</td>
+                            <td>~</td>
+                            <td>16.92 Hora(s)</td>
+                        </tr>
+                        <tr>
+                            <th>{{'backend.report.metric.errorFix'|trans}}</th>
+                            <td>(TDD/TTD)*100</td>
+                            <td><=25%</td>
+                            <td>9.56%</td>
+                        </tr>
+                        <tr>
+                            <th>{{'backend.report.metric.changeReq'|trans}}</th>
+                            <td>(SCD/SC)*100</td>
+                            <td>>=80%</td>
+                            <td>80%</td>
+                        </tr>
+                        <tr>
+                            <th>{{'backend.report.metric.cicleOneFix'|trans}}</th>
+                            <td>(ECP/DC)*100</td>
+                            <td>>=75%</td>
+                            <td>57.69%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <h1>
+            <a href="#" class="btn btn-default pull-right">{{'backend.global.pdf'|trans}}</a>
+        </h1>
+    </div>
+{% endblock %}

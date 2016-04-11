@@ -40,6 +40,31 @@ class ReportController extends Controller {
     }
 
     /**
+     * Permite mostrar el reporte del proyecto en cual estamos parados
+     * @author Jorge dd/mm/aaaa
+     * @param Request $request
+     * @param string $id identificador del proyecto
+     * @return type
+     */
+    public function indexProjectAction(Request $request, $id) {
+        $em = $this->getDoctrine()->getManager();
+
+        $project = $em->getRepository('BackendBundle:Project')->find($id);
+
+        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
+            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
+            return $this->redirectToRoute('backend_projects');
+        }
+
+        $search = array('project' => $project->getId());
+
+        return $this->render('BackendBundle:Project/Report:projectReport.html.twig', array(
+                    'project' => $project,
+                    'menu' => self::MENU
+        ));
+    }
+
+    /**
      * Permite seleccionar el tipo de reporte que se desea generar.
      * Puede ser por un usuario o todos y el sprint specifico o todos los sprints
      * @author Luisa Pereira 28/03/2016

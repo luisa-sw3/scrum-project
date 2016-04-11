@@ -12,3 +12,8 @@ backend_project_reports_user_sprint:
     path:     /userReport1
     defaults: { _controller: "BackendBundle:Report:userReport" }
     methods:  [GET, POST]
+
+  backend_project_reports_project:
+    path:     /project
+    defaults: { _controller: "BackendBundle:Report:indexProject" }
+    methods:  [GET, POST]
