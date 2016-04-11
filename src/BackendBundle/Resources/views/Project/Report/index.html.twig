@@ -2,7 +2,6 @@
 {% block title %}{{'backend.report.reports'|trans}}{% endblock %}
 
 {% block content %}
-
     <!-- Page Heading -->
     <div class="row">
         <div class="col-lg-12">
@@ -11,7 +10,7 @@
             </h1>
 
             {% set item2 = {'text': project.name, 'url':path('backend_projects_view',{'id':project.id}),'icon':'fa fa-dashboard'} %}
-            {% set item3 = {'text': 'backend.report.reports'|trans, 'icon':'fa fa-list'} %}
+            {% set item3 = {'text': 'backend.report.reports'|trans, 'icon':'fa fa-file-text-o'} %}
             {% set items = [item2, item3] %}
             {{ filters.breadcrum(items) }}
         </div>
@@ -19,8 +18,42 @@
     <!-- /.row -->
     {{ filters.showMessage('messageSuccess', 'success')}}
     {{ filters.showMessage('messageError', 'danger')}}
-    
-    <div>
-        <a href="{{path('backend_project_product_backlog_new',{'id':project.id})}}" class="btn btn-primary pull-right">{{'backend.item.new'|trans}}</a>
-    </div>
-  {% endblock %}
+
+    <div class="row">
+        <div class="col-lg-2 col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading project-link">
+                    <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <i class="fa fa-list fa-5x"></i>
+                        </div>
+                    </div>
+                </div>
+                <a href="{{ path('backend_project_reports_project',{'id':project.id}) }}">
+                    <div class="panel-footer">
+                        <span class="pull-left">{{ 'backend.report.project'|trans }}</span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-2 col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading project-link">
+                    <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <i class="fa fa-users fa-5x"></i>
+                        </div>
+                    </div>
+                </div>
+                <a href="{{ path('backend_project_reports_user',{'id':project.id}) }}">
+                    <div class="panel-footer">
+                        <span class="pull-left">{{ 'backend.report.users'|trans }}</span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>  
+    </div>                    
+{% endblock %}

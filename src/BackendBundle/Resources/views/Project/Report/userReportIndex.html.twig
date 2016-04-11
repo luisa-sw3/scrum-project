@@ -1,0 +1,63 @@
+{% extends 'BackendBundle:Default:main.html.twig' %}
+{% block title %}{{'backend.report.reports'|trans}}{% endblock %}
+
+{% block content %}
+    <!-- Page Heading -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                {{'backend.report.users'|trans}}
+                <a href="{{ app.request.headers.get('referer') }}" class="btn btn-default pull-right">{{'backend.global.back'|trans}}</a>
+            </h1>
+
+            {% set item2 = {'text': project.name, 'url':path('backend_projects_view',{'id':project.id}),'icon':'fa fa-dashboard'} %}
+            {% set item3 = {'text': 'backend.report.reports'|trans, 'url':path('backend_project_reports',{'id':project.id}), 'icon':'fa fa-file-text-o'} %}
+            {% set item4 = {'text': 'backend.report.users'|trans, 'icon':'fa fa-users'} %}
+            {% set items = [item2, item3, item4] %}
+            {{ filters.breadcrum(items) }}
+        </div>
+    </div>
+    <!-- /.row -->
+    {{ filters.showMessage('messageSuccess', 'success')}}
+    {{ filters.showMessage('messageError', 'danger')}}
+
+    <div class="row">
+        <div class="col-lg-6">
+            <form role="form">
+                <div class="form-group">
+                    <label>{{'backend.report.userSelect'|trans}}</label>
+                    <select class="form-control">
+                        <option>{{'backend.report.userAll'|trans}}</option>
+                        {% for user in users %}
+                            <option>{{ user.name }} {{ user.lastname }}</option>
+                        {% else %}
+                            <option>{{'backend.report.empty_list'|trans}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-6">
+            <form role="form">
+                <div class="form-group">
+                    <label>{{'backend.report.sprintSelect'|trans}}</label>
+                    <select class="form-control">
+                        <option>{{'backend.report.sprintAll'|trans}}</option>
+                        {% for sprint in sprints %}
+                            <option>{{ sprint.name }}</option>
+                        {% else %}
+                            <option>{{'backend.report.empty_list'|trans}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <h1>
+            <a href="{{ path('backend_project_reports_user_sprint',{'id':project.id}) }}" class="btn btn-primary pull-left">{{'backend.report.generate'|trans}}</a>
+        </h1>
+    </div>
+
+{% endblock %}
