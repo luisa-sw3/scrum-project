@@ -37,97 +37,97 @@
                         <tr>
                             <td>TT</td>
                             <td>{{'backend.report.data.tt'|trans}}</td>
-                            <td></td>
+                            <td>220</td>
                         </tr>
                         <tr>
                             <td>TR</td>
                             <td>{{'backend.report.data.tr'|trans}}</td>
-                            <td></td>
+                            <td>135</td>
                         </tr>
                         <tr>
                             <td>TTD</td>
                             <td>{{'backend.report.data.ttd'|trans}}</td>
-                            <td></td>
+                            <td>575 Hrs</td>
                         </tr>
                         <tr>
                             <td>TDT</td>
                             <td>{{'backend.report.data.tdt'|trans}}</td>
-                            <td></td>
+                            <td>520 Hrs</td>
                         </tr>
                         <tr>
                             <td>TC</td>
                             <td>{{'backend.report.data.tc'|trans}}</td>
-                            <td></td>
+                            <td>11</td>
                         </tr>
                         <tr>
                             <td>TA</td>
                             <td>{{'backend.report.data.ta'|trans}}</td>
-                            <td></td>
+                            <td>5</td>
                         </tr>
                         <tr>
                             <td>DE</td>
                             <td>{{'backend.report.data.de'|trans}}</td>
-                            <td></td>
+                            <td>32</td>
                         </tr>
                         <tr>
                             <td>DC</td>
                             <td>{{'backend.report.data.dc'|trans}}</td>
-                            <td></td>
+                            <td>26</td>
                         </tr>
                         <tr>
                             <td>TDD</td>
                             <td>{{'backend.report.data.tdd'|trans}}</td>
-                            <td></td>
+                            <td>55 Hrs</td>
                         </tr>
                         <tr>
                             <td>SC</td>
                             <td>{{'backend.report.data.sc'|trans}}</td>
-                            <td></td>
+                            <td>15</td>
                         </tr>
                         <tr>
                             <td>SCD</td>
                             <td>{{'backend.report.data.scd'|trans}}</td>
-                            <td></td>
+                            <td>12</td>
                         </tr>
                         <tr>
                             <td>TSC</td>
                             <td>{{'backend.report.data.tsc'|trans}}</td>
-                            <td></td>
+                            <td>28 Hrs</td>
                         </tr>
                         <tr>
                             <td>SP</td>
                             <td>{{'backend.report.data.sp'|trans}}</td>
-                            <td></td>
+                            <td>7</td>
                         </tr>
                         <tr>
                             <td>SF</td>
                             <td>{{'backend.report.data.sf'|trans}}</td>
-                            <td></td>
+                            <td>4</td>
                         </tr>
                         <tr>
                             <td>PTS</td>
                             <td>{{'backend.report.data.pts'|trans}}</td>
-                            <td></td>
+                            <td>33</td>
                         </tr>
                         <tr>
                             <td>ECP</td>
                             <td>{{'backend.report.data.ecp'|trans}}</td>
-                            <td></td>
+                            <td>15</td>
                         </tr>
-                        <tr class="warning">
+                        <tr>
                             <td>ECS</td>
                             <td>{{'backend.report.data.ecs'|trans}}</td>
-                            <td></td>
+                            <td class="warning">5</td>
                         </tr>
-                        <tr class="warning">
+                        <tr>
                             <td>ECT</td>
                             <td>{{'backend.report.data.ect'|trans}}</td>
-                            <td></td>
+                            <td class="warning">4</td>
                         </tr>
-                        <tr class="danger">
+                        <tr>
                             <td>ECC</td>
                             <td>{{'backend.report.data.ecc'|trans}}</td>
-                            <td></td>
+                            <td class="danger">2</td>
                         </tr>
                     </tbody>
                 </table>
@@ -162,19 +162,19 @@
                             <th>{{'backend.report.metric.foundDefect'|trans}}</th>
                             <td>(DE/TR)*100)</td>
                             <td><=25%</td>
-                            <td>23.7%</td>
+                            <td class="success">23.7%</td>
                         </tr>
                         <tr>
                             <th>{{'backend.report.metric.cancelledItem'|trans}}</th>
                             <td>(TC/TT)*100</td>
-                            <td><=</td>
-                            <td>5%</td>
+                            <td><=8%</td>
+                            <td class="success">5%</td>
                         </tr>
                         <tr>
                             <th>{{'backend.report.metric.postponedItem'|trans}}</th>
                             <td>(TA/TT)*100</td>
                             <td><=10%</td>
-                            <td>2.27%</td>
+                            <td class="success">2.27%</td>
                         </tr>
                         <tr>
                             <th>{{'backend.report.metric.avgSprint'|trans}}</th>
@@ -192,19 +192,19 @@
                             <th>{{'backend.report.metric.errorFix'|trans}}</th>
                             <td>(TDD/TTD)*100</td>
                             <td><=25%</td>
-                            <td>9.56%</td>
+                            <td class="success">9.56%</td>
                         </tr>
                         <tr>
                             <th>{{'backend.report.metric.changeReq'|trans}}</th>
                             <td>(SCD/SC)*100</td>
                             <td>>=80%</td>
-                            <td>80%</td>
+                            <td class="warning">80%</td>
                         </tr>
                         <tr>
                             <th>{{'backend.report.metric.cicleOneFix'|trans}}</th>
                             <td>(ECP/DC)*100</td>
                             <td>>=75%</td>
-                            <td>57.69%</td>
+                            <td class="danger">57.69%</td>
                         </tr>
                     </tbody>
                 </table>

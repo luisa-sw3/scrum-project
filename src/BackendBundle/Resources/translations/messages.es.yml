@@ -57,6 +57,7 @@ backend:
         create_account: "No tienes una cuenta? Crea una"
         forgot_password: "Olvidaste tu contraseña?"
         keep_logged_in: "No cerrar sesión"
+        log_in: "Iniciar Sesión"
         
     user:
         edit_profile: "Editar Perfil"
@@ -310,7 +311,7 @@ backend:
             sc: "Solicitudes de Cambio"
             scd: "Solicitudes de Cambio Desarrolladas"
             tsc: "Tiempo Empleado en Solicitudes de Cambio"
-            sp: "Sprint Planeados"
+            sp: "Sprints Planeados"
             sf: "Sprints Finalizados"
             pts: "Promedio Tareas por Sprint"
             ecp: "# Errores Corregidos en Primer Ciclo"
@@ -324,7 +325,7 @@ backend:
             limit: "Límite Aceptado"
             adv: "% Avance de Proyecto"
             foundDefect: "% Defectos Inyectados"
-            avgHr: "Promedio: Horas Restantantes (incluye corrección de defectos existenes"
+            avgHr: "Promedio: Horas Restantantes (incluye corrección de defectos existentes)"
             cancelledItem: "% Tareas Canceladas"
             postponedItem: "% Tareas Aplazadas"
             avgSprint: "Promedio: Sprints Restantes"
