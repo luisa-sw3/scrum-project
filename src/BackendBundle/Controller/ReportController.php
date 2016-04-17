@@ -135,10 +135,11 @@ class ReportController extends Controller {
         ));
     }
 
-    /**
+   /**
      * Permite seleccionar el tipo de reporte que se desea generar.
      * Puede ser por un usuario o todos y el sprint specifico o todos los sprints
      * @author Luisa Pereira 28/03/2016
+     * @author Jorge Cardona 17/04/2016
      * @param Request $request
      * @param string $id identificador del proyecto
      * @return type
@@ -148,22 +149,21 @@ class ReportController extends Controller {
 
         $project = $em->getRepository('BackendBundle:Project')->find($id);
 
-        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
-            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
-            return $this->redirectToRoute('backend_projects');
-        }
-
-        $users = $em->getRepository('BackendBundle:User')->findUsersByProject($id);
-
-        $search = array('project' => $project->getId());
-        $order = array('creationDate' => 'ASC');
-
-        $sprints = $em->getRepository('BackendBundle:Sprint')->findBy($search, $order);
+        $taskAssigned = $em->getRepository('BackendBundle:Item')->findByType($project, "3");
+        $doneTask = $em->getRepository('BackendBundle:Item')->findByTypeStatus($project, "11", "3");
+        $estHours = $em->getRepository('BackendBundle:Item')->totalEstHours($project);
+        $totalHours = $em->getRepository('BackendBundle:Item')->totalWorkHours($project);
+        $errHours = $em->getRepository('BackendBundle:Item')->totalWorkHoursByType($project, "4");
+        $foundErr = $em->getRepository('BackendBundle:Item')->findByType($project, "4");
 
         return $this->render('BackendBundle:Project/Report:userReport.html.twig', array(
                     'project' => $project,
-                    'users' => $users,
-                    'sprints' => $sprints,
+                    'assignedTasks' => $taskAssigned,
+                    'doneTask' => $doneTask,
+                    'estHrs' => $estHours,
+                    'totalHrs' => $totalHours,
+                    'errHrs' => $errHours,
+                    'errFound' => $foundErr,           
                     'menu' => self::MENU
         ));
     }
