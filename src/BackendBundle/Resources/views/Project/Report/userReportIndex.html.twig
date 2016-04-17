@@ -28,8 +28,7 @@
                 <div class="form-group">
                     <label>{{'backend.report.userSelect'|trans}}</label>
                     <select id="userselect" name="userselect" class="form-control">
-                        {% if users%}
-                            <option value="">{{'backend.report.userSelect'|trans}}</option>
+                        {% if users%}                            
                             {% if users|length == 1 %}
                                 {% for user in users %}
                                     <option value="{{user.id}}">{{ user.name }} {{ user.lastname }}</option>

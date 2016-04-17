@@ -37,7 +37,7 @@ class SprintRepository extends EntityRepository {
         return $query->getResult();
     }
 
-    public function findByProyect($projectId, $status) {
+    public function findByProyect($projectId) {
 
         $repository = $this->getEntityManager();
 

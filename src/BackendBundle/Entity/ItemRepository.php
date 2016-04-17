@@ -98,81 +98,69 @@ class ItemRepository extends EntityRepository {
 
         return $consult->getResult();
     }
-    
+
     public function findByType($projectId, $type) {
 
         $repository = $this->getEntityManager();
-        
+
         $query = $repository->createQuery(" 
             Select i 
             FROM BackendBundle:Item i
             WHERE i.project = :projectId
             AND i.type = :type");
+
         $query->setParameter('projectId', $projectId);
         $query->setParameter('type', $type);
-        
+
         return $query->getResult();
     }
 
-    public function findByStatus($projectId, $status) {
-
-        $repository = $this->getEntityManager();
-        
-        $query = $repository->createQuery(" 
-            Select i 
-            FROM BackendBundle:Item i
-            WHERE i.project = :projectId
-            AND i.status = :status");
-        $query->setParameter('projectId', $projectId);
-        $query->setParameter('status', $status);
-        
-        return $query->getResult();
-    }
-    
     public function findByTypeStatus($projectId, $status, $type) {
 
         $repository = $this->getEntityManager();
-        
+
         $query = $repository->createQuery(" 
             Select i 
             FROM BackendBundle:Item i
             WHERE i.project = :projectId
             AND i.status = :status
             AND i.type = :type");
+
         $query->setParameter('projectId', $projectId);
         $query->setParameter('status', $status);
         $query->setParameter('type', $type);
-        
+
         return $query->getResult();
     }
-    
+
     public function totalWorkHours($projectId) {
 
         $repository = $this->getEntityManager();
-        
+
         $query = $repository->createQuery(" 
             Select SUM(i.workedHours) AS totalHours
             FROM BackendBundle:Item i
             WHERE i.project = :projectId");
+
         $query->setParameter('projectId', $projectId);
-        
-        
+
+
         return $query->getSingleScalarResult();
     }
-    
+
     public function totalWorkHoursByType($projectId, $type) {
 
         $repository = $this->getEntityManager();
-        
+
         $query = $repository->createQuery(" 
             Select SUM(i.workedHours) AS totalHours
             FROM BackendBundle:Item i
             WHERE i.project = :projectId
             AND i.type = :type");
+
         $query->setParameter('projectId', $projectId);
         $query->setParameter('type', $type);
-        
+
         return $query->getSingleScalarResult();
     }
-
 }

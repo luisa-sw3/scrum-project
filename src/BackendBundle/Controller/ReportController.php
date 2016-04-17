@@ -42,6 +42,7 @@ class ReportController extends Controller {
     /**
      * Permite mostrar el reporte del proyecto en cual estamos parados
      * @author Jorge dd/mm/aaaa
+     * @author Luisa Pereira 16/04/2016
      * @param Request $request
      * @param string $id identificador del proyecto
      * @return type
@@ -113,57 +114,11 @@ class ReportController extends Controller {
 
         $project = $em->getRepository('BackendBundle:Project')->find($id);
 
-        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
-            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
-            return $this->redirectToRoute('backend_projects');
-        }
-
         $users = $em->getRepository('BackendBundle:User')->findUsersByProject($id);
-
-//        $search = array('project' => $project->getId());
-//        $order = array('creationDate' => 'ASC');
-//
-//        $sprints = $em->getRepository('BackendBundle:Sprint')->findBy($search, $order);
-//        $sprints = $em->getRepository('BackendBundle:Sprint')->findSprintsByUserProject($project,$user);
-
 
         return $this->render('BackendBundle:Project/Report:userReportIndex.html.twig', array(
                     'project' => $project,
                     'users' => $users,
-//                    'sprints' => $sprints,
-                    'menu' => self::MENU
-        ));
-    }
-
-    /**
-     * Permite seleccionar el tipo de reporte que se desea generar.
-     * Puede ser por un usuario o todos y el sprint specifico o todos los sprints
-     * @author Luisa Pereira 28/03/2016
-     * @param Request $request
-     * @param string $id identificador del proyecto
-     * @return type
-     */
-    public function userReportAction(Request $request, $id) {
-        $em = $this->getDoctrine()->getManager();
-
-        $project = $em->getRepository('BackendBundle:Project')->find($id);
-
-        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
-            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
-            return $this->redirectToRoute('backend_projects');
-        }
-
-        $users = $em->getRepository('BackendBundle:User')->findUsersByProject($id);
-
-        $search = array('project' => $project->getId());
-        $order = array('creationDate' => 'ASC');
-
-        $sprints = $em->getRepository('BackendBundle:Sprint')->findBy($search, $order);
-
-        return $this->render('BackendBundle:Project/Report:userReport.html.twig', array(
-                    'project' => $project,
-                    'users' => $users,
-                    'sprints' => $sprints,
                     'menu' => self::MENU
         ));
     }
@@ -174,30 +129,13 @@ class ReportController extends Controller {
 
         $project = $em->getRepository('BackendBundle:Project')->find($id);
 
-        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
-            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
-            return $this->redirectToRoute('backend_projects');
-        }
-
         $userId = $parameters->get('user_id');
         $html = '';
 
-        //si el servicio seleccionado es ninguno devolver html vacio
-        if ($userId == '') {
-            $response['result'] = '__OK__';
-            $response['html'] = $html;
-
-            $r = new Response(json_encode($response));
-            $r->headers->set('Content-Type', 'application/json');
-            return $r;
-        }
-
         //si el servicio seleccionado es todos devolver html con todos los usuarios
         if ($userId == 'all') {
-            $search = array('project' => $project->getId());
-            $order = array('creationDate' => 'ASC');
 
-            $sprints = $em->getRepository('BackendBundle:Sprint')->findBy($search, $order);
+            $sprints = $em->getRepository('BackendBundle:Sprint')->findByProject($project);
 
             // se recorren los grupo y se arman los options
             foreach ($sprints as $sprint) {
