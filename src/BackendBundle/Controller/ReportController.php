@@ -119,6 +119,40 @@ class ReportController extends Controller {
         return $this->render('BackendBundle:Project/Report:userReportIndex.html.twig', array(
                     'project' => $project,
                     'users' => $users,
+//                    'sprints' => $sprints,
+                    'menu' => self::MENU
+        ));
+    }
+
+   /**
+     * Permite seleccionar el tipo de reporte que se desea generar.
+     * Puede ser por un usuario o todos y el sprint specifico o todos los sprints
+     * @author Luisa Pereira 28/03/2016
+     * @author Jorge Cardona 17/04/2016
+     * @param Request $request
+     * @param string $id identificador del proyecto
+     * @return type
+     */
+    public function userReportAction(Request $request, $id) {
+        $em = $this->getDoctrine()->getManager();
+
+        $project = $em->getRepository('BackendBundle:Project')->find($id);
+
+        $taskAssigned = $em->getRepository('BackendBundle:Item')->findByType($project, "3");
+        $doneTask = $em->getRepository('BackendBundle:Item')->findByTypeStatus($project, "11", "3");
+        $estHours = $em->getRepository('BackendBundle:Item')->totalEstHours($project);
+        $totalHours = $em->getRepository('BackendBundle:Item')->totalWorkHours($project);
+        $errHours = $em->getRepository('BackendBundle:Item')->totalWorkHoursByType($project, "4");
+        $foundErr = $em->getRepository('BackendBundle:Item')->findByType($project, "4");
+
+        return $this->render('BackendBundle:Project/Report:userReport.html.twig', array(
+                    'project' => $project,
+                    'assignedTasks' => $taskAssigned,
+                    'doneTask' => $doneTask,
+                    'estHrs' => $estHours,
+                    'totalHrs' => $totalHours,
+                    'errHrs' => $errHours,
+                    'errFound' => $foundErr,      
                     'menu' => self::MENU
         ));
     }
@@ -163,5 +197,4 @@ class ReportController extends Controller {
         $r->headers->set('Content-Type', 'application/json');
         return $r;
     }
-
 }
