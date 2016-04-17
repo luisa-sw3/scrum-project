@@ -51,15 +51,51 @@ class ReportController extends Controller {
 
         $project = $em->getRepository('BackendBundle:Project')->find($id);
 
-        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
-            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
-            return $this->redirectToRoute('backend_projects');
-        }
+        $totalItems = $em->getRepository('BackendBundle:Item')->findByType($project, "3");
 
-        $search = array('project' => $project->getId());
+        $doneTask = $em->getRepository('BackendBundle:Item')->findByTypeStatus($project, "11", "3");
+
+        $totalHours = $em->getRepository('BackendBundle:Item')->totalWorkHours($project);
+
+        $taskHours = $em->getRepository('BackendBundle:Item')->totalWorkHoursByType($project, "3");
+
+        $canceledTasks = $em->getRepository('BackendBundle:Item')->findByTypeStatus($project, "9", "3");
+
+        $ppTasks = $em->getRepository('BackendBundle:Item')->findByTypeStatus($project, "10", "3");
+
+        $foundErr = $em->getRepository('BackendBundle:Item')->findByType($project, "4");
+
+        $fixedErr = $em->getRepository('BackendBundle:Item')->findByTypeStatus($project, "12", "4");
+
+        $errHours = $em->getRepository('BackendBundle:Item')->totalWorkHoursByType($project, "4");
+
+        $totalChanreRqst = $em->getRepository('BackendBundle:Item')->findByType($project, "6");
+
+        $doneChangeRqst = $em->getRepository('BackendBundle:Item')->findByTypeStatus($project, "11", "6");
+
+        $crHours = $em->getRepository('BackendBundle:Item')->totalWorkHoursByType($project, "6");
+
+        $sprints = $em->getRepository('BackendBundle:Sprint')->findByProject($project);
+
+        $sprintsDone = $em->getRepository('BackendBundle:Sprint')->findByStatus($project, "4");
+
 
         return $this->render('BackendBundle:Project/Report:projectReport.html.twig', array(
                     'project' => $project,
+                    'totalItems' => $totalItems,
+                    'done' => $doneTask,
+                    'workHours' => $totalHours,
+                    'taskHours' => $taskHours,
+                    'tCanceled' => $canceledTasks,
+                    'tPostponed' => $ppTasks,
+                    'foundErr' => $foundErr,
+                    'fixedErr' => $fixedErr,
+                    'errHrs' => $errHours,
+                    'totalCR' => $totalChanreRqst,
+                    'doneCR' => $doneChangeRqst,
+                    'crHrs' => $crHours,
+                    'sprints' => $sprints,
+                    'doneSprints' => $sprintsDone,
                     'menu' => self::MENU
         ));
     }
@@ -81,23 +117,25 @@ class ReportController extends Controller {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
             return $this->redirectToRoute('backend_projects');
         }
-        
-        $users = $em->getRepository('BackendBundle:User')->findUsersByProject($id);
-        
-        $search = array('project' => $project->getId());
-        $order = array('creationDate' => 'ASC');
 
-        $sprints = $em->getRepository('BackendBundle:Sprint')->findBy($search, $order);
+        $users = $em->getRepository('BackendBundle:User')->findUsersByProject($id);
+
+//        $search = array('project' => $project->getId());
+//        $order = array('creationDate' => 'ASC');
+//
+//        $sprints = $em->getRepository('BackendBundle:Sprint')->findBy($search, $order);
+//        $sprints = $em->getRepository('BackendBundle:Sprint')->findSprintsByUserProject($project,$user);
+
 
         return $this->render('BackendBundle:Project/Report:userReportIndex.html.twig', array(
                     'project' => $project,
                     'users' => $users,
-                    'sprints' => $sprints,
+//                    'sprints' => $sprints,
                     'menu' => self::MENU
         ));
     }
-    
-        /**
+
+    /**
      * Permite seleccionar el tipo de reporte que se desea generar.
      * Puede ser por un usuario o todos y el sprint specifico o todos los sprints
      * @author Luisa Pereira 28/03/2016
@@ -114,9 +152,9 @@ class ReportController extends Controller {
             $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
             return $this->redirectToRoute('backend_projects');
         }
-        
+
         $users = $em->getRepository('BackendBundle:User')->findUsersByProject($id);
-        
+
         $search = array('project' => $project->getId());
         $order = array('creationDate' => 'ASC');
 
@@ -129,4 +167,63 @@ class ReportController extends Controller {
                     'menu' => self::MENU
         ));
     }
+
+    public function getSprintsByUserAction(Request $request, $id) {
+        $parameters = $request->request;
+        $em = $this->getDoctrine()->getManager();
+
+        $project = $em->getRepository('BackendBundle:Project')->find($id);
+
+        if (!$project || ($project && !$this->container->get('access_control')->isAllowedProject($project->getId()))) {
+            $this->get('session')->getFlashBag()->add('messageError', $this->get('translator')->trans('backend.project.not_found_message'));
+            return $this->redirectToRoute('backend_projects');
+        }
+
+        $userId = $parameters->get('user_id');
+        $html = '';
+
+        //si el servicio seleccionado es ninguno devolver html vacio
+        if ($userId == '') {
+            $response['result'] = '__OK__';
+            $response['html'] = $html;
+
+            $r = new Response(json_encode($response));
+            $r->headers->set('Content-Type', 'application/json');
+            return $r;
+        }
+
+        //si el servicio seleccionado es todos devolver html con todos los usuarios
+        if ($userId == 'all') {
+            $search = array('project' => $project->getId());
+            $order = array('creationDate' => 'ASC');
+
+            $sprints = $em->getRepository('BackendBundle:Sprint')->findBy($search, $order);
+
+            // se recorren los grupo y se arman los options
+            foreach ($sprints as $sprint) {
+                $html = $html . '<option value=' . $sprint->getId() . ' >' . $sprint->getName() . '</option>';
+            }
+
+            $response['result'] = '__OK__';
+            $response['html'] = $html;
+            $r = new Response(json_encode($response));
+            $r->headers->set('Content-Type', 'application/json');
+            return $r;
+        }
+
+        // listado de sprints segun el usuario seleccionado
+        $sprints = $em->getRepository('BackendBundle:Sprint')->findSprintsByUserProject($id, $userId);
+
+        // se recorren los grupo y se arman los options
+        foreach ($sprints as $sprint) {
+            $html = $html . '<option value=' . $sprint->getId() . ' >' . $sprint->getName() . '</option>';
+        }
+
+        $response['result'] = '__OK__';
+        $response['html'] = $html;
+        $r = new Response(json_encode($response));
+        $r->headers->set('Content-Type', 'application/json');
+        return $r;
+    }
+
 }

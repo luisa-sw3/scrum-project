@@ -21,33 +21,55 @@
     {{ filters.showMessage('messageSuccess', 'success')}}
     {{ filters.showMessage('messageError', 'danger')}}
 
+    <!-- Seleccion de un usuario para mostrar sprints -->
     <div class="row">
         <div class="col-lg-6">
             <form role="form">
                 <div class="form-group">
                     <label>{{'backend.report.userSelect'|trans}}</label>
-                    <select class="form-control">
-                        <option>{{'backend.report.userAll'|trans}}</option>
-                        {% for user in users %}
-                            <option>{{ user.name }} {{ user.lastname }}</option>
+                    <select id="userselect" name="userselect" class="form-control">
+                        {% if users%}
+                            <option value="">{{'backend.report.userSelect'|trans}}</option>
+                            {% if users|length == 1 %}
+                                {% for user in users %}
+                                    <option value="{{user.id}}">{{ user.name }} {{ user.lastname }}</option>
+                                {% endfor %}
+                            {% else %} 
+                                <option value="all">{{'backend.report.userAll'|trans}}</option>
+                                {% for user in users %}
+                                    <option value="{{user.id}}">{{ user.name }} {{ user.lastname }}</option>
+                                {% endfor %}
+                            {% endif %}
                         {% else %}
-                            <option>{{'backend.report.empty_list'|trans}}</option>
-                        {% endfor %}
+                            <option value="">{{'backend.report.empty_list'|trans}}</option>
+                        {% endif %}
                     </select>
                 </div>
             </form>
         </div>
+
+        <!-- Seleccion de los sprints -->
         <div class="col-lg-6">
             <form role="form">
                 <div class="form-group">
                     <label>{{'backend.report.sprintSelect'|trans}}</label>
-                    <select class="form-control">
-                        <option>{{'backend.report.sprintAll'|trans}}</option>
-                        {% for sprint in sprints %}
-                            <option>{{ sprint.name }}</option>
+                    <select id="sprintselect" name="sprintselect" class="form-control">
+                        {#{% if sprints %}
+                            <option value="">{{'backend.report.userSelect'|trans}}</option>
+                            {% if sprints|length == 1 %}
+                                {% for sprint in sprints %}
+                                    <option value="{{sprint.id}}">{{sprint.name}}</option>
+                                {% endfor %}
+                            {% else %} 
+                                <option value="all">{{'backend.report.sprintAll'|trans}}</option>
+                                {% for sprint in sprints %}
+                                    <option value="{{sprint.id}}">{{ sprint.name }}</option>
+                                {% endfor %}
+                            {% endif %}
                         {% else %}
-                            <option>{{'backend.report.empty_list'|trans}}</option>
-                        {% endfor %}
+                            <option value="">{{'backend.report.empty_list'|trans}}</option>
+                        {% endif %}#}
+                        <option value="" selected="selected">{{'backend.report.userSelect'|trans}}</option>
                     </select>
                 </div>
             </form>
@@ -60,4 +82,27 @@
         </h1>
     </div>
 
+{% endblock %}
+
+{% block scripts %}
+    $("#userselect").change(function () {
+    var userId = $('#userselect').val();
+
+    $.ajax({
+        type: 'POST',
+        url: "{{ path('backend_project_reports_user_select', {'id':project.id}) }}",
+        dataType: 'json',
+        data: 'user_id='+userId,
+        async: false,
+        success: function(resp){
+            if (resp.result == '__OK__'){
+                $("#sprintselect").html(resp.html);
+                $("#sprintselect").trigger('change');
+            }},
+            error: function (xhr, status, error) {
+                var err = eval("(" + xhr.responseText + ")");
+                alert(err.Message);
+            }
+        });
+    });
 {% endblock %}

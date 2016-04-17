@@ -10,7 +10,7 @@ use Util\Util;
  * Sprint
  * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 23/12/2015
  * @ORM\Table(name="sprint")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="BackendBundle\Entity\SprintRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class Sprint {

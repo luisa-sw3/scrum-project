@@ -21,6 +21,34 @@
     {{ filters.showMessage('messageSuccess', 'success')}}
     {{ filters.showMessage('messageError', 'danger')}}
 
+    <!-- Seteo de variables que se reutilizan -->
+    {% set tt = totalItems | length %}
+    {% set tr = done | length %}
+    {% set ttd = workHours %}
+    {% set tdt = taskHours %}
+    {% set tc = tCanceled | length %}
+    {% set ta = tPostponed | length %}
+    {% set de = foundErr | length %}
+    {% set dc = fixedErr | length %}
+    {% set tdd = errHrs %}
+    {% set sc = totalCR | length %}
+    {% set scd = doneCR | length %}
+    {% set tsc = crHrs %}
+    {% set sp = sprints | length %}
+    {% set sf = doneSprints | length %}
+    {% set ecp = 2 %}
+    {% set ecs = 5 %}
+    {% set ect = 4 %}
+    {% set ecc = 2 %}
+    {% set pts = (tt / sp) %}
+    {% set limDef = 25 %}
+    {% set limCancel = 8 %}
+    {% set limPP = 10 %}
+    {% set limFixErr = 25 %}
+    {% set limSC = 80 %}
+    {% set limCicleErr = 75 %}
+
+    <!-- Tabla con consultas hechas a la base de datos -->
     <div class="row">
         <div class="col-lg-6">
             <h2>{{'backend.report.data.data1'|trans}}</h2>
@@ -37,102 +65,214 @@
                         <tr>
                             <td>TT</td>
                             <td>{{'backend.report.data.tt'|trans}}</td>
-                            <td>220</td>
+                            <td>{{ tt }}</td>
                         </tr>
                         <tr>
                             <td>TR</td>
                             <td>{{'backend.report.data.tr'|trans}}</td>
-                            <td>135</td>
+                            <td>{{ tr }}</td>
                         </tr>
                         <tr>
                             <td>TTD</td>
                             <td>{{'backend.report.data.ttd'|trans}}</td>
-                            <td>575 Hrs</td>
+                            <td>{{ ttd }} Hrs</td>
                         </tr>
                         <tr>
                             <td>TDT</td>
                             <td>{{'backend.report.data.tdt'|trans}}</td>
-                            <td>520 Hrs</td>
+                            <td>{{ tdt }} Hrs</td>
                         </tr>
                         <tr>
                             <td>TC</td>
                             <td>{{'backend.report.data.tc'|trans}}</td>
-                            <td>11</td>
+                            <td>{{ tc }}</td>
                         </tr>
                         <tr>
                             <td>TA</td>
                             <td>{{'backend.report.data.ta'|trans}}</td>
-                            <td>5</td>
+                            <td>{{ ta }}</td>
                         </tr>
                         <tr>
                             <td>DE</td>
                             <td>{{'backend.report.data.de'|trans}}</td>
-                            <td>32</td>
+                            <td>{{ de }}</td>
                         </tr>
-                        <tr>
-                            <td>DC</td>
-                            <td>{{'backend.report.data.dc'|trans}}</td>
-                            <td>26</td>
-                        </tr>
-                        <tr>
-                            <td>TDD</td>
-                            <td>{{'backend.report.data.tdd'|trans}}</td>
-                            <td>55 Hrs</td>
-                        </tr>
-                        <tr>
-                            <td>SC</td>
-                            <td>{{'backend.report.data.sc'|trans}}</td>
-                            <td>15</td>
-                        </tr>
-                        <tr>
-                            <td>SCD</td>
-                            <td>{{'backend.report.data.scd'|trans}}</td>
-                            <td>12</td>
-                        </tr>
-                        <tr>
-                            <td>TSC</td>
-                            <td>{{'backend.report.data.tsc'|trans}}</td>
-                            <td>28 Hrs</td>
-                        </tr>
-                        <tr>
-                            <td>SP</td>
-                            <td>{{'backend.report.data.sp'|trans}}</td>
-                            <td>7</td>
-                        </tr>
-                        <tr>
-                            <td>SF</td>
-                            <td>{{'backend.report.data.sf'|trans}}</td>
-                            <td>4</td>
-                        </tr>
-                        <tr>
-                            <td>PTS</td>
-                            <td>{{'backend.report.data.pts'|trans}}</td>
-                            <td>33</td>
-                        </tr>
-                        <tr>
-                            <td>ECP</td>
-                            <td>{{'backend.report.data.ecp'|trans}}</td>
-                            <td>15</td>
-                        </tr>
-                        <tr>
-                            <td>ECS</td>
-                            <td>{{'backend.report.data.ecs'|trans}}</td>
-                            <td class="warning">5</td>
-                        </tr>
-                        <tr>
-                            <td>ECT</td>
-                            <td>{{'backend.report.data.ect'|trans}}</td>
-                            <td class="warning">4</td>
-                        </tr>
-                        <tr>
-                            <td>ECC</td>
-                            <td>{{'backend.report.data.ecc'|trans}}</td>
-                            <td class="danger">2</td>
-                        </tr>
+                        {% if foundErr|length %}
+                            <tr>
+                                <td>DC</td>
+                                <td>{{'backend.report.data.dc'|trans}}</td>
+                                <td>{{ dc }}</td>
+                            </tr>
+                            <tr>
+                                <td>TDD</td>
+                                <td>{{'backend.report.data.tdd'|trans}}</td>
+                                <td>{{ tdd }} Hrs</td>
+                            </tr>
+                            <tr>
+                                <td>SC</td>
+                                <td>{{'backend.report.data.sc'|trans}}</td>
+                                <td>{{ sc }}</td>
+                            </tr>
+                            {% if totalCR|length %}
+                                <tr> 
+                                    <td>SCD</td>
+                                    <td>{{'backend.report.data.scd'|trans}}</td>
+                                    <td>{{ scd }}</td>
+                                </tr>
+                                <tr>
+                                    <td>TSC</td>
+                                    <td>{{'backend.report.data.tsc'|trans}}</td>                            
+                                    <td>{{ tsc }} Hrs</td>
+                                </tr>                        
+                                <tr>
+                                    <td>SP</td>
+                                    <td>{{'backend.report.data.sp'|trans}}</td>
+                                    <td>{{ sp }}</td>
+                                </tr>
+                                <tr>
+                                    <td>SF</td>
+                                    <td>{{'backend.report.data.sf'|trans}}</td>
+                                    <td>{{ sf }}</td>
+                                </tr>                                
+                                <tr>
+                                    <td>ECP</td>
+                                    <td>{{'backend.report.data.ecp'|trans}}</td>
+                                    <td>{{ ecp }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ECS</td>
+                                    <td>{{'backend.report.data.ecs'|trans}}</td>
+                                    <td class="warning">{{ ecs }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ECT</td>
+                                    <td>{{'backend.report.data.ect'|trans}}</td>
+                                    <td class="warning">{{ ect }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ECC</td>
+                                    <td>{{'backend.report.data.ecc'|trans}}</td>
+                                    <td class="danger">{{ ecc }}</td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td>SP</td>
+                                    <td>{{'backend.report.data.sp'|trans}}</td>
+                                    <td>{{ sp }}</td>
+                                </tr>
+                                <tr>
+                                    <td>SF</td>
+                                    <td>{{'backend.report.data.sf'|trans}}</td>
+                                    <td>{{ sf }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ECP</td>
+                                    <td>{{'backend.report.data.ecp'|trans}}</td>
+                                    <td>{{ ecp }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ECS</td>
+                                    <td>{{'backend.report.data.ecs'|trans}}</td>
+                                    <td class="warning">{{ ecs }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ECT</td>
+                                    <td>{{'backend.report.data.ect'|trans}}</td>
+                                    <td class="warning">{{ ect }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ECC</td>
+                                    <td>{{'backend.report.data.ecc'|trans}}</td>
+                                    <td class="danger">{{ ecc  }}</td>
+                                </tr>
+                            {% endif %}
+                        {% else %}
+                            <tr>
+                                <td>SC</td>
+                                <td>{{'backend.report.data.sc'|trans}}</td>
+                                <td>{{ sc }}</td>
+                            </tr>
+                            {% if totalCR|length %}
+                                <tr>                        
+                                    <td>SCD</td>
+                                    <td>{{'backend.report.data.scd'|trans}}</td>
+                                    <td>{{ scd }}</td>
+                                </tr>
+                                <tr>
+                                    <td>TSC</td>
+                                    <td>{{'backend.report.data.tsc'|trans}}</td>                            
+                                    <td>{{ tcs }} Hrs</td>
+                                </tr>                        
+                                <tr>
+                                    <td>SP</td>
+                                    <td>{{'backend.report.data.sp'|trans}}</td>
+                                    <td>{{ sp }}</td>
+                                </tr>
+                                <tr>
+                                    <td>SF</td>
+                                    <td>{{'backend.report.data.sf'|trans}}</td>
+                                    <td>{{ sf }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ECP</td>
+                                    <td>{{'backend.report.data.ecp'|trans}}</td>
+                                    <td>{{ ecp }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ECS</td>
+                                    <td>{{'backend.report.data.ecs'|trans}}</td>
+                                    <td class="warning">{{ ecs }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ECT</td>
+                                    <td>{{'backend.report.data.ect'|trans}}</td>
+                                    <td class="warning">{{ ect }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ECC</td>
+                                    <td>{{'backend.report.data.ecc'|trans}}</td>
+                                    <td class="danger">{{ ecc }}</td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td>SP</td>
+                                    <td>{{'backend.report.data.sp'|trans}}</td>
+                                    <td>{{ sp }}</td>
+                                </tr>
+                                <tr>
+                                    <td>SF</td>
+                                    <td>{{'backend.report.data.sf'|trans}}</td>
+                                    <td>{{ sf }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ECP</td>
+                                    <td>{{'backend.report.data.ecp'|trans}}</td>
+                                    <td>{{ ecp }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ECS</td>
+                                    <td>{{'backend.report.data.ecs'|trans}}</td>
+                                    <td class="warning">{{ ecs }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ECT</td>
+                                    <td>{{'backend.report.data.ect'|trans}}</td>
+                                    <td class="warning">{{ ect }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ECC</td>
+                                    <td>{{'backend.report.data.ecc'|trans}}</td>
+                                    <td class="danger">{{ ecc }}</td>
+                                </tr>
+                            {% endif %}                               
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
         </div>
+
+        <!-- Tabla con los calculos respetivos a las consultas --
+        -- realizadas previamente -->
         <div class="col-lg-6">
             <h2>{{'backend.report.metric.metrics'|trans}}</h2>
             <div class="table-responsive">
@@ -140,72 +280,169 @@
                     <thead>
                         <tr>
                             <th>{{'backend.report.metric.metric'|trans}}</th>
-                            <th>{{'backend.report.metric.form'|trans}}</th>
+{#                            <th>{{'backend.report.metric.form'|trans}}</th>#}
                             <th>{{'backend.report.metric.limit'|trans}}</th>
                             <th>{{'backend.report.data.sum'|trans}}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <th>{{'backend.report.metric.adv'|trans}}</th>
-                            <td>(TR/TT)*100</td>
+                            <th title="{{'backend.report.metric.form'|trans}}: (TR/TT)*100">{{'backend.report.metric.adv'|trans}}</th>
+{#                            <td>(TR/TT)*100</td>#}
                             <td> ~ </td>
-                            <td>61.36%</td>
+                            {% if tt %}
+                                <td>{{ ((tr / tt) * 100) | number_format(2) }}%</td>                            
+                            {% else %}
+                                <td>{{'backend.report.error'|trans}}</td>                            
+                            {% endif %}
                         </tr>
+
                         <tr>
-                            <th>{{'backend.report.metric.avgHr'|trans}}</th>
-                            <td>((TT-TR)*TTD)/TR + ((DE-DC)*TDD)/DC</td>
+                            <th title="{{'backend.report.metric.form'|trans}}: ((TT-TR)*TTD)/TR + ((DE-DC)*TDD)/DC">{{'backend.report.metric.avgHr'|trans}}</th>
+{#                            <td>((TT-TR)*TTD)/TR + ((DE-DC)*TDD)/DC</td>#}
                             <td>~</td>
-                            <td>378.95 Hrs</td>
+                            {% if tr and dc %}
+                                <td>{{ (((tt - tr) * ttd) / tr + ((de - dc) * tdd) / dc) | number_format(2) }} Hrs</td>
+                            {% else %}
+                                <td>{{'backend.report.error'|trans}}</td>
+                            {% endif %}
                         </tr>
+
                         <tr>
-                            <th>{{'backend.report.metric.foundDefect'|trans}}</th>
-                            <td>(DE/TR)*100)</td>
-                            <td><=25%</td>
-                            <td class="success">23.7%</td>
+                            <th title="{{'backend.report.metric.form'|trans}}: (DE/TR)*100)">{{'backend.report.metric.foundDefect'|trans}}</th>
+{#                            <td>(DE/TR)*100)</td>#}
+                            <td><={{ limDef }}%</td>
+                            {% if tr %}
+                                {% if ((de / tr) * 100) <= limDef %}
+                                    <td class="success">{{ ((de / tr) * 100) | number_format(2) }}%</td>
+                                {% elseif ((de / tr) * 100) == limDef %}
+                                    <td class="warning">{{ ((de / tr) * 100) | number_format(2) }}%</td>
+                                {% else %}
+                                    <td class="danger">{{ ((de / tr) * 100) | number_format(2) }}%</td>
+                                {% endif %}
+                            {% else %}
+                                <td>{{'backend.report.error'|trans}}</td>
+                            {% endif %}
                         </tr>
+
                         <tr>
-                            <th>{{'backend.report.metric.cancelledItem'|trans}}</th>
-                            <td>(TC/TT)*100</td>
-                            <td><=8%</td>
-                            <td class="success">5%</td>
+                            <th title="{{'backend.report.metric.form'|trans}}: (TC/TT)*100">{{'backend.report.metric.cancelledItem'|trans}}</th>
+{#                            <td>(TC/TT)*100</td>#}
+                            <td><={{ limCancel }}</td>
+                            {% if tt %}
+                                {% if ((tc / tt) * 100) <= limCancel %}
+                                    <td class="success">{{ ((tc / tt) * 100) | number_format(2) }}%</td>
+                                {% elseif ((tc / tt) * 100) == limCancel %}
+                                    <td class="warning">{{ ((tc / tt) * 100) | number_format(2) }}%</td>
+                                {% else %}
+                                    <td class="danger">{{ ((tc / tt) * 100) | number_format(2) }}%</td>
+                                {% endif %}
+                            {% else %}
+                                <td>{{'backend.report.error'|trans}}</td>
+                            {% endif %}
                         </tr>
+
                         <tr>
-                            <th>{{'backend.report.metric.postponedItem'|trans}}</th>
-                            <td>(TA/TT)*100</td>
-                            <td><=10%</td>
-                            <td class="success">2.27%</td>
+                            <th title="{{'backend.report.metric.form'|trans}}: (TA/TT)*100">{{'backend.report.metric.postponedItem'|trans}}</th>
+{#                            <td>(TA/TT)*100</td>#}
+                            <td><={{ limPP }}%</td>
+                            {% if tt %}
+                                {% if ((ta / tt) * 100) <= limPP %}
+                                    <td class="success">{{ ((ta / tt) * 100) | number_format(2) }}%</td>
+                                {% elseif ((ta / tt) * 100) == limPP %}
+                                    <td class="warning">{{ ((ta / tt) * 100) | number_format(2) }}%</td>
+                                {% else %}
+                                    <td class="danger">{{ ((ta / tt) * 100) | number_format(2) }}%</td>
+                                {% endif %}
+                            {% else %}
+                                <td>{{'backend.report.error'|trans}}</td>
+                            {% endif %}
                         </tr>
+
                         <tr>
-                            <th>{{'backend.report.metric.avgSprint'|trans}}</th>
-                            <td>(TT-TR)/PTS</td>
+                            <th title="{{'backend.report.metric.form'|trans}}: TT/SP">{{'backend.report.data.pts'|trans}} (PTS)</th>
+{#                            <td>TT/SP</td>#}
                             <td>~</td>
-                            <td>2.57 Sprint(s)</td>
+                            {% if sp %}
+                                <td>{{ pts | number_format(2) }}</td>
+                            {% else %}
+                                <td>{{'backend.report.error'|trans}}</td>
+                            {% endif %}
                         </tr>
+
                         <tr>
-                            <th>{{'backend.report.metric.estError'|trans}}</th>
-                            <td>((DE-DC)*TDD)/DC</td>
+                            <th title="{{'backend.report.metric.form'|trans}}: (TT-TR)/PTS">{{'backend.report.metric.avgSprint'|trans}}</th>
+{#                            <td>(TT-TR)/PTS</td>#}
                             <td>~</td>
-                            <td>16.92 Hora(s)</td>
+                            {% if pts %}
+                                <td>{{ ((tt - tr) / pts) | number_format(2) }} Sprint(s)</td>
+                            {% else %}
+                                <td>{{'backend.report.error'|trans}}</td>
+                            {% endif %}
                         </tr>
+
                         <tr>
-                            <th>{{'backend.report.metric.errorFix'|trans}}</th>
-                            <td>(TDD/TTD)*100</td>
-                            <td><=25%</td>
-                            <td class="success">9.56%</td>
+                            <th title="{{'backend.report.metric.form'|trans}}: ((DE-DC)*TDD)/DC">{{'backend.report.metric.estError'|trans}}</th>
+{#                            <td>((DE-DC)*TDD)/DC</td>#}
+                            <td>~</td>
+                            {% if dc %}
+                                <td>{{ (((de - dc) * tdd) / dc) | number_format(2) }} Hora(s)</td>
+                            {% else %}
+                                <td>{{'backend.report.error'|trans}}</td>
+                            {% endif %}
                         </tr>
+
                         <tr>
-                            <th>{{'backend.report.metric.changeReq'|trans}}</th>
-                            <td>(SCD/SC)*100</td>
-                            <td>>=80%</td>
-                            <td class="warning">80%</td>
+                            <th title="{{'backend.report.metric.form'|trans}}: (TDD/TTD)*100">{{'backend.report.metric.errorFix'|trans}}</th>
+{#                            <td>(TDD/TTD)*100</td>#}
+                            <td><={{ limFixErr }}%</td>
+                            {% if ttd %}
+                                {% if ((tdd / ttd) * 100) <= limPP %}
+                                    <td class="success">{{ ((tdd / ttd) * 100) | number_format(2) }}%</td>
+                                {% elseif ((tdd / ttd) * 100) == limPP %}
+                                    <td class="warning">{{ ((tdd / ttd) * 100) | number_format(2) }}%</td>
+                                {% else %}
+                                    <td class="danger">{{ ((tdd / ttd) * 100) | number_format(2) }}%</td>
+                                {% endif %}
+                            {% else %}
+                                <td>{{'backend.report.error'|trans}}</td>
+                            {% endif %}
                         </tr>
+
                         <tr>
-                            <th>{{'backend.report.metric.cicleOneFix'|trans}}</th>
-                            <td>(ECP/DC)*100</td>
-                            <td>>=75%</td>
-                            <td class="danger">57.69%</td>
+                            <th title="{{'backend.report.metric.form'|trans}}: (SCD/SC)*100">{{'backend.report.metric.changeReq'|trans}}</th>
+{#                            <td>(SCD/SC)*100</td>#}
+                            <td>>={{ limSC }}%</td>
+                            {% if sc %}
+                                {% if ((scd / sc) * 100) >= limSC %}
+                                    <td class="success">{{ ((scd / sc) * 100) | number_format(2) }}%</td>
+                                {% elseif ((scd / sc) * 100) == limSC %}
+                                    <td class="warning">{{ ((scd / sc) * 100) | number_format(2) }}%</td>
+                                {% else %}
+                                    <td class="danger">{{ ((scd / sc) * 100) | number_format(2) }}%</td>
+                                {% endif %}
+                            {% else %}
+                                <td>{{'backend.report.error'|trans}}</td>
+                            {% endif %}
                         </tr>
+
+                        <tr>
+                            <th title="{{'backend.report.metric.form'|trans}}: (ECP/DC)*100">{{'backend.report.metric.cicleOneFix'|trans}}</th>
+{#                            <td>(ECP/DC)*100</td>#}
+                            <td>>={{ limCicleErr }}%</td>
+                            {% if dc %}
+                                {% if ((ecp / dc) * 100) >= limCicleErr %}
+                                    <td class="success">{{ ((ecp / dc) * 100) | number_format(2) }}%</td>
+                                {% elseif ((ecp / dc) * 100) == limCicleErr %}
+                                    <td class="warning">{{ ((ecp / dc) * 100) | number_format(2) }}%</td>
+                                {% else %}
+                                    <td class="danger">{{ ((ecp / dc) * 100) | number_format(2) }}%</td>
+                                {% endif %}
+                            {% else %}
+                                <td>{{'backend.report.error'|trans}}</td>
+                            {% endif %}
+                        </tr>
+
                     </tbody>
                 </table>
             </div>
