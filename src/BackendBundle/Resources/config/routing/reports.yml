@@ -6,12 +6,12 @@ backend_project_reports:
 backend_project_reports_user:
     path:     /userReport
     defaults: { _controller: "BackendBundle:Report:indexUser" }
-    methods:  GET
+    methods:  [GET, POST]
  
 backend_project_reports_user_select:
     path:     /userReport/select
     defaults: { _controller: "BackendBundle:Report:getSprintsByUser" }
-    methods:  POST
+    methods:  [GET, POST]
     
 backend_project_reports_user_sprint:
     path:     /userReport1

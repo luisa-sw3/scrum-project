@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use BackendBundle\Form\SprintType;
 use BackendBundle\Entity as Entity;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Util\Util;
 
 /**
@@ -119,12 +120,11 @@ class ReportController extends Controller {
         return $this->render('BackendBundle:Project/Report:userReportIndex.html.twig', array(
                     'project' => $project,
                     'users' => $users,
-//                    'sprints' => $sprints,
                     'menu' => self::MENU
         ));
     }
 
-   /**
+    /**
      * Permite seleccionar el tipo de reporte que se desea generar.
      * Puede ser por un usuario o todos y el sprint specifico o todos los sprints
      * @author Luisa Pereira 28/03/2016
@@ -152,7 +152,7 @@ class ReportController extends Controller {
                     'estHrs' => $estHours,
                     'totalHrs' => $totalHours,
                     'errHrs' => $errHours,
-                    'errFound' => $foundErr,      
+                    'errFound' => $foundErr,
                     'menu' => self::MENU
         ));
     }
@@ -171,11 +171,15 @@ class ReportController extends Controller {
 
             $sprints = $em->getRepository('BackendBundle:Sprint')->findByProject($project);
 
-            // se recorren los grupo y se arman los options
-            foreach ($sprints as $sprint) {
-                $html = $html . '<option value=' . $sprint->getId() . ' >' . $sprint->getName() . '</option>';
+            if ($sprints) {
+                // se recorren los grupo y se arman los options
+                foreach ($sprints as $sprint) {
+                    $html = $html . '<option value="' . $sprint->getId() . '">' . $sprint->getName() . '</option>';
+                }
+            } else {
+                $html = '<option> -- No Sprint -- </option>';
             }
-
+            
             $response['result'] = '__OK__';
             $response['html'] = $html;
             $r = new Response(json_encode($response));
@@ -183,18 +187,27 @@ class ReportController extends Controller {
             return $r;
         }
 
+
         // listado de sprints segun el usuario seleccionado
-        $sprints = $em->getRepository('BackendBundle:Sprint')->findSprintsByUserProject($id, $userId);
+        $sprints = $em->getRepository('BackendBundle:Sprint')->findByUser($project, $userId);
 
-        // se recorren los grupo y se arman los options
-        foreach ($sprints as $sprint) {
-            $html = $html . '<option value=' . $sprint->getId() . ' >' . $sprint->getName() . '</option>';
+        if ($sprints) {
+            // se recorren los grupo y se arman los options
+            foreach ($sprints as $sprint) {
+                $html = $html . '<option value="' . $sprint->getId() . '">' . $sprint->getName() . '</option>';
+            }
+        } else {
+            $html = '<option> -- No Sprint -- </option>';
         }
-
+        
         $response['result'] = '__OK__';
         $response['html'] = $html;
         $r = new Response(json_encode($response));
         $r->headers->set('Content-Type', 'application/json');
         return $r;
+
+        print("  Html: " . $html);
+        return $r;
     }
+
 }
