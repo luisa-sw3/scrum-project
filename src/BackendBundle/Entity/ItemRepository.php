@@ -165,6 +165,7 @@ class ItemRepository extends EntityRepository {
     }
 
     //------------------ Consultas para los reportes de usuarios ------------------//
+    
     public function findByTypeUserSprint($projectId, $type, $usrId, $sprintId) {
 
         $repository = $this->getEntityManager();

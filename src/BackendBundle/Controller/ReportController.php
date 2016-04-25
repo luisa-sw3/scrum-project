@@ -133,12 +133,12 @@ class ReportController extends Controller {
      * @param string $id identificador del proyecto
      * @return type
      */
-    public function userReportAction(Request $request, $id) {
+    public function userReportAction(Request $request, $id, $userId, $sprintId) {        
         $em = $this->getDoctrine()->getManager();
 
         $project = $em->getRepository('BackendBundle:Project')->find($id);
 
-        $taskAssigned = $em->getRepository('BackendBundle:Item')->findByType($project, "3");
+        $taskAssigned = $em->getRepository('BackendBundle:Item')->findByTypeUserSprint($project, "3", $userId, $sprintId);
         $doneTask = $em->getRepository('BackendBundle:Item')->findByTypeStatus($project, "11", "3");
         $estHours = $em->getRepository('BackendBundle:Item')->totalEstHours($project);
         $totalHours = $em->getRepository('BackendBundle:Item')->totalWorkHours($project);
@@ -172,14 +172,15 @@ class ReportController extends Controller {
             $sprints = $em->getRepository('BackendBundle:Sprint')->findByProject($project);
 
             if ($sprints) {
+                $html = '<option value="' . 'selectsprint' . '"> -- Select Sprint --  </option>';
                 // se recorren los grupo y se arman los options
                 foreach ($sprints as $sprint) {
                     $html = $html . '<option value="' . $sprint->getId() . '">' . $sprint->getName() . '</option>';
                 }
             } else {
-                $html = '<option> -- No Sprint -- </option>';
+                $html = '<option value="'.'nosprint'.'"> -- No Sprint -- </option>';
             }
-            
+
             $response['result'] = '__OK__';
             $response['html'] = $html;
             $r = new Response(json_encode($response));
@@ -192,22 +193,24 @@ class ReportController extends Controller {
         $sprints = $em->getRepository('BackendBundle:Sprint')->findByUser($project, $userId);
 
         if ($sprints) {
+            $html = '<option value="' . 'selectsprint' . '"> -- Select Sprint --  </option>';
+            $html = $html . '<option value="'. 'all' .'">' . 'Todos los Sprints' . '</option>';
             // se recorren los grupo y se arman los options
             foreach ($sprints as $sprint) {
                 $html = $html . '<option value="' . $sprint->getId() . '">' . $sprint->getName() . '</option>';
             }
         } else {
-            $html = '<option> -- No Sprint -- </option>';
+            $html = '<option value="'.'nosprint'.'"> -- No Sprint -- </option>';
         }
-        
+
         $response['result'] = '__OK__';
         $response['html'] = $html;
         $r = new Response(json_encode($response));
         $r->headers->set('Content-Type', 'application/json');
         return $r;
 
-        print("  Html: " . $html);
-        return $r;
+//        print("  Html: " . $html);
+//        return $r;
     }
 
 }

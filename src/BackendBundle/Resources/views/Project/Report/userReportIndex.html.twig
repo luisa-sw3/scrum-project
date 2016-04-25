@@ -62,10 +62,8 @@
         </div>
     </div>
 
-    <div class="col-lg-12">
-        <h1>
-            <a href="{{ path('backend_project_reports_user_sprint',{'id':project.id}) }}" class="btn btn-primary pull-right">{{'backend.report.generate'|trans}}</a>
-        </h1>
+    <div class="col-lg-12" id="reportBtn">
+        
     </div>
 {% endblock %}
 
@@ -93,4 +91,47 @@
             }
         });
     });
+    
+    $('#userselect').change(function() {
+        userId = $(this).val();
+        
+        var sprintId = document.getElementById("sprintselect").value;
+        
+        document.getElementById("sprintselect").addEventListener('change', function() {
+            sprintId = '';
+            sprintId = document.getElementById("sprintselect").value;
+            console.log('user_id= ' + userId +' sprint_id= '+ sprintId + " ONCHANGE");
+            
+                
+            if(document.getElementById('reportBtn').hasChildNodes())
+            {
+                document.getElementById('reportBtn').removeChild(document.getElementById('reportBtn').firstChild);
+            }
+            var para = document.createElement("A");            
+
+            // Crea el atributo href
+            var attH = document.createAttribute("href");
+            attH.value = "{{ path('backend_project_reports_user_sprint', {'id':project.id, 'userId': userId, 'sprintId': sprintId}) }}";            
+            para.setAttributeNode(attH); 
+
+            // Crea el atributo id
+            var attId = document.createAttribute("id");
+            attId.value = "genbutton";
+            para.setAttributeNode(attId);
+
+            // Crea el atributo class
+            var attC = document.createAttribute("class");
+            attC.value = "btn btn-primary pull-right";
+            para.setAttributeNode(attC);
+
+            // creo el texto del boton
+            var t = document.createTextNode("{{'backend.report.generate'|trans}}");
+            para.appendChild(t);
+
+            // Se agregar todo al div que genera el reporte
+            document.getElementById("reportBtn").appendChild(para);
+
+        }, false);
+    });
+
 {% endblock %}

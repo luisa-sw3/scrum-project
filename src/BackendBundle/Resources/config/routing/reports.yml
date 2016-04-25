@@ -4,7 +4,7 @@ backend_project_reports:
     methods:  GET
     
 backend_project_reports_user:
-    path:     /userReport
+    path:     /userIndexReport
     defaults: { _controller: "BackendBundle:Report:indexUser" }
     methods:  [GET, POST]
  
@@ -14,7 +14,7 @@ backend_project_reports_user_select:
     methods:  [GET, POST]
     
 backend_project_reports_user_sprint:
-    path:     /userReport1
+    path:     /userReport
     defaults: { _controller: "BackendBundle:Report:userReport" }
     methods:  [GET, POST]
 
