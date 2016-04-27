@@ -4,11 +4,9 @@ namespace BackendBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use BackendBundle\Form\SprintType;
 use BackendBundle\Entity as Entity;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Util\Util;
 
 /**
  * Sprint controller.
@@ -124,39 +122,6 @@ class ReportController extends Controller {
         ));
     }
 
-    /**
-     * Permite seleccionar el tipo de reporte que se desea generar.
-     * Puede ser por un usuario o todos y el sprint specifico o todos los sprints
-     * @author Luisa Pereira 28/03/2016
-     * @author Jorge Cardona 17/04/2016
-     * @param Request $request
-     * @param string $id identificador del proyecto
-     * @return type
-     */
-    public function userReportAction(Request $request, $id, $userId, $sprintId) {        
-        $em = $this->getDoctrine()->getManager();
-
-        $project = $em->getRepository('BackendBundle:Project')->find($id);
-
-        $taskAssigned = $em->getRepository('BackendBundle:Item')->findByTypeUserSprint($project, "3", $userId, $sprintId);
-        $doneTask = $em->getRepository('BackendBundle:Item')->findByTypeStatus($project, "11", "3");
-        $estHours = $em->getRepository('BackendBundle:Item')->totalEstHours($project);
-        $totalHours = $em->getRepository('BackendBundle:Item')->totalWorkHours($project);
-        $errHours = $em->getRepository('BackendBundle:Item')->totalWorkHoursByType($project, "4");
-        $foundErr = $em->getRepository('BackendBundle:Item')->findByType($project, "4");
-
-        return $this->render('BackendBundle:Project/Report:userReport.html.twig', array(
-                    'project' => $project,
-                    'assignedTasks' => $taskAssigned,
-                    'doneTask' => $doneTask,
-                    'estHrs' => $estHours,
-                    'totalHrs' => $totalHours,
-                    'errHrs' => $errHours,
-                    'errFound' => $foundErr,
-                    'menu' => self::MENU
-        ));
-    }
-
     public function getSprintsByUserAction(Request $request, $id) {
         $parameters = $request->request;
         $em = $this->getDoctrine()->getManager();
@@ -172,13 +137,13 @@ class ReportController extends Controller {
             $sprints = $em->getRepository('BackendBundle:Sprint')->findByProject($project);
 
             if ($sprints) {
-                $html = '<option value="' . 'selectsprint' . '"> -- Select Sprint --  </option>';
+                $html = '<option value="' . 'select' . '"> -- Select Sprint --  </option>';
                 // se recorren los grupo y se arman los options
                 foreach ($sprints as $sprint) {
                     $html = $html . '<option value="' . $sprint->getId() . '">' . $sprint->getName() . '</option>';
                 }
             } else {
-                $html = '<option value="'.'nosprint'.'"> -- No Sprint -- </option>';
+                $html = '<option value="' . 'nosprint' . '"> -- No Sprint -- </option>';
             }
 
             $response['result'] = '__OK__';
@@ -193,14 +158,14 @@ class ReportController extends Controller {
         $sprints = $em->getRepository('BackendBundle:Sprint')->findByUser($project, $userId);
 
         if ($sprints) {
-            $html = '<option value="' . 'selectsprint' . '"> -- Select Sprint --  </option>';
-            $html = $html . '<option value="'. 'all' .'">' . 'Todos los Sprints' . '</option>';
+            $html = '<option value="' . 'select' . '"> -- Select Sprint --  </option>';
+            $html = $html . '<option value="' . 'all' . '">' . 'Todos' . '</option>';
             // se recorren los grupo y se arman los options
             foreach ($sprints as $sprint) {
                 $html = $html . '<option value="' . $sprint->getId() . '">' . $sprint->getName() . '</option>';
             }
         } else {
-            $html = '<option value="'.'nosprint'.'"> -- No Sprint -- </option>';
+            $html = '<option value="' . 'nosprint' . '"> -- No Sprint -- </option>';
         }
 
         $response['result'] = '__OK__';
@@ -211,6 +176,68 @@ class ReportController extends Controller {
 
 //        print("  Html: " . $html);
 //        return $r;
+    }
+
+    /**
+     * Permite seleccionar el tipo de reporte que se desea generar.
+     * Puede ser por un usuario o todos y el sprint specifico o todos los sprints
+     * @author Luisa Pereira 28/03/2016
+     * @author Jorge Cardona 17/04/2016
+     * @param Request $request
+     * @param string $id identificador del proyecto
+     * @return type
+     */
+    public function userReportAction(Request $request, $id) {
+        $em = $this->getDoctrine()->getManager();
+
+        $project = $em->getRepository('BackendBundle:Project')->find($id);
+
+
+        $userId = $_GET['user_id'];
+        $sprintId = $_GET['sprint_id'];
+
+        $user = '';
+        $sprintName = '';
+
+//        \Symfony\Component\VarDumper\VarDumper::dump($userId);
+//        \Symfony\Component\VarDumper\VarDumper::dump($sprintId);
+//        die();
+
+
+        if ($userId != "all") {
+            $user = $em->getRepository('BackendBundle:User')->find($userId)->__toString();
+        } else {
+            $user = $userId;
+        }
+
+
+        if ($sprintId !== 'all') {
+            $sprintName = $em->getRepository('BackendBundle:Sprint')->find($sprintId)->getName();
+        } else {
+            $sprintName = $sprintId;
+        }
+
+        $taskAssigned = $em->getRepository('BackendBundle:Item')->findByTypeUserSprint($project, "3", $userId, $sprintId);
+        $doneTask = $em->getRepository('BackendBundle:Item')->findByTypeStatus($project, "11", "3");
+        $estHours = $em->getRepository('BackendBundle:Item')->totalEstHours($project);
+        $totalHours = $em->getRepository('BackendBundle:Item')->totalWorkHours($project);
+        $errHours = $em->getRepository('BackendBundle:Item')->totalWorkHoursByType($project, "4");
+        $foundErr = $em->getRepository('BackendBundle:Item')->findByType($project, "4");
+
+        return $this->render('BackendBundle:Project/Report:userReport.html.twig', array(
+                    'project' => $project,
+                    'userId' => $userId,
+                    'sprintId' => $sprintId,
+                    'userSelect' => $user,
+                    'sprintSelect' => $sprintName,
+                    'assignedTasks' => $taskAssigned,
+                    'doneTask' => $doneTask,
+                    'estHrs' => $estHours,
+                    'totalHrs' => $totalHours,
+                    'errHrs' => $errHours,
+                    'errFound' => $foundErr,
+                    'menu' => self::MENU
+        ));
     }
 
 }

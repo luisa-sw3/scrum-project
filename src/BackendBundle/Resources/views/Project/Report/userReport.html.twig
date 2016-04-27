@@ -45,11 +45,11 @@
                     <thead>
                         <tr>
                             <th>{{'backend.report.userName'|trans}}</td>
-                            <td>Todos los Usuarios</td>
+                            <td>{{ userSelect }}</td>
                         </tr>
                         <tr>
                             <th>{{'backend.report.sprintName'|trans}}</td>
-                            <td>Todos los Sprints</td>
+                            <td>{{ sprintSelect }}</td>
                         </tr>
                     </thead>
                 </table>
@@ -152,10 +152,14 @@
                             <th title="{{'backend.report.metric.form'|trans}}: (TR/TA)*100">{{'backend.report.metric.percentageProd'|trans}}</th>
                                 {#                            <td>(TR/TA)*100</td>#}
                             <td> >={{ limProd }}% </td>
-                            {% if ((tr / ta) * 100) >= limProd %}
-                                <td class="success">{{ ((tr / ta) * 100) | number_format(2) }}%</td>
+                            {% if ta %}
+                                {% if ((tr / ta) * 100) >= limProd %}
+                                    <td class="success">{{ ((tr / ta) * 100) | number_format(2) }}%</td>
+                                {% else %}
+                                    <td class="danger">{{ ((tr / ta) * 100) | number_format(2) }}%</td>
+                                {% endif %}
                             {% else %}
-                                <td class="danger">{{ ((tr / ta) * 100) | number_format(2) }}%</td>
+                                <td>{{'backend.report.error'|trans}}</td>
                             {% endif %}
                         </tr>
                         <tr>
@@ -172,20 +176,28 @@
                             <th title="{{'backend.report.metric.form'|trans}}: (DT/TE)*100">{{'backend.report.metric.deviationEst'|trans}}</th>
                                 {#                            <td>(DT/TE)*100</td>#}
                             <td> <={{ limEst }}% </td>
-                            {% if ((dt / te) * 100) <= limEst %}
-                                <td class="success">{{ ((dt / te) * 100) | number_format(2) }}%</td>
+                            {% if te %}
+                                {% if ((dt / te) * 100) <= limEst %}
+                                    <td class="success">{{ ((dt / te) * 100) | number_format(2) }}%</td>
+                                {% else %}
+                                    <td class="danger">{{ ((dt / te) * 100) | number_format(2) }}%</td>
+                                {% endif %}
                             {% else %}
-                                <td class="danger">{{ ((dt / te) * 100) | number_format(2) }}%</td>
+                                <td>{{'backend.report.error'|trans}}</td>
                             {% endif %}
                         </tr>
                         <tr>
                             <th title="{{'backend.report.metric.form'|trans}}: DD/TR">{{'backend.report.metric.errorDens'|trans}}</th>
                                 {#                            <td> DD/TR </td>#}
                             <td><={{ limDefect }}</td>
-                            {% if (dd / tr) <= limDefect %}
-                                <td class="success">{{ (dd / tr) | number_format(2) }}</td>
+                            {% if tr %}
+                                {% if (dd / tr) <= limDefect %}
+                                    <td class="success">{{ (dd / tr) | number_format(2) }}</td>
+                                {% else %}
+                                    <td class="danger">{{ (dd / tr) | number_format(2) }}</td>
+                                {% endif %}
                             {% else %}
-                                <td class="danger">{{ (dd / tr) | number_format(2) }}</td>
+                                <td>{{'backend.report.error'|trans}}</td>
                             {% endif %}
                         </tr>
                     </tbody>

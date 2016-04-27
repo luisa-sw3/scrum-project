@@ -20,6 +20,7 @@
     <!-- /.row -->
     {{ filters.showMessage('messageSuccess', 'success')}}
     {{ filters.showMessage('messageError', 'danger')}}
+    
 
     <!-- Seleccion de un usuario para mostrar sprints -->
     <div class="row">
@@ -30,19 +31,19 @@
                     <select id="userselect" name="userselect" class="form-control">
                         {% if users %}                            
                             {% if users|length == 1 %}
-                                <option value="" selected="selected">-- Select User --</option>
+                                <option value="select" selected="selected">-- Select User --</option>
                                 {% for user in users %}
                                     <option value="{{user.id}}">{{ user.name }} {{ user.lastname }}</option>
                                 {% endfor %}
                             {% else %} 
-                                <option value="" selected="selected">-- Select User --</option>
+                                <option value="select" selected="selected">-- Select User --</option>
                                 <option value="all">{{'backend.report.userAll'|trans}}</option>
                                 {% for user in users %}
                                     <option value="{{user.id}}">{{ user.name }} {{ user.lastname }}</option>
                                 {% endfor %}
                             {% endif %}
                         {% else %}
-                            <option value="" selected="selected">{{'backend.report.empty_list'|trans}}</option>
+                            <option value="empty" selected="selected">{{'backend.report.empty_list'|trans}}</option>
                         {% endif %}
                     </select>
                 </div>
@@ -55,7 +56,7 @@
                 <div class="form-group">
                     <label>{{'backend.report.sprintSelect'|trans}}</label>
                     <select id="sprintselect" name="sprintselect" class="form-control">
-                        <option value="" selected="selected">-- Select Sprint --</option>
+                        <option value="empty" selected="selected">{{'backend.report.empty_list'|trans}}</option>
                     </select>
                 </div>
             </form>
@@ -63,7 +64,7 @@
     </div>
 
     <div class="col-lg-12" id="reportBtn">
-        
+          
     </div>
 {% endblock %}
 
@@ -102,35 +103,31 @@
             sprintId = document.getElementById("sprintselect").value;
             console.log('user_id= ' + userId +' sprint_id= '+ sprintId + " ONCHANGE");
             
-                
-            if(document.getElementById('reportBtn').hasChildNodes())
-            {
-                document.getElementById('reportBtn').removeChild(document.getElementById('reportBtn').firstChild);
+            if( !(sprintId == "select") ){
+                window.location.href = '{{ path('backend_project_reports_user_sprint', {'id':project.id}) }}?user_id=' + userId +'&sprint_id='+ sprintId;
             }
-            var para = document.createElement("A");            
-
-            // Crea el atributo href
-            var attH = document.createAttribute("href");
-            attH.value = "{{ path('backend_project_reports_user_sprint', {'id':project.id, 'userId': userId, 'sprintId': sprintId}) }}";            
-            para.setAttributeNode(attH); 
-
-            // Crea el atributo id
-            var attId = document.createAttribute("id");
-            attId.value = "genbutton";
-            para.setAttributeNode(attId);
-
-            // Crea el atributo class
-            var attC = document.createAttribute("class");
-            attC.value = "btn btn-primary pull-right";
-            para.setAttributeNode(attC);
-
-            // creo el texto del boton
-            var t = document.createTextNode("{{'backend.report.generate'|trans}}");
-            para.appendChild(t);
-
-            // Se agregar todo al div que genera el reporte
-            document.getElementById("reportBtn").appendChild(para);
-
+            else{
+                alert("Seleccione un Sprint!");
+                
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('backend_project_reports_user_select', {'id':project.id}) }}",
+                    dataType: 'json',
+                    data: 'user_id=' + userId,
+                    async: false,
+                    success: function(resp){           
+                        if (resp.result == '__OK__')
+                        {
+                            $("#sprintselect").html(resp.html);
+                            $("#sprintselect").trigger('change');                
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
+                    }
+                });
+            }
         }, false);
     });
 
