@@ -290,8 +290,7 @@ backend:
         stop_sprint_message: "Are you sure you want to stop this Sprint?"
         finish_sprint: "Finish Sprint"
         finish_sprint_message: "Are you sure you want to finish this Sprint?"
-        
-        
+               
     report: 
         reports: "Reports"
         project: "Project Report"
@@ -343,6 +342,7 @@ backend:
         sprintSelect: "Select a Sprint"
         sprintAll: "All Sprints"
         empty_list: "No Users"
+        sprint_empty_list: "This user doesn't have any assigned sprints or items"
         generate: "Generate Report"
         userName: "User"
         sprintName: "Sprint Selected"

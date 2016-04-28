@@ -31,12 +31,12 @@
                     <select id="userselect" name="userselect" class="form-control">
                         {% if users %}                            
                             {% if users|length == 1 %}
-                                <option value="select" selected="selected">-- Select User --</option>
+                                <option value="select" selected="selected">-- {{ 'backend.report.userSelect'|trans}} --</option>
                                 {% for user in users %}
                                     <option value="{{user.id}}">{{ user.name }} {{ user.lastname }}</option>
                                 {% endfor %}
                             {% else %} 
-                                <option value="select" selected="selected">-- Select User --</option>
+                                <option value="select" selected="selected">-- {{ 'backend.report.userSelect'|trans}} --</option>
                                 <option value="all">{{'backend.report.userAll'|trans}}</option>
                                 {% for user in users %}
                                     <option value="{{user.id}}">{{ user.name }} {{ user.lastname }}</option>
@@ -56,7 +56,7 @@
                 <div class="form-group">
                     <label>{{'backend.report.sprintSelect'|trans}}</label>
                     <select id="sprintselect" name="sprintselect" class="form-control">
-                        <option value="empty" selected="selected">{{'backend.report.empty_list'|trans}}</option>
+                        
                     </select>
                 </div>
             </form>

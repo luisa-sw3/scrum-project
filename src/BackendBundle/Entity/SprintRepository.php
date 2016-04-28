@@ -6,6 +6,13 @@ use Doctrine\ORM\EntityRepository;
 
 class SprintRepository extends EntityRepository {
 
+    /**
+     * Permite listar los sprints de un proyecto segun el criterio de busqueda
+     * @author Luisa F. Pereira 27/04/2016
+     * @param string $projectId Id del projecto
+     * @param string $userId Id del usuario
+     * @return  array[Sprint] de horas estimadas
+     */
     public function findSprintsByUserProject($projectId, $userId) {
 
         $em = $this->getEntityManager();
@@ -21,6 +28,13 @@ class SprintRepository extends EntityRepository {
         return $consult->getResult();
     }
 
+    /**
+     * Permite listar los sprints de un proyecto segun el criterio de busqueda
+     * @author Luisa F. Pereira 27/04/2016
+     * @param string $projectId Id del projecto
+     * @param string $status Id del estado
+     * @return  array[Sprint] de horas estimadas
+     */
     public function findByStatus($projectId, $status) {
 
         $repository = $this->getEntityManager();
@@ -30,12 +44,19 @@ class SprintRepository extends EntityRepository {
             FROM BackendBundle:Sprint s
             WHERE s.project = :projectId
             AND s.status = :status");
+
         $query->setParameter('projectId', $projectId);
         $query->setParameter('status', $status);
 
         return $query->getResult();
     }
 
+    /**
+     * Permite listar los sprints de un proyecto segun el criterio de busqueda
+     * @author Luisa F. Pereira 27/04/2016
+     * @param string $projectId Id del projecto
+     * @return  array[Sprint] de horas estimadas
+     */
     public function findByProject($projectId) {
 
         $repository = $this->getEntityManager();
@@ -49,7 +70,14 @@ class SprintRepository extends EntityRepository {
 
         return $query->getResult();
     }
-    
+
+    /**
+     * Permite listar los sprints de un proyecto segun el criterio de busqueda
+     * @author Luisa F. Pereira 27/04/2016
+     * @param string $projectId Id del projecto
+     * @param string $usrId Id del usuario
+     * @return  array[Sprint] de horas estimadas
+     */
     public function findByUser($projectId, $usrId) {
 
         $repository = $this->getEntityManager();

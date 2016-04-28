@@ -134,7 +134,7 @@
                                     <td>{{'backend.report.data.sf'|trans}}</td>
                                     <td>{{ sf }}</td>
                                 </tr>                                
-                                <tr>
+                                {#<tr>
                                     <td>ECP</td>
                                     <td>{{'backend.report.data.ecp'|trans}}</td>
                                     <td>{{ ecp }}</td>
@@ -153,7 +153,7 @@
                                     <td>ECC</td>
                                     <td>{{'backend.report.data.ecc'|trans}}</td>
                                     <td class="danger">{{ ecc }}</td>
-                                </tr>
+                                </tr>#}
                             {% else %}
                                 <tr>
                                     <td>SP</td>
@@ -165,7 +165,7 @@
                                     <td>{{'backend.report.data.sf'|trans}}</td>
                                     <td>{{ sf }}</td>
                                 </tr>
-                                <tr>
+                                {#<tr>
                                     <td>ECP</td>
                                     <td>{{'backend.report.data.ecp'|trans}}</td>
                                     <td>{{ ecp }}</td>
@@ -184,7 +184,7 @@
                                     <td>ECC</td>
                                     <td>{{'backend.report.data.ecc'|trans}}</td>
                                     <td class="danger">{{ ecc  }}</td>
-                                </tr>
+                                </tr>#}
                             {% endif %}
                         {% else %}
                             <tr>
@@ -213,7 +213,7 @@
                                     <td>{{'backend.report.data.sf'|trans}}</td>
                                     <td>{{ sf }}</td>
                                 </tr>
-                                <tr>
+                                {#<tr>
                                     <td>ECP</td>
                                     <td>{{'backend.report.data.ecp'|trans}}</td>
                                     <td>{{ ecp }}</td>
@@ -232,7 +232,7 @@
                                     <td>ECC</td>
                                     <td>{{'backend.report.data.ecc'|trans}}</td>
                                     <td class="danger">{{ ecc }}</td>
-                                </tr>
+                                </tr>#}
                             {% else %}
                                 <tr>
                                     <td>SP</td>
@@ -244,7 +244,7 @@
                                     <td>{{'backend.report.data.sf'|trans}}</td>
                                     <td>{{ sf }}</td>
                                 </tr>
-                                <tr>
+                                {#<tr>
                                     <td>ECP</td>
                                     <td>{{'backend.report.data.ecp'|trans}}</td>
                                     <td>{{ ecp }}</td>
@@ -263,7 +263,7 @@
                                     <td>ECC</td>
                                     <td>{{'backend.report.data.ecc'|trans}}</td>
                                     <td class="danger">{{ ecc }}</td>
-                                </tr>
+                                </tr>#}
                             {% endif %}                               
                         {% endif %}
                     </tbody>
@@ -426,10 +426,10 @@
                             {% endif %}
                         </tr>
 
-                        <tr>
+                        {#<tr>
                             <th title="{{'backend.report.metric.form'|trans}}: (ECP/DC)*100">{{'backend.report.metric.cicleOneFix'|trans}}</th>
 {#                            <td>(ECP/DC)*100</td>#}
-                            <td>>={{ limCicleErr }}%</td>
+                            {#<td>>={{ limCicleErr }}%</td>
                             {% if dc %}
                                 {% if ((ecp / dc) * 100) >= limCicleErr %}
                                     <td class="success">{{ ((ecp / dc) * 100) | number_format(2) }}%</td>
@@ -441,7 +441,7 @@
                             {% else %}
                                 <td>{{'backend.report.error'|trans}}</td>
                             {% endif %}
-                        </tr>
+                        </tr>#}
 
                     </tbody>
                 </table>
@@ -451,7 +451,7 @@
 
     <div class="col-lg-12">
         <h1>
-            <a href="#" class="btn btn-default pull-right">{{'backend.global.pdf'|trans}}</a>
+            <a href="#" class="btn btn-primary pull-right">{{'backend.global.pdf'|trans}}</a>
         </h1>
     </div>
 {% endblock %}

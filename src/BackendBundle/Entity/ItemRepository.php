@@ -99,292 +99,232 @@ class ItemRepository extends EntityRepository {
         return $consult->getResult();
     }
 
-    public function findByType($projectId, $type) {
+    //------------------ Consultas para los reportes ------------------//
+
+    /**
+     * Permite listar los items de un proyecto segun el criterio de busqueda
+     * @author Luisa Pereira 27/04/2016
+     * @param string $projectId Id del projecto
+     * @param string $usrId Id del usuario
+     * @param string $sprintId Id del sprint
+     * @param string $type Id del tipo de item
+     * @param string $status Id del estado de item
+     * @return array[Item] listado de items
+     */
+    public function findByTypeStatusUserSprint($projectId, $usrId, $sprintId, $type, $status) {
 
         $repository = $this->getEntityManager();
 
-        $query = $repository->createQuery(" 
+        $consulta = " Select i FROM BackendBundle:Item i ";
+        $condicion = "";
+
+        $query = $repository->createQuery($consulta . $condicion);
+
+
+        // lista de items (por tipo) de un proyecto
+        if ($usrId == 'all' && $sprintId == 'all' && $status == 'all') {
+            $query = $repository->createQuery(" 
             Select i 
             FROM BackendBundle:Item i
             WHERE i.project = :projectId
             AND i.type = :type");
 
-        $query->setParameter('projectId', $projectId);
-        $query->setParameter('type', $type);
+            $query->setParameter('projectId', $projectId);
+            $query->setParameter('type', $type);
 
-        return $query->getResult();
-    }
+            return $query->getResult();
+        }
 
-    public function findByTypeStatus($projectId, $status, $type) {
-
-        $repository = $this->getEntityManager();
-
-        $query = $repository->createQuery(" 
+        // lista de items (por tipo y por sprint) de un proyecto
+        if ($usrId == 'all' && $status == 'all') {
+            $query = $repository->createQuery(" 
             Select i 
             FROM BackendBundle:Item i
             WHERE i.project = :projectId
+            AND i.sprint = :sId
+            AND i.type = :type");
+
+            $query->setParameter('projectId', $projectId);
+            $query->setParameter('sId', $sprintId);
+            $query->setParameter('type', $type);
+
+            return $query->getResult();
+        }
+
+        // lista de items (por tipo y por usuario) de un proyecto
+        if ($sprintId == 'all' && $status == 'all') {
+            $query = $repository->createQuery(" 
+            Select i 
+            FROM BackendBundle:Item i
+            WHERE i.project = :projectId
+            AND i.designedUser = :uId
+            AND i.type = :type");
+
+            $query->setParameter('projectId', $projectId);
+            $query->setParameter('uId', $usrId);
+            $query->setParameter('type', $type);
+
+            return $query->getResult();
+        }
+
+        // lista de items (por tipo, por usuario y por sprint)de un proyecto
+        if ($status == 'all') {
+            $query = $repository->createQuery(" 
+            Select i 
+            FROM BackendBundle:Item i
+            WHERE i.project = :projectId
+            AND i.designedUser = :uId
+            AND i.sprint = :sId
+            AND i.type = :type");
+
+            $query->setParameter('projectId', $projectId);
+            $query->setParameter('uId', $usrId);
+            $query->setParameter('sId', $sprintId);
+            $query->setParameter('type', $type);
+
+            return $query->getResult();
+        }
+
+        // lista de items (por tipo y estado) de un proyecto
+        if ($usrId == 'all' && $sprintId == 'all') {
+            $query = $repository->createQuery(" 
+            Select i 
+            FROM BackendBundle:Item i
+            WHERE i.project = :projectId            
+            AND i.type = :type
+            AND i.status = :status");
+
+            $query->setParameter('projectId', $projectId);
+            $query->setParameter('type', $type);
+            $query->setParameter('status', $status);
+
+            return $query->getResult();
+        }
+
+        // lista de items (por tipo, estado y usuario) de un proyecto
+        if ($sprintId == 'all') {
+            $query = $repository->createQuery(" 
+            Select i 
+            FROM BackendBundle:Item i
+            WHERE i.project = :projectId            
+            AND i.type = :type
             AND i.status = :status
-            AND i.type = :type");
-
-        $query->setParameter('projectId', $projectId);
-        $query->setParameter('status', $status);
-        $query->setParameter('type', $type);
-
-        return $query->getResult();
-    }
-
-    public function totalWorkHours($projectId) {
-
-        $repository = $this->getEntityManager();
-
-        $query = $repository->createQuery(" 
-            Select SUM(i.workedHours) AS totalHours
-            FROM BackendBundle:Item i
-            WHERE i.project = :projectId");
-
-        $query->setParameter('projectId', $projectId);
-
-
-        return $query->getSingleScalarResult();
-    }
-
-    public function totalWorkHoursByType($projectId, $type) {
-
-        $repository = $this->getEntityManager();
-
-        $query = $repository->createQuery(" 
-            Select SUM(i.workedHours) AS totalHours
-            FROM BackendBundle:Item i
-            WHERE i.project = :projectId
-            AND i.type = :type");
-
-        $query->setParameter('projectId', $projectId);
-        $query->setParameter('type', $type);
-
-        return $query->getSingleScalarResult();
-    }
-
-    //------------------ Consultas para los reportes de usuarios ------------------//
-    
-    public function findByTypeUserSprint($projectId, $type, $usrId, $sprintId) {
-
-        $repository = $this->getEntityManager();
-
-        if ($usrId == 'all') {
-            $query = $repository->createQuery(" 
-            Select i 
-            FROM BackendBundle:Item i
-            WHERE i.project = :projectId
-            AND i.sprint = :sId
-            AND i.type = :type");
+            AND i.designedUser = :uId");
 
             $query->setParameter('projectId', $projectId);
-            $query->setParameter('sId', $sprintId);
-            $query->setParameter('type', $type);
-
-            return $query->getResult();
-        }
-
-        if ($sprintId == 'all') {
-            $query = $repository->createQuery(" 
-            Select i 
-            FROM BackendBundle:Item i
-            WHERE i.project = :projectId
-            AND i.designedUser = :uId
-            AND i.type = :type");
-
-            $query->setParameter('projectId', $projectId);
-            $query->setParameter('uId', $usrId);
-            $query->setParameter('type', $type);
-
-            return $query->getResult();
-        }
-
-        $query = $repository->createQuery(" 
-            Select i 
-            FROM BackendBundle:Item i
-            WHERE i.project = :projectId
-            AND i.designedUser = :uId
-            AND i.sprint = :sId
-            AND i.type = :type");
-
-        $query->setParameter('projectId', $projectId);
-        $query->setParameter('uId', $usrId);
-        $query->setParameter('sId', $sprintId);
-        $query->setParameter('type', $type);
-
-        return $query->getResult();
-    }
-
-    public function findByTypeStatusUserSprint($projectId, $type, $status, $usrId, $sprintId) {
-
-        $repository = $this->getEntityManager();
-
-        if ($usrId == 'all') {
-            $query = $repository->createQuery(" 
-            Select i 
-            FROM BackendBundle:Item i
-            WHERE i.project = :projectId
-            AND i.sprint = :sId
-            AND i.type = :type
-            AND i.status = :status");
-
-            $query->setParameter('projectId', $projectId);
-            $query->setParameter('sId', $sprintId);
             $query->setParameter('type', $type);
             $query->setParameter('status', $status);
+            $query->setParameter('uId', $usrId);
 
             return $query->getResult();
         }
 
-        if ($sprintId == 'all') {
+        // lista de items (por tipo, estado y sprint) de un proyecto
+        if ($usrId == 'all') {
             $query = $repository->createQuery(" 
             Select i 
             FROM BackendBundle:Item i
-            WHERE i.project = :projectId
-            AND i.designedUser = :uId
+            WHERE i.project = :projectId            
             AND i.type = :type
-            AND i.status = :status");
+            AND i.status = :status
+            AND i.sprint = :sId");
 
             $query->setParameter('projectId', $projectId);
-            $query->setParameter('uId', $usrId);
             $query->setParameter('type', $type);
             $query->setParameter('status', $status);
+            $query->setParameter('sId', $sprintId);
 
             return $query->getResult();
         }
 
+        // lista de items (por tipo, estado, usuario y sprint) de un proyecto
         $query = $repository->createQuery(" 
             Select i 
             FROM BackendBundle:Item i
-            WHERE i.project = :projectId
-            AND i.designedUser = :uId
-            AND i.sprint = :sId
+            WHERE i.project = :projectId            
             AND i.type = :type
-            AND i.status = :status");
+            AND i.status = :status
+            AND i.designedUser = :uId
+            AND i.sprint = :sId");
 
         $query->setParameter('projectId', $projectId);
-        $query->setParameter('uId', $usrId);
-        $query->setParameter('sId', $sprintId);
         $query->setParameter('type', $type);
         $query->setParameter('status', $status);
+        $query->setParameter('uId', $usrId);
+        $query->setParameter('sId', $sprintId);
 
         return $query->getResult();
     }
 
-    public function totalEstHoursByUserSprint($projectId, $usrId, $sprintId) {
-
-        $repository = $this->getEntityManager();
-
-        /* Consulta que permite calcular las horas estimadas en un projecto
-         * por todos los usuarios que existen y un sprint seleccionado
-         */
-        if ($usrId == 'all') {
-            $query = $repository->createQuery(" 
-            Select SUM(i.estimatedHours) AS totalHours
-            FROM BackendBundle:Item i
-            WHERE i.project = :projectId
-            AND i.sprint = :sId");
-
-            $query->setParameter('projectId', $projectId);
-            $query->setParameter('sId', $sprintId);
-
-            return $query->getSingleScalarResult();
-        }
-
-        /* Consulta que permite calcular las horas estimadas en un projecto
-         * por un usuario seleccionado y todos los sprints de este
-         */
-        if ($sprintId == 'all') {
-            $query = $repository->createQuery(" 
-            Select SUM(i.estimatedHours) AS totalHours
-            FROM BackendBundle:Item i
-            WHERE i.project = :projectId
-            AND i.designedUser = :usrId");
-
-            $query->setParameter('projectId', $projectId);
-            $query->setParameter('usrId', $usrId);
-
-            return $query->getSingleScalarResult();
-        }
-
-        /* Consulta que permite calcular las horas estimadas en un projecto
-         * por un usuario seleccionado y un sprint seleccionado
-         */
-        $query = $repository->createQuery(" 
-            Select SUM(i.estimatedHours) AS totalHours
-            FROM BackendBundle:Item i
-            WHERE i.project = :projectId
-            AND i.designedUser = :usrId
-            AND i.sprint = :sId");
-
-        $query->setParameter('projectId', $projectId);
-        $query->setParameter('usrId', $usrId);
-        $query->setParameter('sId', $sprintId);
-
-        return $query->getSingleScalarResult();
-    }
-
-    public function totalWorkHoursByUserSprint($projectId, $usrId, $sprintId) {
-
-        $repository = $this->getEntityManager();
-
-        /* Consulta que permite calcular las horas estimadas en un projecto
-         * por todos los usuarios que existen y un sprint seleccionado
-         */
-        if ($usrId == 'all') {
-            $query = $repository->createQuery(" 
-            Select SUM(i.workedHours) AS totalHours
-            FROM BackendBundle:Item i
-            WHERE i.project = :projectId
-            AND i.sprint = :sId");
-
-            $query->setParameter('projectId', $projectId);
-            $query->setParameter('sId', $sprintId);
-
-            return $query->getSingleScalarResult();
-        }
-
-        /* Consulta que permite calcular las horas estimadas en un projecto
-         * por un usuario seleccionado y todos los sprints de este
-         */
-        if ($sprintId == 'all') {
-            $query = $repository->createQuery(" 
-            Select SUM(i.workedHours) AS totalHours
-            FROM BackendBundle:Item i
-            WHERE i.project = :projectId
-            AND i.designedUser = :usrId");
-
-            $query->setParameter('projectId', $projectId);
-            $query->setParameter('usrId', $usrId);
-
-            return $query->getSingleScalarResult();
-        }
-
-        /* Consulta que permite calcular las horas estimadas en un projecto
-         * por un usuario seleccionado y un sprint seleccionado
-         */
-        $query = $repository->createQuery(" 
-            Select SUM(i.workedHours) AS totalHours
-            FROM BackendBundle:Item i
-            WHERE i.project = :projectId
-            AND i.designedUser = :usrId
-            AND i.sprint = :sId");
-
-        $query->setParameter('projectId', $projectId);
-        $query->setParameter('usrId', $usrId);
-        $query->setParameter('sId', $sprintId);
-
-        return $query->getSingleScalarResult();
-    }
-
+    /**
+     * Permite calcular el total de horas trabajadas en un proyecto segun 
+     * el criterio de busqueda
+     * @author Luisa F. Pereira 27/04/2016
+     * @param string $projectId Identificador del projecto
+     * @param string $type Id del tipo de item
+     * @param string $usrId Id del usuario
+     * @param string $sprintId Id del sprint
+     * @return  total de horas trabajadas
+     */
     public function totalWorkHoursByTypeUserSprint($projectId, $type, $usrId, $sprintId) {
 
         $repository = $this->getEntityManager();
 
-        /* Consulta que permite calcular las horas estimadas en un projecto
-         * por todos los usuarios que existen y un sprint seleccionado
-         */
+        // suma el total de horas trabajadas en todo el proyecto
+        if ($usrId == 'all' && $sprintId == 'all' && $type == 'all') {
+            $query = $repository->createQuery(" 
+            Select SUM(i.workedHours) AS totalHours
+            FROM BackendBundle:Item i
+            WHERE i.project = :projectId");
+
+            $query->setParameter('projectId', $projectId);
+
+            return $query->getSingleScalarResult();
+        }
+
+        // suma el total de horas trabajadas en un item de un proyecto
+        if ($usrId == 'all' && $sprintId == 'all') {
+            $query = $repository->createQuery(" 
+            Select SUM(i.workedHours) AS totalHours
+            FROM BackendBundle:Item i
+            WHERE i.project = :projectId
+            AND i.type = :type");
+
+            $query->setParameter('projectId', $projectId);
+            $query->setParameter('type', $type);
+
+            return $query->getSingleScalarResult();
+        }
+
+        // suma el total de horas trabajadas en un sprint X
+        if ($usrId == 'all' && $type == 'all') {
+            $query = $repository->createQuery(" 
+            Select SUM(i.workedHours) AS totalHours
+            FROM BackendBundle:Item i
+            WHERE i.project = :projectId
+            AND i.sprint = :sId");
+
+            $query->setParameter('projectId', $projectId);
+            $query->setParameter('sId', $sprintId);
+
+            return $query->getSingleScalarResult();
+        }
+
+        // suma el total de horas trabajadas en todo el proyecto por usuario X
+        if ($sprintId == 'all' && $type == 'all') {
+            $query = $repository->createQuery(" 
+            Select SUM(i.workedHours) AS totalHours
+            FROM BackendBundle:Item i
+            WHERE i.project = :projectId
+            AND i.designedUser = :usrId");
+
+            $query->setParameter('projectId', $projectId);
+            $query->setParameter('usrId', $usrId);
+
+            return $query->getSingleScalarResult();
+        }
+
+        // suma el total de horas trabajadas en un sprint X y un item especifico
         if ($usrId == 'all') {
             $query = $repository->createQuery(" 
             Select SUM(i.workedHours) AS totalHours
@@ -400,9 +340,7 @@ class ItemRepository extends EntityRepository {
             return $query->getSingleScalarResult();
         }
 
-        /* Consulta que permite calcular las horas estimadas en un projecto
-         * por un usuario seleccionado y todos los sprints de este
-         */
+        // suma el total de horas trabajadas en todo el proyecto por usuario X y un item especifico
         if ($sprintId == 'all') {
             $query = $repository->createQuery(" 
             Select SUM(i.workedHours) AS totalHours
@@ -418,9 +356,8 @@ class ItemRepository extends EntityRepository {
             return $query->getSingleScalarResult();
         }
 
-        /* Consulta que permite calcular las horas estimadas en un projecto
-         * por un usuario seleccionado y un sprint seleccionado
-         */
+        // suma el total de horas trabajadas en todo el proyecto por usuario X, sprint X y un item especifico
+
         $query = $repository->createQuery(" 
             Select SUM(i.workedHours) AS totalHours
             FROM BackendBundle:Item i
@@ -437,17 +374,122 @@ class ItemRepository extends EntityRepository {
         return $query->getSingleScalarResult();
     }
 
-    public function totalEstHours($projectId) {
+    /**
+     * Permite calcular el total de horas estimadas en un proyecto segun 
+     * el criterio de busqueda
+     * @author Luisa F. Pereira 27/04/2016
+     * @param string $projectId Identificador del projecto
+     * @param string $type Id del tipo de item
+     * @param string $usrId Id del usuario
+     * @param string $sprintId Id del sprint
+     * @return  total de horas estimadas
+     */
+    public function totalEstHoursByTypeUserSprint($projectId, $type, $usrId, $sprintId) {
 
         $repository = $this->getEntityManager();
+
+        // suma el total de horas estimadas en todo el proyecto
+        if ($usrId == 'all' && $sprintId == 'all' && $type == 'all') {
+            $query = $repository->createQuery(" 
+            Select SUM(i.estimatedHours) AS totalHours
+            FROM BackendBundle:Item i
+            WHERE i.project = :projectId");
+
+            $query->setParameter('projectId', $projectId);
+
+            return $query->getSingleScalarResult();
+        }
+
+        // suma el total de horas estimadas en un item de un proyecto
+        if ($usrId == 'all' && $sprintId == 'all') {
+            $query = $repository->createQuery(" 
+            Select SUM(i.estimatedHours) AS totalHours
+            FROM BackendBundle:Item i
+            WHERE i.project = :projectId
+            AND i.type = :type");
+
+            $query->setParameter('projectId', $projectId);
+            $query->setParameter('type', $type);
+
+            return $query->getSingleScalarResult();
+        }
+
+        // suma el total de horas estimadas en un sprint X
+        if ($usrId == 'all' && $type == 'all') {
+            $query = $repository->createQuery(" 
+            Select SUM(i.estimatedHours) AS totalHours
+            FROM BackendBundle:Item i
+            WHERE i.project = :projectId
+            AND i.sprint = :sId");
+
+            $query->setParameter('projectId', $projectId);
+            $query->setParameter('sId', $sprintId);
+
+            return $query->getSingleScalarResult();
+        }
+
+        // suma el total de horas estimadas en todo el proyecto por usuario X
+        if ($sprintId == 'all' && $type == 'all') {
+            $query = $repository->createQuery(" 
+            Select SUM(i.estimatedHours) AS totalHours
+            FROM BackendBundle:Item i
+            WHERE i.project = :projectId
+            AND i.designedUser = :usrId");
+
+            $query->setParameter('projectId', $projectId);
+            $query->setParameter('usrId', $usrId);
+
+            return $query->getSingleScalarResult();
+        }
+
+        // suma el total de horas estimadas en un sprint X y un item especifico
+        if ($usrId == 'all') {
+            $query = $repository->createQuery(" 
+            Select SUM(i.estimatedHours) AS totalHours
+            FROM BackendBundle:Item i
+            WHERE i.project = :projectId
+            AND i.sprint = :sId
+            AND i.type = :type");
+
+            $query->setParameter('projectId', $projectId);
+            $query->setParameter('sId', $sprintId);
+            $query->setParameter('type', $type);
+
+            return $query->getSingleScalarResult();
+        }
+
+        // suma el total de horas estimadas en todo el proyecto por usuario X y un item especifico
+        if ($sprintId == 'all') {
+            $query = $repository->createQuery(" 
+            Select SUM(i.estimatedHours) AS totalHours
+            FROM BackendBundle:Item i
+            WHERE i.project = :projectId
+            AND i.designedUser = :usrId
+            AND i.type = :type");
+
+            $query->setParameter('projectId', $projectId);
+            $query->setParameter('usrId', $usrId);
+            $query->setParameter('type', $type);
+
+            return $query->getSingleScalarResult();
+        }
+
+        // suma el total de horas estimadas en todo el proyecto por usuario X, sprint X y un item especifico
 
         $query = $repository->createQuery(" 
             Select SUM(i.estimatedHours) AS totalHours
             FROM BackendBundle:Item i
-            WHERE i.project = :projectId");
-        $query->setParameter('projectId', $projectId);
+            WHERE i.project = :projectId
+            AND i.designedUser = :usrId
+            AND i.sprint = :sId
+            AND i.type = :type");
 
+        $query->setParameter('projectId', $projectId);
+        $query->setParameter('usrId', $usrId);
+        $query->setParameter('sId', $sprintId);
+        $query->setParameter('type', $type);
 
         return $query->getSingleScalarResult();
     }
+
 }
