@@ -2,8 +2,8 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
-    - { resource: "@BackendBundle/Resources/config/services.yml" }
-    - { resource: "@FrontendBundle/Resources/config/services.yml" }
+    - { resource: '@BackendBundle/Resources/config/services.yml' }
+    - { resource: '@FrontendBundle/Resources/config/services.yml' }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -39,7 +39,7 @@ framework:
 # Twig Configuration
 twig:
     globals:
-        app_settings: "@app_settings"
+        app_settings: '@app_settings'
         item_attachments_folder: "%item_attachments_folder%"
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
@@ -99,3 +99,12 @@ knp_paginator:
     template:
         pagination: KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig     # sliding pagination controls template
         sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template
+
+# PDF Generator
+siphoc_pdf:
+    basepath: "%kernel.root_dir%/../web"
+    binary: "/usr/local/bin/wkhtmltopdf"
+    options:
+        'lowquality': false
+        'enable-javascript': true
+        'debug-javascript': true
