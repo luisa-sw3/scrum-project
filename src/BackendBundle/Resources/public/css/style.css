@@ -63,6 +63,14 @@ and open the template in the editor.
     padding-left: 0px !important;
 }
 
+.small-padding-left {
+    padding-left: 8px !important;
+}
+
+.small-margin-right {
+    margin-right: 8px !important;
+}
+
 .no-padding-right {
     padding-right: 0px !important;
 }
@@ -132,13 +140,13 @@ h1.page-header {
     padding: 8px !important;
 }
 .list-group-item:first-child {
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
 }
 .list-group-item:last-child {
-  margin-bottom: 0;
-  border-bottom-right-radius: 0px;
-  border-bottom-left-radius: 0px;
+    margin-bottom: 0;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
 }
 
 .label-item-times {
@@ -146,20 +154,20 @@ h1.page-header {
 }
 
 .custom-well {
-  background-color: #f5f5f5;
-  border: 1px solid #e3e3e3;
-  border-radius: 0;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
-  margin-bottom: 0;
-  min-height: 20px;
-  padding: 15px;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    border-radius: 0;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+    margin-bottom: 0;
+    min-height: 20px;
+    padding: 15px;
 }
 .hr {
-  border-bottom: 1px dashed #c0c0c0;
-  border-top: medium none;
-  display: inline-block;
-  margin: 4px 0;
-  width: 100%;
+    border-bottom: 1px dashed #c0c0c0;
+    border-top: medium none;
+    display: inline-block;
+    margin: 4px 0;
+    width: 100%;
 }
 
 .project-link {
@@ -174,10 +182,133 @@ h1.page-header {
 }
 
 .small-margin-top {
-    margin-top: 4px;
+    margin-top: 6px;
+}
+
+.small-margin-bottom {
+    margin-bottom: 6px;
 }
 
 .span-effort img {
     width: 19px;
     margin-left: 10px;
+}
+
+span.label-notification {
+    padding: 6px 10px;
+}
+
+.green-color {
+    color: green;
+}
+
+.red-color {
+    color: red;
+}
+
+.container-radios input {
+    margin-right: 8px;
+}
+
+.container-radios label {
+    margin-right: 8px;
+    font-weight: normal;
+}
+
+.binnacle {
+    border: 1px solid #e3e3e3;
+}
+
+.binnacle div.list-group-item {
+    border: 1px solid #e3e3e3 !important;
+}
+
+.border-status-1 {
+    border-left: 9px #fff solid; //new
+}
+
+.border-status-2 {
+    border-left: 9px #5bc0de solid; //research
+}
+
+.border-status-3 {
+    border-left: 9px #777 solid; //confirmed, work start, near complete
+}
+
+.border-status-4 {
+    border-left: 9px #5cb85c solid; //no a bug, done, fixed
+}
+
+.border-status-5 {
+    border-left: 9px #337ab7 solid; //ready for testing, testing, 
+}
+
+.border-status-6 {
+    border-left: 9px #d9534f solid; //canceled
+}
+
+.border-status-7 {
+    border-left: 9px #f0ad4e solid; //postponed
+}
+
+.inline {
+    display: inline;
+}
+
+@media screen and (max-width: 768px) {
+    h1.page-header {
+        font-size: 30px;
+    }
+}
+
+@media screen and (max-width: 473px) {
+    h1.page-header {
+        font-size: 24px;
+    }
+    ol.breadcrumb li {
+        font-size: 12px !important;
+    }
+}
+
+.side-nav li a {
+    padding-left: 8px;
+    padding-right: 8px !important;
+}
+
+.side-nav > li > ul > li > a {
+    padding-left: 8px;
+}
+
+#wrapper {
+    padding-left: 60px;
+}
+.side-nav, .side-nav li a  {
+    width: 60px;
+}
+
+@media screen and (max-width: 768px) {
+    #wrapper {
+        padding-left: 0px !important;
+    }
+    .side-nav {
+        width: 0px !important;
+    }
+    .side-nav, .side-nav li a  {
+        width: 225px;
+    }
+}
+
+.no-border {
+    border: none;
+}
+
+span.time-title {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+span.worked-time-day {
+    font-size: 15px;
+    font-style: italic;
+    margin-left: 15px;
 }

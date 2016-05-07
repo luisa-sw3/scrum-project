@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type as Type;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class ItemSimpleType extends AbstractType {
 
@@ -25,8 +26,9 @@ class ItemSimpleType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
         $typeOptions = $this->container->get('form_helper')->getItemTypeOptions();
-
         $statusOptions = $this->container->get('form_helper')->getItemStatusOptions();
+        $fibonacciOptions = $this->container->get('form_helper')->getItemFibonacciOptions();
+        $tShirtOptions = $this->container->get('form_helper')->getItemTShirtOptions();
 
         $builder
                 ->add('title', Type\TextType::class, array(
@@ -45,12 +47,38 @@ class ItemSimpleType extends AbstractType {
                     'label' => $this->translator->trans('backend.item.type'),
                     'choices' => $typeOptions,
                 ))
+                ->add('priority', Type\RangeType::class, array(
+                    'required' => true,
+                    'label' => $this->translator->trans('backend.item.priority'),
+                    'attr' => array(
+                        'min' => 0,
+                        'max' => 100,
+                    )
+                ))
+                ->add('effortFibonacci', Type\ChoiceType::class, array(
+                    'required' => false,
+                    'placeholder' => $this->translator->trans('backend.global.select'),
+                    'label' => $this->translator->trans('backend.item.complexity'),
+                    'choices' => $fibonacciOptions,
+                ))
+                ->add('effortTShirt', Type\ChoiceType::class, array(
+                    'required' => false,
+                    'placeholder' => $this->translator->trans('backend.global.select'),
+                    'label' => $this->translator->trans('backend.item.complexity'),
+                    'choices' => $tShirtOptions,
+                ))
                 ->add('estimatedHours', Type\NumberType::class, array(
                     'required' => false,
                     'label' => $this->translator->trans('backend.item.estimated_hours'),
                     'attr' => array(
                         'maxlength' => 4
                     )
+                ))
+                ->add('saveAndContinue', SubmitType::class, array(
+                    'label' => $this->translator->trans('backend.global.save_and_continue'),
+                ))
+                ->add('saveAndExit', SubmitType::class, array(
+                    'label' => $this->translator->trans('backend.global.save_and_exit')
                 ))
         ;
     }

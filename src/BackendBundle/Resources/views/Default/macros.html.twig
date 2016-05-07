@@ -66,20 +66,21 @@
     {% endif %}
 {% endmacro %}  
 
-{% macro itemDescription(item, project, sprint, moreItems) %}
+{% macro itemDescription(item, project, in_backlog, moreItems, in_binnacle = false) %}
     {% set dateFormat = project.settings.dateFormat %}
     <div class="list-group-item col-xs-12 {% if item.parent is empty %}custom-well{% endif %}">
-        <div class="col-xs-10 col-md-11 col-lg-11 no-padding-left">
+        <div class="col-xs-10 col-md-11 col-lg-11 small-padding-left {{item.getLabelClassByStatus(false, true)}}">
             <div class="col-lg-8 col-md-8 col-xs-12 no-padding-sides">
                 <div class="col-lg-12 col-md-12 col-xs-12 no-padding-sides">
-                <strong>{{ item.getTextType()|trans }} # {{item.consecutive}}</strong>
+                    <img src="{{asset('bundles/backend/images/items/'~item.getIconName())}}" width="25px"/>
+                    <strong>&nbsp;{{ item.getTextType()|trans }} # {{item.consecutive}}</strong>
                 </div>
-                <div class="col-lg-12 col-md-12 col-xs-12 no-padding-left">
+                <div class="col-lg-12 col-md-12 col-xs-12 no-padding-left small-margin-bottom">
                     {% set edithPath = path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id}) %}
-                    {% if sprint is not empty %}
-                        {% set edithPath = path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id, 'sprintId':sprint.id}) %}
+                    {% if item.sprint is not empty %}
+                        {% set edithPath = path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id, 'sprintId':item.sprint.id}) %}
                     {% endif %}
-                    <a href="{{ edithPath }}" title="{{ item.title }}" content="">{{ item.title }}</a>
+                    <a href="{{ edithPath }}" title="{{ item.title }}" class="popover-menu" content="{{item.description|escape|raw}}">{{ item.title }}</a>
                 </div>
             </div>
             <div class="col-lg-4 col-md-4 col-xs-12 no-padding-sides">
@@ -90,7 +91,7 @@
                     <span title="{{ 'backend.global.creation_date'|trans }}"><i class="fa fa-calendar"></i> {{ item.creationDate|date(dateFormat) }}</span>
                 </div>
                 <div class="col-lg-5 col-md-5 col-xs-5 no-padding-sides small-margin-top text-left">
-                    <span title="{{ 'backend.item.priority'|trans }}"><i class="fa fa-reorder"></i> <a class="container-priority" href="javascript:void(0);">{{ item.priority|default(0) }}</a></span>
+                    <span title="{{ 'backend.item.priority'|trans }}"><i class="fa fa-reorder"></i> <a class="container-priority change-priority" href="javascript:void(0);" item-id="{{item.id}}" priority="{{item.priority|default(0)}}">{{ item.priority|default(0) }}</a></span>
                     <span title="{{ 'backend.item.effort_estimation'|trans }}" class="span-effort"><i><img src="{{asset('bundles/backend/images/complexity.png')}}"/></i> {{item.getEffortEstimation()|default('~')}}</span>
                 </div>
                 <div class="col-lg-7 col-md-7 col-xs-7 no-padding-sides small-margin-top text-right">
@@ -106,71 +107,46 @@
             </div>
         </div>
         
-        {#<div class="col-xs-10 col-md-10 no-padding-left">
-            <div class="col-lg-12 col-md-12 col-xs-12 no-padding-sides">
-                <strong>{{ item.getTextType()|trans }} # {{item.consecutive}}</strong>
-            </div>
-            <div class="col-lg-12 col-md-12 col-xs-12 no-padding-sides">
-                {% set edithPath = path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id}) %}
-                {% if sprint is not empty %}
-                    {% set edithPath = path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id, 'sprintId':sprint.id}) %}
-                {% endif %}
-                <a href="{{ edithPath }}" class="popover-menu" title="{{ item.title }}" content="{{item.description|raw}}">{{ item.title }}</a>
-            </div>
-            <hr class='hr'>
-            <div class="col-lg-3 col-md-3 col-xs-6 no-padding-sides">
-                <span title="{{ 'backend.item.status'|trans }}" class="{{item.getLabelClassByStatus()}}"><i class="fa fa-info-circle"></i> {{ item.textStatus|trans }}</span>
-            </div>
-            <div class="col-lg-9 col-md-9 col-xs-6 no-padding-sides">
-                <span title="{{ 'backend.global.creation_date'|trans }}"><i class="fa fa-calendar"></i> {{ item.creationDate|date(dateFormat) }}</span>
-            </div>
-            <div class="col-lg-3 col-md-3 col-xs-6 no-padding-sides small-margin-top">
-                <span title="{{ 'backend.item.priority'|trans }}"><i class="fa fa-reorder"></i> <a class="container-priority" href="javascript:void(0);">{{ item.priority|default(0) }}</a></span>
-                <span title="{{ 'backend.item.effort_estimation'|trans }}" class="span-effort"><i><img src="{{asset('bundles/backend/images/complexity.png')}}"/></i> {{item.getEffortEstimation()|default('~')}}</span>
-            </div>
-            <div class="col-lg-9 col-md-9 col-xs-6 no-padding-sides small-margin-top">
-                <span title="{{ 'backend.item.designed_user'|trans }}">
-                    <i class="fa fa-user"></i> 
-                    {% if item.designedUser is not empty %}
-                        {{ item.designedUser }}
-                    {% else %}
-                        <a href="#">{{'backend.item.assign_user'|trans}}</a>
-                    {% endif %}
-                </span>
-            </div>
-        </div>#}
         <div class="col-xs-2 col-md-1 col-lg-1 pull-right no-padding-sides">
-            {% if sprint is not empty %}
+            {% if in_backlog %}
                 {% if item.type != constant('BackendBundle\\Entity\\Item::TYPE_USER_HISTORY') %}
                     <label title="{{'backend.item.worked_estimated_time'|trans}}" class="col-xs-12 text-right label-item-times">{{ item.workedHours|default(0) }} / {{ item.estimatedHours|default(0) }}</label>
                 {% endif %}
                 <div class="btn-group pull-right small-btn-group">
-                    <a class="btn btn-default btn-sm border-radius-left" title="{{ 'backend.item.edit'|trans }}" href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id, 'sprintId':sprint.id}) }}">
+                    {% set edit_params = {'id':project.id, 'itemId':item.id} %}
+                    {% if item.sprint is not empty %}
+                        {% set edit_params = {'id':project.id, 'itemId':item.id, 'sprintId':item.sprint.id} %}
+                    {% endif %}    
+                    <a class="btn btn-default btn-sm border-radius-left" title="{{ 'backend.item.edit'|trans }}" href="{{ path('backend_project_product_backlog_edit', edit_params) }}">
                         <i class="fa fa-pencil"></i>
                     </a>
                     <button type="button" class="btn btn-default btn-sm dropdown-toggle border-radius-right" data-toggle="dropdown">
                         <span class="caret"></span>
                         <span class="sr-only"></span>
                     </button>
-                    <ul class="dropdown-menu" role="menu">
+                    <ul class="dropdown-menu backlog-menu" role="menu">
                         {% if moreItems %}
                             <li><a href="{{path('backend_project_product_backlog_new_related_item',{'id':project.id,'itemId':item.id})}}" class="create-related-item fancybox.iframe"><i class="fa fa-star-o"></i> {{'backend.item.create_related_item'|trans}}</a></li>
-                            {% endif %}
-                        <li class="disabled"><a href="#"><i class="fa fa-chain"></i> Relacionar a un item existente</a></li>
+                        {% endif %}
                         <li class="divider"></li>
                         <li class="disabled"><a href="#"><i class="fa fa-comment-o"></i> Agregar Comentario</a></li>
                         <li><a href="javascript:void(0);" class="change-status" item-id="{{item.id}}" status="{{item.status}}"><i class="fa fa-arrows-h"></i> {{ 'backend.item.change_status'|trans }}</a></li>
                         <li><a href="javascript:void(0);" class="change-priority" item-id="{{item.id}}" priority="{{item.priority|default(0)}}"><i class="fa fa-reorder"></i> {{'backend.item.change_priority'|trans}}</a></li>
-                        <li><a href="javascript:void(0);" class="edit-estimation" item-id="{{item.id}}" estimation="{{item.estimatedHours|default(0)}}"><i class="fa fa-clock-o"></i> {{'backend.item.edit_estimation'|trans}}</a></li>
-                        <li><a href="javascript:void(0);" class="edit-worked-time" item-id="{{item.id}}" worked-time="{{item.workedHours|default(0)}}"><i class="fa fa-clock-o"></i> {{'backend.item.edit_worked_time'|trans}}</a></li>
+                        {% if item.type != constant('BackendBundle\\Entity\\Item::TYPE_USER_HISTORY') %}
+                            <li><a href="javascript:void(0);" class="edit-estimation" item-id="{{item.id}}" estimation="{{item.estimatedHours|default(0)}}"><i class="fa fa-clock-o"></i> {{'backend.item.edit_estimation'|trans}}</a></li>
+                            <li><a href="javascript:void(0);" class="edit-worked-time" item-id="{{item.id}}" worked-time="{{item.workedHours|default(0)}}"><i class="fa fa-clock-o"></i> {{'backend.item.edit_worked_time'|trans}}</a></li>
+                        {% endif %}
                         <li class="divider"></li>
-                        <li class="disabled"><a href="#"><i class="fa fa-cut"></i> Mover a otro Sprint</a></li>
-                        <li class="disabled"><a href="#"><i class="fa fa-copy"></i> Duplicar en otro Sprint</a></li>
+                        <li><a href="{{path('backend_project_product_backlog_copy_move_to_sprint',{'id':project.id,'itemId':item.id})}}" class="copy-move-to-sprint fancybox.iframe"><i class="fa fa-cut"></i> <i class="fa fa-copy"></i> {{'backend.item.move_copy_other_sprint'|trans}}</a></li>
+                        <li><a href="{{path('backend_project_product_backlog_copy_move_to_project',{'id':project.id,'itemId':item.id})}}" class="copy-move-to-project fancybox.iframe"><i class="fa fa-cut"></i> <i class="fa fa-copy"></i> {{'backend.item.move_copy_other_project'|trans}}</a></li>
+                        {% if item.sprint is not empty or (item.sprint is empty and item.parent is not empty and item.parent.sprint is not empty) %}
+                            <li><a href="javascript:void(0);" class="move-to-product-backlog" item-id="{{item.id}}"><i class="fa fa-cut"></i> {{'backend.item.move_to_product_backlog'|trans}}</a></li>
+                        {% endif %}
                         <li class="divider"></li>
                         <li><a href="javascript:void(0);" class="delete-item" item-id="{{item.id}}"><i class="fa fa-times"></i> {{'backend.global.delete'|trans}}</a></li>
                     </ul>
                 </div>
-            {% else %}
+            {% elseif in_binnacle and item.sprint is not empty %}
                 <label class="col-xs-12 text-right label-item-times">{{ item.sprint.name }}</label>
             {% endif %}
         </div>

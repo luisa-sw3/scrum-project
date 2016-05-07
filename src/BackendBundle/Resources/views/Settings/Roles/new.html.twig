@@ -21,7 +21,7 @@
         {{ form_start(form, {'action': path('backend_projects_roles_new',{'projectId':project.id}), 'method': 'POST'}) }}
             <div class="col-lg-6">
                 <div class="form-group">
-                    {{ form_label(form.name)}}
+                    {{ form_label(form.name)}} <em>*</em>
                     {{ form_widget(form.name, {'attr':{'class':'form-control title-case'}}) }}
                     {{ form_errors(form.name) }}
                 </div>

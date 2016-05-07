@@ -49,13 +49,13 @@ class FormHelper {
             $this->translator->trans($item->getTextStatus(Entity\Item::STATUS_CONFIRMED)) => Entity\Item::STATUS_CONFIRMED,
             $this->translator->trans($item->getTextStatus(Entity\Item::STATUS_NOT_A_BUG)) => Entity\Item::STATUS_NOT_A_BUG,
             $this->translator->trans($item->getTextStatus(Entity\Item::STATUS_BEING_WORKED_ON)) => Entity\Item::STATUS_BEING_WORKED_ON,
-            $this->translator->trans($item->getTextStatus(Entity\Item::STATUS_NEAR_COMPLETION)) => Entity\Item::STATUS_NEAR_COMPLETION,
+            $this->translator->trans($item->getTextStatus(Entity\Item::STATUS_BUG_DETECTED)) => Entity\Item::STATUS_BUG_DETECTED,
             $this->translator->trans($item->getTextStatus(Entity\Item::STATUS_READY_FOR_TESTING)) => Entity\Item::STATUS_READY_FOR_TESTING,
             $this->translator->trans($item->getTextStatus(Entity\Item::STATUS_TESTING)) => Entity\Item::STATUS_TESTING,
             $this->translator->trans($item->getTextStatus(Entity\Item::STATUS_CANCELED)) => Entity\Item::STATUS_CANCELED,
             $this->translator->trans($item->getTextStatus(Entity\Item::STATUS_POSTPONED)) => Entity\Item::STATUS_POSTPONED,
-            $this->translator->trans($item->getTextStatus(Entity\Item::STATUS_DONE)) => Entity\Item::STATUS_DONE,
             $this->translator->trans($item->getTextStatus(Entity\Item::STATUS_FIXED)) => Entity\Item::STATUS_FIXED,
+            $this->translator->trans($item->getTextStatus(Entity\Item::STATUS_DONE)) => Entity\Item::STATUS_DONE,
         );
         return $statusOptions;
     }

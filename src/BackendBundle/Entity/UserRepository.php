@@ -28,7 +28,7 @@ class UserRepository extends EntityRepository {
         $consult = $em->createQuery("
         SELECT u.id, " . $abbr . " AS value, " . $abbr . " AS label
         FROM BackendBundle:User u
-        WHERE u.name LIKE :term ".$projectSQL."
+        WHERE u.name LIKE :term " . $projectSQL . "
         ORDER BY u.name ASC");
         $consult->setParameter('term', $term);
 

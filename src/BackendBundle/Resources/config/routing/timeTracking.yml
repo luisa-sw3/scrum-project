@@ -1,0 +1,28 @@
+backend_time_tracking:
+    path:     /
+    defaults: { _controller: BackendBundle:TimeTracking:index }
+
+backend_time_tracking_start_time:
+    path:     /startTime
+    defaults: { _controller: BackendBundle:TimeTracking:startTime }
+    methods: [POST]
+    
+backend_time_tracking_stop_time:
+    path:     /stopTime
+    defaults: { _controller: BackendBundle:TimeTracking:stopTime }
+    methods: [POST]
+    
+backend_time_tracking_delete_time:
+    path:     /deleteTime
+    defaults: { _controller: BackendBundle:TimeTracking:deleteTime }
+    methods: [POST]
+    
+backend_time_tracking_get_project_items:
+    path:     /getProjectItems
+    defaults: { _controller: BackendBundle:TimeTracking:getProjectItems }
+    methods: [POST]
+    
+backend_time_update_time_tracking_list:
+    path:     /updateTimeTrackingList
+    defaults: { _controller: BackendBundle:TimeTracking:updateTimeTrackingList }
+    methods: [POST]

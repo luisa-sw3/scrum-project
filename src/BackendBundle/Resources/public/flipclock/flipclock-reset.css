@@ -1,0 +1,60 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Apr 6, 2016, 10:19:47 PM
+    Author     : cesargiraldonaranjo
+*/
+.flip-clock-wrapper {
+    min-width: 155px;
+    width: 155px;
+    margin: auto;
+    margin-top: 15px;
+    margin-bottom: 8px;
+}
+
+.flip-clock-wrapper ul {
+    height: 25px;
+    width: 17px;
+    margin: 2px;
+    border-radius: 3px;
+    padding: 0px;
+}
+.flip-clock-wrapper ul li {
+    line-height: 25px;
+}
+.flip-clock-wrapper .flip {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.flip-clock-wrapper ul li a div div.inn {
+    font-size: 17px;
+}
+.flip-clock-divider {
+    height: 30px;
+    width: 12px;
+}
+.flip-clock-divider.hours span.flip-clock-label {
+    right: -36px;
+}
+.flip-clock-divider.minutes span.flip-clock-label {
+    right: -39px;
+}
+.flip-clock-divider.seconds span.flip-clock-label {
+    right: -42px;
+}
+
+.flip-clock-dot {
+    left: 3px;
+    width: 6px;
+    height: 6px;
+}
+
+.flip-clock-dot.top {
+    top: 7px;
+}
+.flip-clock-dot.bottom {
+    bottom: 7px;
+}

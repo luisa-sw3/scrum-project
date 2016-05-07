@@ -28,6 +28,8 @@ backend:
         unknown_error: "Error desconocido, inténtelo de nuevo"
         logout: "Salir"
         save_changes: "Guardar Cambios"
+        save_and_continue: "Guardar y Continuar"
+        save_and_exit: "Guardar y Salir"
         language: "Lenguaje"
         id: "ID"
         consecutive: "Consecutivo"
@@ -41,6 +43,8 @@ backend:
         search: "Buscar"
         clear_search: "Borrar Búsqueda"
         showing: "Mostrando"
+        from: "desde"
+        until: "hasta"
         to: "a"
         of: "de"
         or: "o"
@@ -50,7 +54,15 @@ backend:
         hours: Horas
         all: "Todos"
         user: "Usuario"
-        pdf: "Generar PDF"
+        low: "Baja"
+        high: "Alta"
+        select_action: "Seleccione una acción"
+        select_method: "Seleccione el método"
+        project: "Proyecto"
+        task: "Tarea"
+        description: "Descripción"
+        today: "Hoy"
+        yesterday: "Ayer"
     
     login:
         message: "Ingrese para acceder al área administrativa"
@@ -131,6 +143,7 @@ backend:
         developer_description: "<p>Es un integrante del equipo de desarrollo el cual tiene un objetivo común responsables de la realización del trabajo y de su calidad en cada iteración y en el proyecto.</p><p>El equipo de desarrollo debe estar entre 3 y 9 personas.</p><p>Es un equipo autoorganizado, que comparte información y cuyos miembros confían entre ellos.</p><ul><li>Seleccionar los requisitos que se compromete a completar en una iteración, de forma que estén preparados para ser entregados al cliente.</li><li>Estimar la complejidad de cada requisito en la lista de requisitos priorizada del producto o proyecto.</li><li>Seleccionar los requisitos que pueden completar en cada iteración, realizando al cliente las preguntas necesarias.</li><li>Identificar todas las tareas necesarias para completar cada requisito.</li><li>Estimar el esfuerzo necesario para realizar cada tarea.</li><li>Cada miembro del equipo se autoasigna a las tareas.</li><li>Durante la iteración, trabajar de manera conjunta para conseguir los objetivos de la iteración.</li><li>Demostrar al cliente los requisitos completados en cada iteración.</li><li>Hacer una retrospectiva la final de cada iteración para mejorar de forma continua su manera de trabajar.</li><li>El equipo es multidisciplinar, cada persona tiene las habilidades necesarias para identificar y llevar a cabo las tareas de cada iteración.</li><li>Se recomienda que todos los miembros del equipo trabajen en la misma localización física, para poder maximizar la comunicación.</li></ul>"
         
     user_project:
+        team: "Equipo"
         project_team: "Equipo del Proyecto"
         project_team_roles: "Equipo del Proyecto & Roles"
         active_members: "Miembros Activos"
@@ -198,6 +211,7 @@ backend:
         priority: "Prioridad"
         estimated_hours: "Horas estimadas"
         effort_estimation: "Esfuerzo Estimado (Complejidad)"
+        complexity: "Complejidad"
         worked_hours: "Horas trabajadas"
         designed_user: "Usuario designado"
         sprint: "Planeado para sprint"
@@ -229,7 +243,7 @@ backend:
         status_confirmed: "Confirmado"
         status_not_a_bug: "No es un error"
         status_being_worked_on: "Trabajo iniciado"
-        status_near_completion: "Cerca de terminar"
+        status_bug_detected: "Incidencia Detectada"
         status_ready_for_testing: "Listo para pruebas"
         status_testing: "Probando"
         status_canceled: "Cancelado"
@@ -246,6 +260,13 @@ backend:
         change_status: "Cambiar Estado"
         
         worked_estimated_time: "Tiempo Trabajado / Tiempo Estimado"
+        move_copy_other_sprint: "Mover / Copiar a Sprint"
+        select_sprint: "Seleccione Sprint"
+        move_copy_other_project: "Mover / Copiar a Proyecto"
+        select_project: "Seleccione Proyecto"
+        
+        move_to_product_backlog: "Mover a la Pila del Producto"
+        move_to_product_backlog_message: "Estas seguro que deseas mover este item a la Pila del Producto?"
         
     backlog:
         product_backlog: "Pila del Producto"
@@ -360,7 +381,7 @@ backend:
             ect: "# Errores Corregidos en Tercer Ciclo"
             ecc: "# Errores Corregidos en Cuarto Ciclo"
         error: "No Existen Datos"
-            
+        
     attachment:
         attachments: "Archivos Adjuntos"
         upload_files: "Subir Archivo(s)"
@@ -408,3 +429,22 @@ backend:
         item_attachment_deleted: "Se ha eliminado un archivo adjunto"
         item_status_modified: "El estado del elemento ha sido modificado"
         item_assign_cleared: "Se ha desasignado el usuario del elemento"
+        item_sprint_copied: "El elemento se ha copiado al sprint"
+        item_project_copied: "El elemento se ha copiado al proyecto"
+        item_project_moved: "El elemento se ha movido al proyecto"
+        item_moved_to_product_backlog: "El elemento se ha movido a la Pila del Producto"
+        
+    time_tracking:
+        time_tracking: "Registro de Tiempo"
+        time: "Tiempo"
+        empty_list: "Ningún registro de tiempo"
+        task_description: "Descripcion  de la tarea"
+        start: "Iniciar"
+        stop: "Detener"
+        select_task: "Seleccione la tarea"
+        time: "Tiempo"
+        select_task_warning: "Por favor seleccione o describa una tarea"
+        select_project_warning: "Por favor seleccione un proyecto"
+        delete_time_warning: "Estas seguro que deseas eliminar este registro?"
+        start_task: "Iniciar esta Tarea"
+        total_time: "Tiempo Total"

@@ -1,0 +1,91 @@
+frontend:
+    lang:
+        spanish: "Español"
+        english: "Inglés"
+        
+    pages:
+        home: "Inicio"
+        features: "Características"
+        why: "Por qué Agile Scrum ?"
+        create_account: "Crear Cuenta"
+        sign_in: "Ingresar"
+        
+    home:
+        slider_text: "Software para Administración de Proyectos Scrum"
+        title_1: "Flujo de trabajo intuitivo para Proyectos Ágiles"
+        text_1: "Agile SCRUM responde a las necesidades de cada Rol de Scrum y facilita las ceremonias del proceso de Scrum mediante la presentación de interfaces sencillas para la gestión sus artefactos. "
+        title_2: "Organice la Pila de Producto de manera eficiente"
+        text_2: "Crea historias de usuario, actividades, mejoras, etc. Agrúpalos entre sí, y da prioridad a cada elemento basado en el valor del negocio. En todo momento tendrás una visión general del progreso continuo de tu producto. "
+        title_3: "Simple y Escalable"
+        text_3: "Agile SCRUM es la herramienta perfecta para la gestión de tu equipo de desarrollo. Es rápido, muy sencillo y escalable"
+        title_4: "Observa el progreso diario, sin importar en donde te encuentres"
+        text_4: "Superviza el estado de las tareas en tu tablero de Scrum en tiempo real. Observa retrasos, impedimentos y el progreso durante todo el día. Agile Scrum es la herramienta ideal para equipos distribuidos."
+        
+    features:
+        view_features: "Ver Características"
+        legend: "Empieza inmediatamente. No necesitas capacitaciones."
+        
+        title_1: "Equipo y Roles"
+        text_1_1: "Crea diferentes roles"
+        text_1_2: "Crea equipos por proyectos"
+        text_1_3: "Seleciona Product Owners y Stakeholders"
+        text_1_4: "Realiza seguimiento de la velocidad del equipo"
+        
+        title_2: "Administración del Backlog"
+        text_2_1: 'Utiliza "arrastrar y soltar" para cortar y pegar elementos y asignar prioridades'
+        text_2_2: "Observa fácilmente el estado de cada elemento"
+        text_2_3: "Divide los elementos del Backlog en tareas"
+        text_2_4: "Observa los elementos del backlog de Sprints anteriores"
+        text_2_5: "Observa los detalles de los elementos sin abandonar la página"
+        text_2_6: "Prioriza tu Pila de Producto basado en el valor del negocio"
+        text_2_7: "Fácil barra de busqueda para filtrar elementos en el Backlog"
+        
+        title_3: "Planificación del Sprint"
+        text_3_1: "Crear y edita fácilmente los sprints"
+        text_3_2: "Estimación en horas"
+        text_3_3: "Estima la complejidad con la Serie Fibonacci o Tallas de Camisas"
+        text_3_4: "Observa facilmente si un equipo tiene trabajo excesivo"
+        text_3_5: "Maneja los días libres, el trabajo en fines de semana, etc. "
+        text_3_6: "Añade o elimina elementos del Backlog durante un Sprint para adaptarse al tiempo disponible"
+        
+        title_4: "Tablero de Tareas"
+        text_4_1: "Tablero de tareas increíblemente fácil de usar"
+        text_4_2: "Igual que el uso de un muro físico"
+        text_4_3: "Personaliza tu propio tablero de tareas"
+        text_4_4: 'Mueve los elementos utilizando "arrastrar y soltar"'
+        text_4_5: "Observa los detalles de los elementos sin abandonar la página"
+        
+        title_5: "Burndown"
+        text_5_1: "Observa Gráficas de Burndown para cada Sprint"
+        text_5_2: "Las Gráficas de Burndown se actualizan al instante "
+        text_5_3: "Obtén una Grafica Burndown precisa que se encarga de días libres, trabajo en fines de semana, etc."
+        
+        title_6: "Seguimiento de Tiempos"
+        text_6_1: "Controla el tiempo empleado en los elementos del backlog y tareas"
+        text_6_2: "Obtiene un registro de tiempo para el uso en facturación y la contabilidad "
+        text_6_3: "Observa el registro de tiempos para personas individuales o equipos, y para los sprints o rangos de fechas"
+        
+    why:
+        title: "Más razones por las que te va a encantar"
+        
+        subtitle_1: "Increíblemente fácil de usar"
+        text_1: "Todo el mundo sabe inmediatamente cómo utilizar Agile SCRUM, sin ninguna necesidad de formación. Si conoces sólo los conceptos básicos de Scrum, te sentirás como en casa en Agile SCRUM."
+        
+        subtitle_2: "Muy Rapido"
+        text_2: "Ágil SCRUM es increíblemente rápido y responsive. Sólo tienes que acceder, y nunca tendrás que esperar a que todos los datos se carguen. Puedes abrir cualquier elemento y ver sus detalles instantáneamente, sin ningún tiempo excesivo de carga."
+        
+        subtitle_3: "Archivos Adjuntos"
+        text_3: "Puedes adjuntar archivos para el uso en tu trabajo, tales como dibujos, especificaciones, imágenes, etc., por lo que todo estará en un solo lugar. Para las imágenes adjuntas, verás una miniatura de la imagen."
+        
+        subtitle_4: "Notificaciónes de Correo Electrónico"
+        text_4: "Puedes obtener notificaciones por correo electrónico cuando alguien hace algo de tu interés, como respuesta a un comentario que hiciste a un elemento que tengas asignado."
+        
+    create_account:
+        slider_text: "Regístrese con nosotros"
+        legend: "Diligencie el siguiente formulario para crear su cuenta:"
+        create: "Crear Cuenta"
+        
+        
+        
+        
+    

@@ -10,9 +10,17 @@
             </h1>
 
             {% set item2 = {'text': project.name, 'url':path('backend_projects_view',{'id':project.id}),'icon':'fa fa-dashboard'} %}
-            {% set item3 = {'text': 'backend.backlog.product_backlog'|trans, 'url':path('backend_project_product_backlog',{'id':project.id}), 'icon':'fa fa-list'} %}
-            {% set item4 = {'text': 'backend.item.edit'|trans, 'icon':'fa fa-pencil'} %}
-            {% set items = [item2, item3, item4] %}
+            {% if app.request.get('sprintId') is empty %}
+                {% set item3 = {'text': 'backend.backlog.product_backlog'|trans, 'url':path('backend_project_product_backlog',{'id':project.id}), 'icon':'fa fa-list'} %}
+                {% set item4 = {'text': 'backend.item.edit'|trans, 'icon':'fa fa-pencil'} %}
+                {% set items = [item2, item3, item4] %}
+            {% else %}
+                {% set item3 = {'text': 'backend.sprint.sprints'|trans, 'url':path('backend_project_sprints',{'id':project.id}), 'icon':'fa fa-rotate-right'} %}
+                {% set item4 = {'text': item.sprint, 'url':path('backend_project_sprints_backlog',{'id':project.id,'sprintId':item.sprint.id}),'icon':'fa fa-list'} %}
+                {% set item5 = {'text': 'backend.item.edit'|trans, 'icon':'fa fa-pencil'} %}
+                {% set items = [item2, item3, item4, item5] %}
+            {% endif %}
+            
             {{ filters.breadcrum(items) }}
         </div>
     </div>
@@ -37,11 +45,15 @@
                     {{ form_errors(edit_form.title) }}
                 </div>
                 <div class="form-group">
-                    <div class="col-xs-11" style="padding-left: 0px;">
+                    <div class="col-xs-10 no-padding-left">
                         {{ form_label(edit_form.priority)}}
-                        {{ form_widget(edit_form.priority, {'attr':{'style':'cursor:pointer;','onchange':'rangevalue.value=value'},}) }}
+                        {{ form_widget(edit_form.priority, {'attr':{'style':'cursor:pointer;','onmousemove':'rangevalue.value=value','onchange':'rangevalue.value=value'},}) }}
+                        <div class="col-lg-12 col-md-12 col-xs-12 no-padding-sides" style="margin-bottom: 18px;">
+                            <span class="pull-left green-color">{{'backend.global.low'|trans}}</span>
+                            <span class="pull-right red-color">{{'backend.global.high'|trans}}</span>
+                        </div>
                     </div>
-                    <output class="alert alert-box col-xs-1 text-center pull-right no-margin-bottom" id="rangevalue">{{item.priority|default(0)}}</output>
+                    <output class="alert alert-box col-xs-2 text-center pull-right no-margin-bottom" id="rangevalue">{{item.priority|default(0)}}</output>
                 </div>
                 <div class="form-group col-xs-6 no-padding-left">
                     {{ form_label(edit_form.designedUser)}}
@@ -100,10 +112,9 @@
                 <legend>{{'backend.item_history.history'|trans}}</legend>
                 <div class="form-group no-margin-bottom">
                     <table class="table table-bordered no-margin-bottom">
-                        <tr id="table-header">
-                            <th width="100px;">{{'backend.global.date'|trans}}</th>
+                        <tr id="table-history">
+                            <th width="130px;">{{'backend.global.date'|trans}}</th>
                             <th>{{'backend.item_history.event'|trans}}</th>
-                            <th width="100px;">{{'backend.global.user'|trans}}</th>
                         </tr>
                     </table>
                 </div>
@@ -111,12 +122,13 @@
                     <table class="table table-bordered table-hover">
                         {% for event in itemHistory %}
                             <tr>
-                                <td width="100px;">
+                                <td width="130px;">
                                     {{event.date|date(project.settings.dateFormat)}}<br>
-                                    {{event.date|date(project.settings.hourFormat)}}
+                                    {{event.date|date(project.settings.hourFormat)}}<br>
+                                    <i class="fa fa-user"></i> {{event.userOwner}}
                                 </td>
                                 <td>
-                                    {{ event.getTextAction|trans ~event.actionSufix }}
+                                    {{ (event.getTextAction|trans ~event.actionSufix)|raw }}
                                     {% if event.additionalData is not empty %}
                                         {% set data = event.additionalData|json_decode %}
                                         <table class="table table-striped">
@@ -135,13 +147,10 @@
                                         </table>
                                     {% endif %}
                                 </td>
-                                <td width="100px;">
-                                    {{event.userOwner}}
-                                </td>
                             </tr>
                         {% else %}
                             <tr>
-                                <td colspan="3">{{'backend.item_history.empty_list'|trans}}</td>
+                                <td colspan="2">{{'backend.item_history.empty_list'|trans}}</td>
                             </tr>
                         {% endfor %}
                     </table>
@@ -159,9 +168,9 @@
                     </div>
                     <p id="upload-message"></p>
                 </div>
-                <div class="form-group">
+                <div class="table-responsive form-group col-lg-12 col-md-12 col-xs-12 no-padding-sides">
                     <table class="table table-bordered table-attachments">
-                        <tr id="table-header">
+                        <tr id="table-attachments">
                             <th>{{'backend.attachment.file_name'|trans}}</th>
                             <th>{{'backend.attachment.file_information'|trans}}</th>
                             <th width="86px">{{'backend.global.options'|trans}}</th>
@@ -169,21 +178,41 @@
                         {% for attach in attachments %}
                             <tr>
                                 <td>
+                                    {% set fileExists = false %}
+                                    {% if (attach.filePath is not empty and file_exists(item_attachments_folder ~attach.filePath)) %}
+                                        {% set fileExists = true %}
+                                    {% endif %}
+                                    
                                     {% if attach.isAudioFile %}
-                                        <audio controls>
-                                            <source src="{{ asset('uploads/items/'~attach.filePath)}}" type="audio/{{attach.fileExtension}}">
-                                            {{'backend.attachment.no_support_audio'|trans}}
-                                        </audio>
+                                        {% if fileExists %}
+                                            <audio controls>
+                                                <source src="{{ asset('uploads/items/'~attach.filePath)}}" type="audio/{{attach.fileExtension}}">
+                                                {{'backend.attachment.no_support_audio'|trans}}
+                                            </audio>
+                                        {% else %}
+                                            <img class="thumbnail inline" src="{{ asset('bundles/backend/images/file-broken.png')}}"/>
+                                            <span class="red-color">{{'backend.attachment.not_found'|trans}}</span>
+                                        {% endif %}
                                     {% elseif attach.isVideoFile %}
-                                        <video controls>
-                                            <source src="{{ asset('uploads/items/'~attach.filePath)}}" type="video/{{attach.fileExtension}}">
-                                            {{'backend.attachment.no_support_video'|trans}}
-                                            <!-- You can embed a Flash player here, to play your mp4 video in older browsers -->
-                                        </video>
+                                        {% if fileExists %}
+                                            <video controls>
+                                                <source src="{{ asset('uploads/items/'~attach.filePath)}}" type="video/{{attach.fileExtension}}">
+                                                {{'backend.attachment.no_support_video'|trans}}
+                                                <!-- You can embed a Flash player here, to play your mp4 video in older browsers -->
+                                            </video>
+                                        {% else %}
+                                            <img class="thumbnail inline" src="{{ asset('bundles/backend/images/file-broken.png')}}"/>
+                                            <span class="red-color">{{'backend.attachment.not_found'|trans}}</span>
+                                        {% endif %}
                                     {% elseif attach.isImageFile %}
-                                        <a class="fancybox" href="{{asset('uploads/items/'~attach.filePath)}}">
-                                            <img class="thumbnail" src="{{ asset('uploads/items/'~attach.filePath) | imagine_filter('thumbnail_120_90')}}"/>
-                                        </a>
+                                        {% if fileExists %}
+                                            <a class="fancybox" href="{{asset('uploads/items/'~attach.filePath)}}">
+                                                <img class="thumbnail" src="{{ asset('uploads/items/'~attach.filePath) | imagine_filter('thumbnail_120_90')}}"/>
+                                            </a>
+                                        {% else %}
+                                            <img class="thumbnail inline" src="{{ asset('bundles/backend/images/file-broken.png')}}"/>
+                                            <span class="red-color">{{'backend.attachment.not_found'|trans}}</span>
+                                        {% endif %}
                                     {% else %}
                                         <i class="fa fa-file fa-5x" title="{{'backend.attachment.preview_no_available'|trans}}"></i>
                                     {% endif %}
@@ -200,7 +229,7 @@
                                 </td>
                             </tr>
                         {% else %}
-                            <tr>
+                            <tr id="no-attachments">
                                 <td colspan="3">
                                     {{'backend.attachment.empty_list'|trans}}
                                 </td>
@@ -303,7 +332,8 @@
                     $("#progress-bar").toggle();
                     if (response.result == "__OK__") {
                         $("#upload-message").attr('class', 'success');
-                        $("#table-header").after(response.html);
+                        $("#table-attachments").after(response.html);
+                        $("#no-attachments").remove();
                         $("#uploadfiles").val('');
                     } else {
                         $("#upload-message").attr('class', 'danger');

@@ -23,11 +23,10 @@
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    <th>{{ 'backend.project.name'|trans }}</th>
+                    <th width="150px">{{ 'backend.project.name'|trans }}</th>
                     <th>{{ 'backend.project.description'|trans }}</th>
-                    <th>{{ 'backend.project.creation_date'|trans }}</th>
-                    <th>{{ 'backend.project.start_date'|trans }}</th>
-                    <th>{{ 'backend.project.estimated_date'|trans }}</th>
+                    <th width="120px">{{ 'backend.project.start_date'|trans }}</th>
+                    <th width="120px">{{ 'backend.project.estimated_date'|trans }}</th>
                     <th>{{ 'backend.global.options'|trans }}</th>
                 </tr>
             </thead>
@@ -39,18 +38,13 @@
                     <td><a href="{{ path('backend_projects_view', { 'id': project.id }) }}">{{ project.name }}</a></td>
                     <td>{{ project.description|raw }}</td>
                     <td>
-                        {% if project.creationDate %}
-                            {{ project.creationDate|date(dateFormat) }}
-                        {% endif %}
-                    </td>
-                    <td>
                         {% if project.startDate %}
-                            {{ project.startDate|date(dateFormat) }}
+                            <i class="fa fa-calendar-o"></i> {{ project.startDate|date(dateFormat) }}
                         {% endif %}
                     </td>
                     <td>
                         {% if project.estimatedDate %}
-                            {{ project.estimatedDate|date(dateFormat) }}
+                            <i class="fa fa-calendar-check-o"></i>  {{ project.estimatedDate|date(dateFormat) }}
                         {% endif %}
                     </td>
                     <td>
@@ -61,7 +55,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="6">{{'backend.project.empty_list'|trans}}</td>
+                    <td colspan="5">{{'backend.project.empty_list'|trans}}</td>
                 </tr>
             {% endfor %}
             </tbody>

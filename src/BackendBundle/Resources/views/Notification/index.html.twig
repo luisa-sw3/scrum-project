@@ -38,10 +38,10 @@
                     <td>{{ invitation.project.name }}</td>
                     <td>{{ invitation.role.name }}</td>
                     <td>
-                        <a class="btn btn-success btn-sm" title="{{ 'backend.project_invitation.accept'|trans }}" href="{{ path('backend_notifications_accept',{'id':invitation.id}) }}">
+                        <a class="btn btn-success btn-md" title="{{ 'backend.project_invitation.accept'|trans }}" href="{{ path('backend_notifications_accept',{'id':invitation.id}) }}">
                             <i class="fa fa-check"></i>
                         </a>
-                        <a class="btn btn-danger btn-sm reject-invitation" invitation-id="{{invitation.id}}" title="{{ 'backend.project_invitation.reject'|trans }}" href="javascript:void(0);">
+                        <a class="btn btn-danger btn-md reject-invitation" invitation-id="{{invitation.id}}" title="{{ 'backend.project_invitation.reject'|trans }}" href="javascript:void(0);">
                             <i class="fa fa-times"></i>
                         </a>
                     </td>

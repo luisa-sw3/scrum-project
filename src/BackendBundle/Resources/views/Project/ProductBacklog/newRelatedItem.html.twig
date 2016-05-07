@@ -24,15 +24,44 @@
                 </div>
             </div>
             <div class="col-md-12 col-xs-12">
-                <div class="form-group col-xs-6 no-padding-left">
+                <div class="form-group col-lg-6 col-md-6 col-xs-6 no-padding-left">
                     {{ form_label(form.type)}}<em>*</em>
                     {{ form_widget(form.type, {'attr':{'class':'form-control'}}) }}
                     {{ form_errors(form.type) }}
                 </div>
-                <div class="form-group col-xs-6 no-padding-right">
+                <div class="form-group col-lg-6 col-md-6 col-xs-6 no-padding-right">
                     {{ form_label(form.estimatedHours)}}
                     {{ form_widget(form.estimatedHours, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
                     {{ form_errors(form.estimatedHours) }}
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-xs-6 no-padding-left">
+                    <div class="col-xs-10 no-padding-left">
+                        {{ form_label(form.priority)}}
+                        {{ form_widget(form.priority, {'attr':{'style':'cursor:pointer;','onchange':'rangevalue.value=value','onmousemove':'rangevalue.value=value','onkeyup':'rangevalue.value=value'},}) }}
+                        <div class="col-lg-12 col-md-12 col-xs-12 no-padding-sides" style="margin-bottom: 8px;">
+                            <span class="pull-left green-color">{{'backend.global.low'|trans}}</span>
+                            <span class="pull-right red-color">{{'backend.global.high'|trans}}</span>
+                        </div>
+                    </div>
+                    <output class="alert alert-box col-xs-2 text-center pull-right no-margin-bottom" id="rangevalue">{{item.priority|default(50)}}</output>
+                </div>
+                {% set displayFibonacci = true %}
+                {% if project.effortEstimationMethod != constant('BackendBundle\\Entity\\Project::METHOD_FIBONACCI')%}
+                    {% set displayFibonacci = false %}
+                {% endif  %}
+                <div class="form-group col-lg-6 col-md-6 col-xs-6 no-padding-right" {% if not displayFibonacci %}style="display: none;"{% endif %}>
+                    {{ form_label(form.effortFibonacci)}}
+                    {{ form_widget(form.effortFibonacci, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
+                    {{ form_errors(form.effortFibonacci) }}
+                </div>
+                {% set displayTShirt = true %}
+                {% if project.effortEstimationMethod != constant('BackendBundle\\Entity\\Project::METHOD_TSHIRT_SIZE')%}
+                    {% set displayTShirt = false %}
+                {% endif %}
+                <div class="form-group col-lg-6 col-md-6 col-xs-6 no-padding-right" {% if not displayTShirt %}style="display: none;"{% endif %}>
+                    {{ form_label(form.effortTShirt)}}
+                    {{ form_widget(form.effortTShirt, {'attr':{'class':'form-control only_numbers_decimal'}}) }}
+                    {{ form_errors(form.effortTShirt) }}
                 </div>
             </div>
             <div class="col-md-12 col-xs-12">
@@ -44,13 +73,18 @@
             </div>
             <div class="col-lg-12">
                 {{ form_widget(form._token) }} 
-                <button type="submit"class="btn btn-primary pull-right">{{ 'backend.global.create'|trans }}</button>
+                
+                {{ form_widget(form.saveAndExit, {'attr':{'class':'btn btn-primary pull-right'}}) }}
+                {{ form_widget(form.saveAndContinue, {'attr':{'class':'btn btn-primary pull-right small-margin-right'}}) }}
+                
+                
+                {#<button type="submit"class="btn btn-primary pull-right">{{ 'backend.global.create'|trans }}</button>#}
             </div>
         {{ form_end(form) }}
     </div>
 {% endblock %}
 {% block scripts %}
-    singleHtmlEditor('textarea', 160);
+    singleHtmlEditor('textarea', 150);
     
     {% if closeFancy %}
         closeFancyOnTime(true, 1);

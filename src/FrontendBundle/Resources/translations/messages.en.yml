@@ -1,0 +1,89 @@
+frontend:
+    lang:
+        spanish: "Spanish"
+        english: "English"
+        
+    pages:
+        home: "Home"
+        features: "Features"
+        why: "Why Agile Scrum ?"
+        create_account: "Create Account"
+        sign_in: "Sign In"
+        
+    home:
+        slider_text: "Project Management and Scrum Software"
+        title_1: "Intuitive Workflow for Agile Projects"
+        text_1: "Agile SCRUM addresses the needs of each scrum role and facilitates the ceremonies of the scrum process by exposing simple interfaces for managing the scrum artifacts. "
+        title_2: "Organize your Product Backlog efficiently"
+        text_2: "Create User Stories, group them into higher level themes, and prioritize each story based on business value. At any time, see an overview of your product’s ongoing progress. "
+        title_3: "Simple & Scalable "
+        text_3: "Agile SCRUM is the perfect tool for managing my development team. It’s quick, it’s simple, it’s scalable "
+        title_4: "See your daily progress, no matter where you are "
+        text_4: "Monitor the status of tasks on your Scrumboard in real-time. Observe delays, impediments and progress throughout the day. Agile Scrum is the ideal tool for distributed teams."
+        
+    features:
+        view_features: "View Features"
+        legend: "Get started immediately. No training needed."
+        
+        title_1: "Team and Roles"
+        text_1_1: "Create different roles"
+        text_1_2: "Create teams by projects"
+        text_1_3: "Select product owners and stakeholders "
+        text_1_4: "Keep track of team velocity"
+        
+        title_2: "Backlog Management"
+        text_2_1: "Use drag-and-drop and cut & paste & edit priorities"
+        text_2_2: "Easily see the status of each item"
+        text_2_3: "Break backlog items down into tasks"
+        text_2_4: "View backlog items from earlier sprints "
+        text_2_5: "View the details of a backlog item without leaving the page"
+        text_2_6: "Prioritize your backlog based on business value"
+        text_2_7: "Easy filter bar to search items in backlog"
+        
+        title_3: "Sprint Planning"
+        text_3_1: "Create and edit sprints easily "
+        text_3_2: "Estimate in hours"
+        text_3_3: "Estimate complexity with Fibonacci Serie or Sizes of Shirts"
+        text_3_4: "Easily see if a team is over-allocated "
+        text_3_5: "Handle free days, work in weekends, etc. "
+        text_3_6: "Add or remove backlog items during a sprint to fit available time "
+        
+        title_4: "Task Board"
+        text_4_1: "Incredibly easy-to-use task boards "
+        text_4_2: "Like using a physical wall "
+        text_4_3: "Customize your own task board "
+        text_4_4: "Move items using drag-and-drop "
+        text_4_5: "View item details without leaving the page "
+        
+        title_5: "Burndown"
+        text_5_1: "See burndown charts for each sprint "
+        text_5_2: "Burndown charts update immediately "
+        text_5_3: "Get precise burndown that handles free days, work in weekends, etc."
+        
+        title_6: "Time Tracking"
+        text_6_1: "Track time used on backlog items and tasks"
+        text_6_2: "Get a time log for use in billing and accounting "
+        text_6_3: "View the time log for individual persons or teams, and for sprints or calendar periods "
+        
+    why:
+        title: "More reasons why you'll love it"
+        
+        subtitle_1: "Amazingly easy to use"
+        text_1: "Everybody immediately knows how to use Agile SCRUM, without any need for training. If you know just the basic concepts of Scrum, you'll immediately feel at home in Agile SCRUM. "
+        
+        subtitle_2: "Lightning fast"
+        text_2: " Agile SCRUM is amazingly fast and responsive. Just log in, and you'll never have to wait for any data to load. You can open any backlog item, task, project, sprint, etc. and look at its details instantly, without any load time. It feels even more amazing if you're on a slow connection "
+        
+        subtitle_3: "Attachments"
+        text_3: " You can attach files for use in your work, such as sketches, specifications, screenshots, etc., so that everything is in one place. For image attachments, you'll see a thumbnail of the image. "
+        
+        subtitle_4: "Email notifications"
+        text_4: "You can get email notifications when somebody does something of interest to you, such as reply to a comment you made or assign work to you. "
+        
+    create_account:
+        slider_text: "Register with us"
+        legend: "Fill out the form below to create your account:"
+        create: "Create Account"
+        
+        
+        

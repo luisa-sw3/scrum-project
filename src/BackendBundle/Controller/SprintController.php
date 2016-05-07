@@ -34,7 +34,7 @@ class SprintController extends Controller {
         }
 
         $search = array('project' => $project->getId());
-        $order = array('creationDate' => 'ASC');
+        $order = array('consecutive' => 'DESC');
 
         $sprints = $em->getRepository('BackendBundle:Sprint')->findBy($search, $order);
 

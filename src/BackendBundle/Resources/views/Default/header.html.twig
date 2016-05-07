@@ -73,8 +73,8 @@
                 {% for invitation in invitations %}    
                     <li class="notification">
                         <a href="#">{{'backend.project_invitation.invitation_to'|trans}} :<strong><br>{{ invitation.project.name }}</strong></a>
-                        <a href="{{ path('backend_notifications_accept',{'id':invitation.id}) }}" class="option"><span class="label label-success">{{'backend.global.accept'|trans}}</span></a>
-                        <a href="{{ path('backend_notifications',{'rejectInvitation':invitation.id}) }}" class="option"><span class="label label-danger">{{'backend.global.reject'|trans}}</span></a>
+                        <a href="{{ path('backend_notifications_accept',{'id':invitation.id}) }}" class="option"><span class="label label-success label-notification">{{'backend.global.accept'|trans}}</span></a>
+                        <a href="{{ path('backend_notifications',{'rejectInvitation':invitation.id}) }}" class="option"><span class="label label-danger label-notification">{{'backend.global.reject'|trans}}</span></a>
                     </li>
                 {% else %}
                     <li>
@@ -91,11 +91,18 @@
         <li class="dropdown" style="width: 82px;">
             <a href="javascript:void(0);" title="{{'backend.global.language'|trans}}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-language fa-lg"></i> <b class="caret"></b> </a>
             <ul class="dropdown-menu alert-dropdown ul-languages">
+                {% set request_method =  app.request.method %}
+                {% set currentPath = 'backend_homepage' %}
+                {% set params = {} %}
+                {% if request_method == 'GET' %}
+                    {% set currentPath = app.request.attributes.get('_route') %}
+                    {% set params = app.request.attributes.get('_route_params') %}
+                {% endif %}
                 <li>
-                    <a href="{{ path('backend_homepage',{'_locale':'es'}) }}" {% if app.request.locale == 'es'%}style="text-decoration: underline;"{% endif %}><img src="{{ asset('bundles/backend/images/lang/spanish.png') }}" /> ES</a>
+                    <a href="{{ path(currentPath, params|merge({'_locale':'es'})) }}" {% if app.request.locale == 'es'%}style="text-decoration: underline;"{% endif %}><img src="{{ asset('bundles/backend/images/lang/spanish.png') }}" /> ES</a>
                 </li>
                 <li>
-                    <a href="{{ path('backend_homepage',{'_locale':'en'}) }}" {% if app.request.locale == 'en'%}style="text-decoration: underline;"{% endif %}><img src="{{ asset('bundles/backend/images/lang/english.png') }}" /> EN</a>
+                    <a href="{{ path(currentPath, params|merge({'_locale':'en'})) }}" {% if app.request.locale == 'en'%}style="text-decoration: underline;"{% endif %}><img src="{{ asset('bundles/backend/images/lang/english.png') }}" /> EN</a>
                 </li>
             </ul>
         </li>

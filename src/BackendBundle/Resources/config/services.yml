@@ -9,10 +9,6 @@ services:
         arguments: 
             entityManager: "@doctrine.orm.entity_manager"
             tokenStorage: "@security.token_storage"
-    
-#    email_manager:
-#        class: BackendBundle\Services\EmailManager
-#        arguments: [@request_stack, @service_container, @doctrine.orm.entity_manager]
 
     email_manager:
         class: BackendBundle\Services\EmailManager
@@ -20,6 +16,11 @@ services:
             requestStack:   "@request_stack"
             container:      "@service_container"
             entityManager:  "@doctrine.orm.entity_manager"
+            
+    time_tracker:
+        class: BackendBundle\Services\TimeTracker
+        arguments: 
+            entityManager: "@doctrine.orm.entity_manager"
     
     #servicio para clase de ayuda para implementar formularios
     form_helper:
@@ -113,10 +114,43 @@ services:
             - "@service_container"
         tags:
             - { name: form.type }
+            
+    #servicio para formulario de mover items entre sprints
+    backend.form.type.item_move_to_sprint:
+        class: BackendBundle\Form\MoveItemToSprintType
+        arguments:
+            - "@service_container"
+        tags:
+            - { name: form.type }
+    
+    #servicio para formulario de mover items entre proyectos
+    backend.form.type.item_move_to_project:
+        class: BackendBundle\Form\MoveItemToProjectType
+        arguments:
+            - "@service_container"
+            - "@security.token_storage"
+        tags:
+            - { name: form.type }
     
     #servicio para formulario de sprints de un proyecto
     backend.form.type.sprint:
         class: BackendBundle\Form\SprintType
+        arguments:
+            - "@service_container"
+        tags:
+            - { name: form.type }
+            
+    #servicio para formulario de registro de tiempos
+    backend.form.type.time_tracking:
+        class: BackendBundle\Form\TimeTracking\TimeTrackType
+        arguments:
+            - "@service_container"
+        tags:
+            - { name: form.type }
+    
+    #servicio para formulario de busqueda de registro de tiempos
+    backend.form.type.search_time_tracking:
+        class: BackendBundle\Form\TimeTracking\SearchTimeTrackType
         arguments:
             - "@service_container"
         tags:

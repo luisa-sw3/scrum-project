@@ -1,12 +1,13 @@
 {% extends 'FrontendBundle:Default:main.html.twig'  %}
-{% block title %}Sample Post - Agile SCRUM{% endblock %}
+{% block title %}{{'frontend.pages.why'|trans}} - Agile SCRUM{% endblock %}
 {% block content_header %}
 {#    <header class="intro-header" style="background-image: url('{{asset('bundles/frontend/img/post-bg.jpg')}}')">#}
-    <header class="intro-header" style="background-image: url('{{asset('bundles/frontend/img/scrum3.jpeg')}}'); height: 500px;">
+    <header class="intro-header" style="background-image: url('{{asset('bundles/frontend/img/scrum3.jpeg')}}'); height: 500px; margin-bottom: 30px; background-position-y: 50px;">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="post-heading">
+                        <h1>&nbsp;</h1>
                         {#<h1>Man must explore, and this is exploration at its greatest</h1>
                         <h2 class="subheading">Problems look mighty small from 150 miles up</h2>
                         <span class="meta">Posted by <a href="#">Start Bootstrap</a> on August 24, 2014</span>#}
@@ -19,28 +20,22 @@
 
 {% block content %}
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-        
-        <h2 class="section-heading">More reasons why you'll love it</h2>
-        
+        <h2 class="section-heading">{{'frontend.why.title'|trans}}</h2>
         <p>
-            <label>Amazingly easy to use</label><br>
-            Everybody immediately knows how to use Agile SCRUM, without any need for training. If you know just the basic concepts of Scrum, you'll immediately feel at home in Agile SCRUM.
+            <label>{{'frontend.why.subtitle_1'|trans}}</label><br>
+            {{'frontend.why.text_1'|trans}}
         </p>
-
         <p>
-            <label>Lightning fast </label><br>
-            Agile SCRUM is amazingly fast and responsive. Just log in, and you'll never have to wait for any data to load. You can open any backlog item, task, project, sprint, etc. and look at its details instantly, without any load time. It feels even more amazing if you're on a slow connection
+            <label>{{'frontend.why.subtitle_2'|trans}}</label><br>
+            {{'frontend.why.text_2'|trans}}
         </p>
-
         <p>
-            <label>Attachments</label><br>
-            You can attach files for use in your work, such as sketches, specifications, screenshots, etc., so that everything is in one place. For image attachments, you'll see a thumbnail of the image.
+            <label>{{'frontend.why.subtitle_3'|trans}}</label><br>
+            {{'frontend.why.text_3'|trans}}
         </p>
-        
         <p>
-            <label> Email notifications </label><br>
-            You can get email notifications when somebody does something of interest to you, such as reply to a comment you made or assign work to you. 
+            <label>{{'frontend.why.subtitle_4'|trans}} </label><br>
+            {{'frontend.why.text_4'|trans}}
         </p>
-        
     </div>
 {% endblock %}

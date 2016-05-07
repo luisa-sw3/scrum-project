@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\Container;
 use BackendBundle\Entity\Item;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
+use BackendBundle\Entity\Sprint;
 
 class ItemType extends AbstractType {
 
@@ -40,6 +41,10 @@ class ItemType extends AbstractType {
 
             if ($data instanceof Item) {
                 $project = $data->getProject();
+                $sprintId = null;
+                if (!empty($data->getSprint())) {
+                    $sprintId = $data->getSprint()->getId();
+                }
 
                 $form
                         ->add('designedUser', EntityType::class, array(
@@ -57,9 +62,11 @@ class ItemType extends AbstractType {
                         ))
                         ->add('sprint', EntityType::class, array(
                             'class' => 'BackendBundle:Sprint',
-                            'query_builder' => function (EntityRepository $er) use ($project) {
+                            'query_builder' => function (EntityRepository $er) use ($project, $sprintId) {
                                 return $er->createQueryBuilder('s')
-                                        ->where(($project != null ? "s.project = '" . $project->getId() . "'" : '1=1'))
+                                        ->where(($project != null ? "s.project = '" . $project->getId() . "'"
+                                        . "AND (s.status = ".Sprint::STATUS_PLANNED." OR s.status = ".Sprint::STATUS_IN_PROCESS.""
+                                        . "OR s.id = '".$sprintId."')" : '1=1'))
                                         ->orderBy('s.name', 'ASC');
                             },
                             'required' => false,
@@ -102,13 +109,13 @@ class ItemType extends AbstractType {
                 ->add('effortFibonacci', Type\ChoiceType::class, array(
                     'required' => false,
                     'placeholder' => $this->translator->trans('backend.global.select'),
-                    'label' => $this->translator->trans('backend.item.effort_estimation'),
+                    'label' => $this->translator->trans('backend.item.complexity'),
                     'choices' => $fibonacciOptions,
                 ))
                 ->add('effortTShirt', Type\ChoiceType::class, array(
                     'required' => false,
                     'placeholder' => $this->translator->trans('backend.global.select'),
-                    'label' => $this->translator->trans('backend.item.effort_estimation'),
+                    'label' => $this->translator->trans('backend.item.complexity'),
                     'choices' => $tShirtOptions,
                 ))
                 ->add('estimatedHours', Type\NumberType::class, array(

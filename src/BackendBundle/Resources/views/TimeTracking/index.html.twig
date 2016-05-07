@@ -1,0 +1,392 @@
+{% extends 'BackendBundle:Default:main.html.twig' %}
+{% block title %}{{'backend.time_tracking.time_tracking'|trans}}{% endblock %}
+
+{% block content %}
+
+    <!-- Page Heading -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                {{'backend.time_tracking.time_tracking'|trans}}
+                <a href="{{ app.request.headers.get('referer') }}" class="btn btn-default pull-right">{{'backend.global.back'|trans}}</a>
+            </h1>
+            {% set item1 = {'text': 'backend.time_tracking.time_tracking'|trans, 'icon':'fa fa-clock-o'} %}
+            {% set items = [item1] %}
+            {{ filters.breadcrum(items) }}
+        </div>
+    </div>
+    <!-- /.row -->
+    {{ filters.showMessage('messageSuccess', 'success')}}
+    {{ filters.showMessage('messageError', 'danger')}}
+
+    <div class="col-lg-12 no-padding-sides">
+        {{ form_start(form, {'action': path('backend_time_tracking_start_time'), 'method': 'POST', 'attr':{'id':'form-time'}}) }}
+        <div class="col-lg-12 col-md-12 col-xs-12 breadcrumb no-padding-sides no-padding-bottom">
+            <div class="form-group col-lg-2 col-md-6 col-xs-6">
+                {{ form_label(form.project)}}<em>*</em>
+                {{ form_widget(form.project, {'attr':{'class':'form-control'}}) }}
+                {{ form_errors(form.project) }}
+            </div>
+            <div class="form-group col-lg-4 col-md-6 col-xs-6">
+                {{ form_label(form.taskId)}}<em>*</em>
+                {{ form_widget(form.taskId, {'attr':{'class':'form-control'}}) }}
+                {{ form_errors(form.taskId) }}
+            </div>
+            <div class="form-group col-lg-3 col-md-6 col-xs-6">
+                {{ form_label(form.description)}}
+                {{ form_widget(form.description, {'attr':{'class':'form-control'}}) }}
+                {{ form_errors(form.description) }}
+            </div>
+            <div class="form-group col-lg-3 col-md-6 col-xs-6">
+                <div class="col-xs-12 text-center no-padding-sides">
+                    <div class="clock"></div>
+                    <div class="message"></div>
+                </div>
+                <div class="col-xs-12 text-center">
+                    {{ form_widget(form._token) }} 
+                    {% if time_track.startTime is empty %}
+                        <button type="submit" id="start-time" class="btn btn-primary btn-md">{{ 'backend.time_tracking.start'|trans }}</button>
+                        <a id="stop-time" time-id="" class="btn btn-danger btn-md hidden">{{ 'backend.time_tracking.stop'|trans }}</a>
+                    {% else %}
+                        <button type="submit" id="start-time" class="btn btn-primary btn-md hidden">{{ 'backend.time_tracking.start'|trans }}</button>
+                        <a id="stop-time" time-id="{{time_track.id}}" class="btn btn-danger btn-md">{{ 'backend.time_tracking.stop'|trans }}</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+    <div class="col-lg-12 no-padding-sides container-search-form" style="display: none;">
+        {{ form_start(searchForm, {'action': path('backend_time_update_time_tracking_list'), 'method': 'POST', 'attr':{'id':'form-search-time'}}) }}
+        <div class="col-lg-12 col-md-12 col-xs-12 breadcrumb no-padding-sides no-padding-bottom">
+            <div class="form-group col-lg-3 col-md-4 col-xs-6">
+                {{ form_label(searchForm.startDate)}}<em>*</em>
+                {{ form_widget(searchForm.startDate, {'attr':{'class':'form-control'}}) }}
+                {{ form_errors(searchForm.startDate) }}
+            </div>
+            <div class="form-group col-lg-3 col-md-4 col-xs-6">
+                {{ form_label(searchForm.endDate)}}<em>*</em>
+                {{ form_widget(searchForm.endDate, {'attr':{'class':'form-control'}}) }}
+                {{ form_errors(searchForm.endDate) }}
+            </div>
+            <div class="form-group col-lg-3 col-md-4 col-xs-6" style="padding-top: 23px;">
+                {{ form_widget(searchForm._token) }} 
+                <button type="submit" id="search-time" class="btn btn-primary btn-md" title="{{ 'backend.global.search'|trans }}"><i class="fa fa-search"></i></button>
+                <a id="cancel-search" class="btn btn-danger btn-md" title="{{ 'backend.global.cancel'|trans }}"><i class="fa fa-times"></i></a>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+    
+    
+    <div class="row">
+        <div class="table-responsive col-lg-12" id="time-list">
+        </div>
+    </div>
+{% endblock %}
+
+{% block functions_javascript %}
+    var clock;
+
+    {% set dateFormat = app_settings.getDefaultDateFormat() %}
+    var searchStartDate = "{{search.startDate|date(dateFormat)}}";
+    var searchEndDate = "{{search.endDate|date(dateFormat)}}";
+    
+    /**
+     * Permite actualizar la lista de tiempos del usuario
+     **/
+    function updateTimeList(startDate, endDate) {
+        $.ajax({
+            type: 'POST',
+            url: "{{ path('backend_time_update_time_tracking_list') }}",
+            dataType: 'json',
+            data: {startDate: startDate, endDate: endDate},
+            success: function (resp)
+            {
+                if (resp.result == '__OK__') {
+                    $("#time-list").html(resp.html);
+                } 
+            }
+        });
+    }
+    
+{% endblock %}
+
+{% block scripts %}
+    clock = $('.clock').FlipClock({
+        clockFace: 'HourlyCounter'
+    });
+    {% if time_track.startTime is not empty %}
+        clock.setTime({{time_track.workedTime}});
+        $(".continue-time").addClass('hidden');
+    {% else %}
+        clock.stop();
+        $(".continue-time").removeClass('hidden');
+    {% endif %}
+
+    $("#backendbundle_time_track_type_taskId").select2({
+        placeholder: "{{'backend.time_tracking.select_task'|trans}}",
+        allowClear: true,
+    });
+    $("span.select2-selection").css('height', '34px');
+    $("span.select2-container--default").css('width', '100%');
+
+    {# Codigo para cargar las tareas activas de un proyecto en especifico #}
+    $("#backendbundle_time_track_type_project").change(function () {
+        var object = $(this);
+        var projectId = object.val();
+
+        if (projectId != '') {
+
+            $("#backendbundle_time_track_type_taskId").attr('disabled', 'disabled');
+            $("#backendbundle_time_track_type_taskId").select2("val", "");
+            $.ajax({
+                type: 'POST',
+                url: "{{path('backend_time_tracking_get_project_items')}}",
+                dataType: 'json',
+                data: {projectId: projectId},
+                async: false,
+                success: function (resp)
+                {
+                    $("#backendbundle_time_track_type_taskId").removeAttr('disabled');
+                    if (resp.result == '__OK__') {
+                        $("#backendbundle_time_track_type_taskId").html(resp.data.html);
+                    } else {
+                        bootbox.alert(resp.msg);
+                    }
+                },
+                error: function (resp)
+                {
+                    $("#backendbundle_time_track_type_taskId").removeAttr('disabled');
+                    bootbox.alert("{{'backend.global.unknown_error'|trans}}");
+                }
+            });
+        }
+    });
+
+    $("#backendbundle_time_track_type_project").trigger('change');
+
+
+    {# Codigo para iniciar el contador de tiempo para una tarea especifica #}
+    $("#form-time").submit(function (e) {
+        e.preventDefault();
+
+        var projectId = $("#backendbundle_time_track_type_project").val();
+        var task = $("#backendbundle_time_track_type_taskId").val();
+        var taskDescription = $("#backendbundle_time_track_type_description").val();
+
+        if (projectId != '') {
+            if (task != '' || (task == '' && taskDescription != '')) {
+                $("#start-time").attr('disabled', 'disabled');
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('backend_time_tracking_start_time') }}",
+                    dataType: 'json',
+                    data: $("#form-time").serialize(),
+                    async: false,
+                    success: function (resp)
+                    {
+                        $("#start-time").removeAttr('disabled');
+
+                        if (resp.result == '__OK__') {
+                            $("#start-time").addClass('hidden');
+                            $("#stop-time").removeClass('hidden');
+                            $("#stop-time").attr('time-id', resp.timeId)
+                            clock.setTime(0);
+                            clock.start();
+                            $(".continue-time").addClass('hidden');
+                        } else {
+                            bootbox.alert(resp.msg);
+                        }
+                    },
+                    error: function (resp)
+                    {
+                        $("#start-time").removeAttr('disabled');
+                        bootbox.alert("{{'backend.global.unknown_error'|trans}}");
+                    }
+                });
+            } else {
+                bootbox.alert("{{'backend.time_tracking.select_task_warning'|trans}}");
+            }
+        } else {
+            bootbox.alert("{{'backend.time_tracking.select_project_warning'|trans}}");
+        }
+    });
+
+    {# Codigo para detener el tiempo de una tarea ya iniciada #}
+    $("#stop-time").click(function () {
+        var object = $(this);
+        var timeId = object.attr('time-id');
+
+        if (timeId != '') {
+            $("#stop-time").attr('disabled', 'disabled');
+
+            $.ajax({
+                type: 'POST',
+                url: "{{ path('backend_time_tracking_stop_time') }}",
+                dataType: 'json',
+                data: {timeId: timeId},
+                success: function (resp)
+                {
+                    $("#stop-time").removeAttr('disabled');
+
+                    if (resp.result == '__OK__') {
+                        $("#stop-time").addClass('hidden');
+                        $("#start-time").removeClass('hidden');
+                        $("#stop-time").attr('time-id', '')
+                        clock.setTime(0);
+                        clock.stop();
+                        $("#backendbundle_time_track_type_taskId").select2("val", "");
+                        $("#backendbundle_time_track_type_description").val('');
+                        updateTimeList(searchStartDate, searchEndDate);
+                        $(".continue-time").removeClass('hidden');
+                    } else {
+                        bootbox.alert(resp.msg);
+                    }
+                },
+                error: function (resp)
+                {
+                    $("#stop-time").removeAttr('disabled');
+                    bootbox.alert("{{'backend.global.unknown_error'|trans}}");
+                }
+            });
+        }
+    });
+    
+    //edit-time-search
+    
+    {# Codigo para realizar la eliminacion de registros de tiempo #}
+    $( "#time-list" ).on( "click", ".delete-time", function( event ) {
+        var object = $(this);
+        var timeId = object.attr('time-id');
+        
+        if (timeId != '') {
+            bootbox.confirm({
+                message: "{{'backend.time_tracking.delete_time_warning'|trans}}",
+                buttons: {
+                    'cancel': {
+                        label: '{{'backend.global.cancel' | trans}}',
+                        className: 'btn-default'
+                    },
+                    'confirm': {
+                        label: '{{'backend.global.delete' | trans}}',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result == true) {
+                        object.attr('disabled', 'disabled');
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{ path('backend_time_tracking_delete_time') }}",
+                            dataType: 'json',
+                            data: {timeId: timeId},
+                            success: function (resp)
+                            {
+                                object.removeAttr('disabled');
+
+                                if (resp.result == '__OK__') {
+                                    updateTimeList(searchStartDate, searchEndDate);
+                                } else {
+                                    bootbox.alert(resp.msg);
+                                }
+                            },
+                            error: function (resp)
+                            {
+                                object.removeAttr('disabled');
+                                bootbox.alert("{{'backend.global.unknown_error'|trans}}");
+                            }
+                        });
+                    }
+                }
+            });
+        } 
+    });
+    
+    
+    {# Codigo para iniciar contadores de registros de tiempo existentes #}
+    $( "#time-list" ).on( "click", ".continue-time", function( event ) {
+        var object = $(this);
+        var timeId = object.attr('time-id');
+        var itemId = object.attr('item-id');
+        var projectId = object.attr('project-id');
+        
+        if (timeId != '') {
+            
+            var currentProject = $("#backendbundle_time_track_type_project").val();
+            
+            if (currentProject != projectId) {
+                $("#backendbundle_time_track_type_project").val(projectId);
+                $("#backendbundle_time_track_type_project").trigger('change');
+            }
+            
+            if (itemId != '') {
+                $("#backendbundle_time_track_type_taskId").val(itemId);
+                
+            } else {
+                var description = $("#description-time-"+timeId).html();
+                $("#backendbundle_time_track_type_description").val(description);
+            }
+            
+            if (!$("#start-time").hasClass('hidden')) {
+                $("#start-time").trigger('click');
+            }
+        }
+    });
+    
+    {# Codigo para realizar una busqueda de tiempos entre fechas #}
+    $("#form-search-time").submit(function (e) {
+        e.preventDefault();
+
+        var startDate = $('#backendbundle_search_time_track_type_startDate').data("DateTimePicker").date();
+        searchStartDate = startDate.format('Y-MM-DD');
+        
+        var endDate = $('#backendbundle_search_time_track_type_endDate').data("DateTimePicker").date();
+        searchEndDate = endDate.format('Y-MM-DD');
+        
+        updateTimeList(searchStartDate, searchEndDate);
+    });
+    
+    {# Codigo para poner el funcionar el datepicker start date #}
+    $('#backendbundle_search_time_track_type_startDate').datetimepicker({
+        inline: false,
+        format: 'DD/MM/YYYY',
+        date: "{{search.startDate|date('m/d/Y')}}"
+    });
+
+    {# Codigo para poner el funcionar el datepicker end date #}
+    $('#backendbundle_search_time_track_type_endDate').datetimepicker({
+        useCurrent: false,
+        inline: false,
+        format: 'DD/MM/YYYY',
+        date: "{{search.endDate|date('m/d/Y')}}"
+    });
+
+    {# Codigo para validar el start date con respecto al end date #}
+    $("#backendbundle_search_time_track_type_startDate").on("dp.change", function (e) {
+        $('#backendbundle_search_time_track_type_endDate').data("DateTimePicker").minDate(e.date);
+    });
+    
+    {# Codigo para validar el end date con respecto al start date #}
+    $("#backendbundle_search_time_track_type_endDate").on("dp.change", function (e) {
+        $('#backendbundle_search_time_track_type_startDate').data("DateTimePicker").maxDate(e.date);
+    });
+    
+    //
+    
+    {# Codigo para desplegar el buscador de tiempos #}
+    $( "#time-list" ).on( "click", ".edit-time-search", function( event ) {
+        $(".container-search-form").slideToggle();
+    });
+    
+    {# Codigo para ocultar el buscador de tiempos #}
+    $("#cancel-search").click(function(){
+        $(".container-search-form").slideUp();
+    });
+    
+    {# Codigo para solicitar la tabla de tiempos al cargar la pagina #}
+    updateTimeList(searchStartDate, searchEndDate);
+    
+{% endblock %}

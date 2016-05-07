@@ -18,7 +18,7 @@
             <div class="col-sm-6">
                 {{ form_widget(form.userId) }}
                 <div class="form-group">
-                    {{ form_label(form.email)}}
+                    {{ form_label(form.email)}} <em>*</em>
                     {{ form_widget(form.email, {'attr':{'class':'form-control'}}) }}
                     {{ form_errors(form.email) }}
                 </div>
@@ -27,7 +27,7 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    {{ form_label(form.role)}}
+                    {{ form_label(form.role)}} <em>*</em>
                     {{ form_widget(form.role, {'attr':{'class':'form-control'}}) }}
                     {{ form_errors(form.role) }}
                 </div>

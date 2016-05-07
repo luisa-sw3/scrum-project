@@ -19,7 +19,7 @@
         {{ form_start(edit_form, {'action': path('backend_projects_edit', {'id':project.id}), 'method': 'POST'}) }}
             <div class="col-lg-6">
                 <div class="form-group">
-                    {{ form_label(edit_form.name)}}
+                    {{ form_label(edit_form.name)}} <em>*</em>
                     {{ form_widget(edit_form.name, {'attr':{'class':'form-control title-case'}}) }}
                     {{ form_errors(edit_form.name) }}
                 </div>
@@ -31,7 +31,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="form-group date-selector">
-                    {{ form_label(edit_form.startDate)}}
+                    {{ form_label(edit_form.startDate)}} <em>*</em>
                     {{ form_widget(edit_form.startDate) }}
                     {{ form_errors(edit_form.startDate) }}
                 </div>

@@ -20,5 +20,27 @@ and open the template in the editor.
 }
 
 .up-block {
-    margin-top: -60px;
+    margin-top: -20px;
+}
+
+
+
+.navbar-custom.is-fixed {
+    background-color: #F8F8F8 !important;
+}
+
+.navbar-custom {
+    background-color: #F8F8F8 !important;
+}
+
+.nav li a, .navbar-header a {
+    color: #404040 !important;
+}
+
+.nav li a:hover, .navbar-header a:hover {
+    color: #0085a1 !important;
+}
+
+.no-padding-bottom {
+    padding-bottom: 0px !important;
 }

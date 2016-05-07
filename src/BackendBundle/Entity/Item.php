@@ -18,7 +18,7 @@ class Item {
     use Consecutive;
 
     const EMPTY_PARENT = 'empty';
-    
+
     /**
      * Constantes para los tipos de items que se pueden crear
      */
@@ -39,7 +39,7 @@ class Item {
     const STATUS_CONFIRMED = 3;
     const STATUS_NOT_A_BUG = 4;
     const STATUS_BEING_WORKED_ON = 5;
-    const STATUS_NEAR_COMPLETION = 6;
+    const STATUS_BUG_DETECTED = 6;
     const STATUS_READY_FOR_TESTING = 7;
     const STATUS_TESTING = 8;
     const STATUS_CANCELED = 9;
@@ -110,6 +110,12 @@ class Item {
      */
     protected $priority;
 
+    /**
+     * Variable numérica para saber en que ciclo se ha corregido un error
+     * @ORM\Column(name="item_fixed_on_cycle", type="integer", nullable=true)
+     */
+    protected $fixedOnCycle;
+    
     /**
      * Usuario quien realiza la creación del item
      * @ORM\ManyToOne(targetEntity="User")
@@ -220,6 +226,10 @@ class Item {
     function getParent() {
         return $this->parent;
     }
+    
+    function getFixedOnCycle() {
+        return $this->fixedOnCycle;
+    }
 
     function setTitle($title) {
         $this->title = $title;
@@ -289,6 +299,11 @@ class Item {
         $this->effortTShirt = $effortTShirt;
     }
 
+    function setFixedOnCycle($fixedOnCycle) {
+        $this->fixedOnCycle = $fixedOnCycle;
+    }
+
+    
     /**
      * Sort array of objects by string fields
      * @param array $objects Array of objects to sort.
@@ -417,8 +432,8 @@ class Item {
             case self::STATUS_BEING_WORKED_ON:
                 $langVar = 'backend.item.status_being_worked_on';
                 break;
-            case self::STATUS_NEAR_COMPLETION:
-                $langVar = 'backend.item.status_near_completion';
+            case self::STATUS_BUG_DETECTED:
+                $langVar = 'backend.item.status_bug_detected';
                 break;
             case self::STATUS_READY_FOR_TESTING:
                 $langVar = 'backend.item.status_ready_for_testing';
@@ -450,50 +465,68 @@ class Item {
      * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 16/02/2016
      * @return string
      */
-    public function getLabelClassByStatus() {
+    public function getLabelClassByStatus($labelClass = true, $borderClass = false) {
         $class = '';
-
+        $border = '';
         switch ($this->status) {
             case self::STATUS_NEW:
                 $class = '';
+                $border = 'border-status-1';
                 break;
             case self::STATUS_INVESTIGATING:
-                $class = 'label label-info';
+                $class = 'label label-info label-notification';
+                $border = 'border-status-2';
                 break;
             case self::STATUS_CONFIRMED:
-                $class = 'label label-default';
+                $class = 'label label-default label-notification';
+                $border = 'border-status-3';
                 break;
             case self::STATUS_NOT_A_BUG:
-                $class = 'label label-success';
+                $class = 'label label-success label-notification';
+                $border = 'border-status-4';
                 break;
             case self::STATUS_BEING_WORKED_ON:
-                $class = 'label label-default';
+                $class = 'label label-default label-notification';
+                $border = 'border-status-3';
                 break;
-            case self::STATUS_NEAR_COMPLETION:
-                $class = 'label label-default';
+            case self::STATUS_BUG_DETECTED:
+                $class = 'label label-default label-danger';
+                $border = 'border-status-3';
                 break;
             case self::STATUS_READY_FOR_TESTING:
-                $class = 'label label-primary';
+                $class = 'label label-primary label-notification';
+                $border = 'border-status-5';
                 break;
             case self::STATUS_TESTING:
-                $class = 'label label-primary';
+                $class = 'label label-primary label-notification';
+                $border = 'border-status-5';
                 break;
             case self::STATUS_CANCELED:
-                $class = 'label label-danger';
+                $class = 'label label-danger label-notification';
+                $border = 'border-status-6';
                 break;
             case self::STATUS_POSTPONED:
-                $class = 'label label-warning';
+                $class = 'label label-warning label-notification';
+                $border = 'border-status-7';
                 break;
             case self::STATUS_DONE:
-                $class = 'label label-success';
+                $class = 'label label-success label-notification';
+                $border = 'border-status-4';
                 break;
             case self::STATUS_FIXED:
-                $class = 'label label-success';
+                $class = 'label label-success label-notification';
+                $border = 'border-status-4';
                 break;
             default:
                 break;
         }
-        return $class;
+        if ($labelClass) {
+            return $class;
+        } 
+        
+        if ($borderClass) {
+            return $border;
+        }
     }
 
     /**
@@ -526,5 +559,51 @@ class Item {
             return $this->getEffortFibonacci();
         }
     }
+
+    /**
+     * Permite obtener el nombre del icono que representa el tipo del item
+     * @author Cesar Giraldo <cesargiraldo1108@gmail.com> 15/03/2016
+     * @param integer $type
+     * @return string
+     */
+    public function getIconName($type = null) {
+
+        if (!$type) {
+            $type = $this->getType();
+        }
+
+        $iconName = '';
+        switch ($type) {
+            case self::TYPE_USER_HISTORY:
+                $iconName = 'user-story.png';
+                break;
+            case self::TYPE_FEATURE:
+                $iconName = 'feature.png';
+                break;
+            case self::TYPE_TASK:
+                $iconName = 'task.png';
+                break;
+            case self::TYPE_BUG:
+                $iconName = 'bug.png';
+                break;
+            case self::TYPE_IMPROVEMENT:
+                $iconName = 'idea.png';
+                break;
+            case self::TYPE_CHANGE_REQUEST:
+                $iconName = 'change-request.png';
+                break;
+            case self::TYPE_IDEA:
+                $iconName = 'idea.png';
+                break;
+            case self::TYPE_INVESTIGATION:
+                $iconName = 'research.png';
+                break;
+            default:
+                break;
+        }
+        return $iconName;
+    }
+    
+    
 
 }

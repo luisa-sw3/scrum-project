@@ -24,8 +24,18 @@ class Extension extends Twig_Extension
             'json_decode'   => new \Twig_Filter_Method($this, 'jsonDecode'),
         );
     }
+    
+    public function getFunctions() {
+        return array(
+            'file_exists'   => new \Twig_Function_Method($this, 'fileExists'),
+        );
+    }
 
     public function jsonDecode($str) {
         return json_decode($str);
+    }
+    
+    public function fileExists($str) {
+        return file_exists($str);
     }
 }

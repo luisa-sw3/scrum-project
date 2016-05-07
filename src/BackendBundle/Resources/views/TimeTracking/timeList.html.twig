@@ -1,0 +1,79 @@
+{% spaceless %}
+{% set dateFormat = 'd/m/Y' %}
+{% set hourFormat = app_settings.getDefaultHourFormat() %}
+<legend class="no-border">
+    {{search.startDate|date(dateFormat)}} {{'backend.global.to'|trans}} {{search.endDate|date(dateFormat)}}
+    <a class="btn btn-default btn-sm edit-time-search"><i class="fa fa-search"></i></a>
+    <small id="container-elapsed-time" class="pull-right label label-info"></small>
+</legend>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>{{ 'backend.item.description'|trans }}</th>
+            <th>{{ 'backend.project.name'|trans }}</th>
+            <th width="150px">{{ 'backend.time_tracking.time'|trans }}</th>
+            <th width="100px">{{ 'backend.global.options'|trans }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        {% set today = ('now')|date %}
+        {% set yesterday = (('now')|date)|date_modify("-1 day") %}
+        {% set lastDate = '' %}
+        {% set workedTime = 0 %}
+        {% for time in time_tracking %}
+            {% set workedTime = workedTime + time.workedTime %}
+           
+            {% if lastDate != time.date|date('Y-m-d') %}
+                {# en el listado hubo un cambio de fecha #}
+                <tr>
+                    <td colspan="4">
+                        {% set lastDate = time.date|date('Y-m-d') %}
+                        <span class="time-title">
+                            {% if lastDate == today|date('Y-m-d') %}
+                                {{'backend.global.today'|trans}}, 
+                            {% elseif lastDate == yesterday|date('Y-m-d') %}
+                                {{'backend.global.yesterday'|trans}}, 
+                            {% endif %}
+                            {{ time.date|date(dateFormat) }}
+                        </span>
+                        <span class="worked-time-day">({{ time_tracker.getWorkedTimePerDay(lastDate, app.user.id, true)}})</span>
+                    </td>
+                </tr>
+            {% endif %}
+            <tr>
+                <td id='description-time-{{time.id}}'>{{ time }}</td>
+                <td>{{ time.project.name }}</td>
+                <td>
+                    {{ time.getTimeOnNaturalLanguage }}
+                    {#{{ time.workedTime }}#}
+                    <br>
+                    {{ time.startTime|date(hourFormat) }} / {{ time.endTime|date(hourFormat) }}
+                </td>
+                <td>
+                    <a class="btn btn-success btn-md continue-time" title="{{'backend.time_tracking.start_task'|trans}}" time-id="{{time.id}}" item-id="{% if time.item is not empty %}{{time.item.id}}{% endif %}" project-id="{{time.project.id}}" href="javascript:void(0);">
+                        <i class="fa fa-play"></i>
+                    </a>&nbsp;
+                    <a class="btn btn-danger btn-md delete-time" title="{{'backend.global.delete'|trans}}" time-id="{{time.id}}" href="javascript:void(0);">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">{{ 'backend.time_tracking.empty_list'|trans }}</td>
+            </tr>
+        {% endfor %}
+        {% if time_tracking|length > 0  %}
+            <tr>
+                <td colspan="2">&nbsp;</td>
+                <td><strong>{{'backend.time_tracking.total_time'|trans}}</strong></td>
+                <td><strong>{{ time_tracker.getElapsedTime(workedTime) }}</strong></td>
+                <script type="text/javascript">
+                    $("#container-elapsed-time").html("{{'backend.time_tracking.total_time'|trans}} : {{ time_tracker.getElapsedTime(workedTime)}}");
+                </script>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+{% endspaceless %}

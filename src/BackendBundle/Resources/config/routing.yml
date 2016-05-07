@@ -28,3 +28,7 @@ backend_projects:
 backend_notifications:
         resource: "@BackendBundle/Resources/config/routing/notification.yml"
         prefix:   /notifications
+        
+backend_time_tracking:
+        resource: "@BackendBundle/Resources/config/routing/timeTracking.yml"
+        prefix:   /timeTracking

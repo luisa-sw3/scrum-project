@@ -64,7 +64,7 @@ ol.vertical ol {
     border: none !important;
 }
 
-.dropdown-menu li {
+.backlog-menu li {
     height: 24px !important;
     border: none !important;
     line-height: 0px !important;
@@ -73,7 +73,21 @@ ol.vertical ol {
     margin: 1px 0px !important;
 }
 
-.dropdown-menu li.divider {
+.backlog-menu li.divider {
+    height: 1px !important;
+    margin: 7px 0px !important;
+}
+
+.popover li {
+    height: auto !important;
+    border: none !important;
+    line-height: 16px !important;
+    min-height: 1px !important;
+    padding: 0px !important;
+    margin: 1px 0px !important;
+}
+
+.popover li.divider {
     height: 1px !important;
     margin: 7px 0px !important;
 }

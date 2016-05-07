@@ -1,0 +1,6 @@
+{% spaceless %}
+    <option value=""></option>
+    {% for item in items %}
+        <option value="{{item.id}}">{{item.getTextType()|trans}} # {{item.consecutive}} - {{item.title}} - ({{item.textStatus|trans}})</option>
+    {% endfor %}
+{% endspaceless %}

@@ -28,6 +28,8 @@ backend:
         unknown_error: "Unknown error, try again"
         logout: "Logout"
         save_changes: "Save Changes"
+        save_and_continue: "Save & Continue"
+        save_and_exit: "Save & Exit"
         language: "Language"
         id: "ID"
         consecutive: "Consecutive"
@@ -41,6 +43,8 @@ backend:
         search: "Search"
         clear_search: "Clear Search"
         showing: "Showing"
+        from: "from"
+        until: "until"
         to: "to"
         of: "of"
         or: "or"
@@ -50,7 +54,15 @@ backend:
         hours: Hours
         all: "All"
         user: "User"
-        pdf: "Generate PDF"
+        low: "Low"
+        high: "High"
+        select_action: "Select an action"
+        select_method: "Select a method"
+        project: "Project"
+        task: "Task"
+        description: "Description"
+        today: "Today"
+        yesterday: "Yesterday"
         
     login:
         message: "Dear user, log in to access the admin area"
@@ -131,6 +143,7 @@ backend:
         developer_description: "<p> It is a member of the development team which has a common goal responsible for the performance of work and quality in each iteration and in the project. </p><p> The development team should be between 3 and 9 people. </p><p> It is a self-organized team, whose members share information and trust each other. </p><ul><li> Select the requirements that promises to complete in one iteration, so that they are ready to be delivered to the customer. </li><li> To estimate the complexity of each requirement in the list of prioritized requirements of the product or project. </li><li> Select the requirements to be completed at each iteration, making to the customer the necessary questions. </li><li> Identify all the tasks required to complete each requirement. </li><li> Estimate the effort required to perform each task. </li><li> Each team member assigns itself to the tasks. </li><li> During the iteration, work together to achieve the objectives of the iteration. </li><li> Demonstrate customer requirements in each iteration completed. </li><li> Make a retrospective at the end of each iteration to continuously improve the way they work. </li><li> The team is multidisciplinary, each person has the skills needed to identify and carry out the tasks of each iteration. </li><li> It is recommended that all team members work in the same physical location, to maximize communication. </li></ul>"
     
     user_project:
+        team: "Team"
         project_team: "Project Team"
         project_team_roles: "Project Team & Roles"
         active_members: "Active Members"
@@ -198,6 +211,7 @@ backend:
         priority: "Priority"
         estimated_hours: "Estimated Hours"
         effort_estimation: "Estimated Effort (Complexity)"
+        complexity: "Complexity"
         worked_hours: "Worked hours"
         designed_user: "Designed User"
         sprint: "Planned to Sprint"
@@ -215,7 +229,7 @@ backend:
         simple_delete: "Simple Delete"
         simple_delete_message: "Only removes the selected item"
         
-        type_user_history: "User History"
+        type_user_history: "User Story"
         type_feature: "Feature"
         type_task: "Task"
         type_bug: "Bug"
@@ -229,7 +243,7 @@ backend:
         status_confirmed: "Confirmed"
         status_not_a_bug: "Not a bug"
         status_being_worked_on: "Being worked on"
-        status_near_completion: "Near completion"
+        status_bug_detected: "Bug detected"
         status_ready_for_testing: "Ready for testing"
         status_testing: "Testing"
         status_canceled: "Canceled"
@@ -246,6 +260,13 @@ backend:
         change_status: "Change Status"
         
         worked_estimated_time: "Worked Time / Estimated Time"
+        move_copy_other_sprint: "Move / Copy to Sprint"
+        select_sprint: "Select Sprint"
+        move_copy_other_project: "Move / Copy to Project"
+        select_project: "Select Project"
+        
+        move_to_product_backlog: "Move to Product Backlog"
+        move_to_product_backlog_message: "Are you sure you want to move this item to Product Backlog?"
         
     backlog:
         product_backlog: "Product Backlog"
@@ -290,7 +311,8 @@ backend:
         stop_sprint_message: "Are you sure you want to stop this Sprint?"
         finish_sprint: "Finish Sprint"
         finish_sprint_message: "Are you sure you want to finish this Sprint?"
-               
+        
+        
     report: 
         reports: "Reports"
         project: "Project Report"
@@ -408,4 +430,22 @@ backend:
         item_attachment_deleted: "An attachment has been deleted"
         item_status_modified: "The item status has been modified"
         item_assign_cleared: "The item assignation has been cleared"
+        item_sprint_copied: "The item has been copied to sprint"
+        item_project_copied: "The item has been copied to project"
+        item_project_moved: "The item has been moved to project"
+        item_moved_to_product_backlog: "The item has been moved to Product Backlog"
         
+    time_tracking:
+        time_tracking: "Time Tracking"
+        time: "Time"
+        empty_list: "No time entries"
+        task_description: "Task Description"
+        start: "Start"
+        stop: "Stop"
+        select_task: "Select Task"
+        time: "Time"
+        select_task_warning: "Please select or describe a task"
+        select_project_warning: "Please select a project"
+        delete_time_warning: "Are you sure you want to delete this entry?"
+        start_task: "Start this Task"
+        total_time: "Total Time"

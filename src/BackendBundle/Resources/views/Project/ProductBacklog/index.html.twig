@@ -22,15 +22,15 @@
     {{ filters.showMessage('messageError', 'danger')}}
 
     <div class="row">
-        <div class="col-md-6">
-            <div class="input-group" id="adv-search">
+        <div class="col-md-6 col-xs-12">
+            <div class="input-group col-lg-12 col-md-12 col-xs-12" id="adv-search">
                 <form class="form-horizontal" role="form" method="post">
                     {{ form_widget(searchForm.item_free_text, {'attr':{'class':'form-control main-search', 'value':pagination.params.item_free_text|default('')}})}}
                     <div class="input-group-btn">
                         <div class="btn-group" role="group">
                             <div class="dropdown dropdown-lg">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
-                                <div class="dropdown-menu dropdown-menu-right" role="menu">
+                                <button type="button" class="btn btn-default dropdown-toggle show-dropdown-search" data-toggle="dropdownss" aria-expanded="false"><span class="caret"></span></button>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-search" role="menu">
                                     <div class="form-group">
                                         {{ form_label(searchForm.item_type)}}
                                         {{ form_widget(searchForm.item_type, {'attr':{'class':'form-control'}})}}
@@ -56,7 +56,80 @@
     </div>
 
     {% set dateFormat = project.settings.dateFormat %}
-    <div class="table-responsive">
+
+    <div class="col-lg-12 no-padding-sides">
+        <div class="rstable">
+            <ol parent="{{constant('BackendBundle\\Entity\\Item::EMPTY_PARENT')}}" class="default vertical col-lg-12 col-md-12 col-xs-12">
+                {% for item in pagination %}
+                    <li item-id='{{item.id}}' parent="{{constant('BackendBundle\\Entity\\Item::EMPTY_PARENT')}}" priority="{{item.priority|default(0)}}" class="backlog-item">
+                        {{ filters.itemDescription(item, project, true, true) }}
+                        {% if item.children is not empty %}
+                            <ol parent='{{item.id}}' >
+                                {% for firstChild in item.children %}
+                                    <li item-id='{{firstChild.id}}' parent='{{item.id}}' priority="{{firstChild.priority|default(0)}}" class="backlog-item">
+                                        {{ filters.itemDescription(firstChild, project, true, true) }}
+                                        {% if firstChild.children is not empty %}
+                                            <ol parent='{{firstChild.id}}'>
+                                                {% for secondChild in firstChild.children %}
+                                                    <li item-id='{{secondChild.id}}' parent='{{firstChild.id}}' priority="{{secondChild.priority|default(0)}}" class="backlog-item">
+                                                        {{ filters.itemDescription(secondChild, project, true, true) }}
+                                                        {% if secondChild.children is not empty %}
+                                                            <ol parent='{{secondChild.id}}'>
+                                                                {% for thirdChild in secondChild.children %}
+                                                                    <li item-id='{{thirdChild.id}}' parent='{{secondChild.id}}' priority="{{thirdChild.priority|default(0)}}" class="backlog-item">
+                                                                        {{ filters.itemDescription(thirdChild, project, true, true) }}
+                                                                        {% if thirdChild.children is not empty %}
+                                                                            <ol parent='{{thirdChild.id}}'>
+                                                                                {% for fourtChild in thirdChild.children %}
+                                                                                    <li item-id='{{fourtChild.id}}' parent='{{thirdChild.id}}' priority="{{fourtChild.priority|default(0)}}" class="backlog-item">
+                                                                                        {{ filters.itemDescription(fourtChild, project, true, false) }}
+                                                                                        {% if fourtChild.children is not empty %}
+                                                                                            <ol parent='{{fourtChild.id}}'>
+                                                                                                {% for fifthChild in fourtChild.children %}
+                                                                                                    <li item-id='{{fifthChild.id}}' parent='{{fourtChild.id}}' priority="{{fifthChild.priority|default(0)}}" class="backlog-item">
+                                                                                                        {{ filters.itemDescription(fifthChild, project, true, false) }}
+                                                                                                    </li>
+                                                                                                {% endfor %}
+                                                                                            </ol>
+                                                                                        {% endif %}
+                                                                                    </li>
+                                                                                {% endfor %}
+                                                                            </ol>
+                                                                        {% else %}
+                                                                            <ol parent="{{thirdChild.id}}"></ol>
+                                                                        {% endif %}
+                                                                    </li>
+                                                                {% endfor %}
+                                                            </ol>
+                                                        {% else %}
+                                                            <ol parent="{{secondChild.id}}"></ol>
+                                                        {% endif %}
+                                                    </li>
+                                                {% endfor %}
+                                            </ol>
+                                        {% else %}
+                                            <ol parent="{{firstChild.id}}"></ol>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ol>
+                        {% else %}
+                            <ol parent="{{item.id}}"></ol>
+                        {% endif %}
+                    </li>
+                {% else %}
+                    {{'backend.backlog.empty_list'|trans}}
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+    {% if pagination|length > 0 %}
+        <div class="col-lg-12">
+            <a href="{{path('backend_project_product_backlog_new',{'id':project.id})}}" class="btn btn-primary pull-right">{{'backend.item.new'|trans}}</a>
+        </div>
+    {% endif %}
+
+    {#<div class="table-responsive">
         <table class="table table-bordered table-hover no-margin-bottom">
             <tr>
                 <th>#</th>
@@ -86,42 +159,64 @@
                     {{ knp_pagination_sortable(pagination, 'backend.item.effort_estimation'|trans, [effortOrder]) }}
                     {{ filters.sortIcon(effortOrder, pagination) }} 
                 </th>
-                <th>{{ 'backend.global.options'|trans }}</th>
             </tr>
-
-            {% for item in pagination %}
-                <tr {% if loop.index is odd %}class="color"{% endif %}>
-                    <td><a href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id}) }}">{{item.consecutive}}</a></td>
-                    <td><a href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id}) }}" class="popover-menu" title="{{ item.title }}" content="{{item.description|raw}}">{{ item.title }}</a></td>
-                    <td>{{ item.getTextType()|trans }}</td>
-                    <td>{{ item.creationDate|date(dateFormat) }}</td>
-                    <td>{{ item.priority|default(0) }}</td>
-                    <td>
-                        {% if project.effortEstimationMethod == constant('BackendBundle\\Entity\\Project::METHOD_FIBONACCI')%}
-                            {{item.effortFibonacci}}
-                        {% else %}
-                            {{item.effortTShirt}}
-                        {% endif  %}
-                    </td>
-                    <td>
-                        <a class="btn btn-default btn-sm" title="{{ 'backend.project.edit'|trans }}" href="{{ path('backend_project_product_backlog_edit',{'id':project.id, 'itemId':item.id}) }}">
-                            <i class="fa fa-pencil"></i>
-                        </a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="6">{{'backend.backlog.empty_list'|trans}}</td>
-                </tr>
-            {% endfor %}
         </table>
         <div class="navigation pull-right">
             {{ knp_pagination_render(pagination) }}
         </div>
-    </div>
+    </div>#}
+{% endblock %}
+
+{% block other_scripts %}
+    <script src="{{ asset('bundles/backend/js/backlog-events.js') }}"></script>
 {% endblock %}
 
 {% block scripts %}
     $("#backendbundle_search_item_type_item_type").val("{{ pagination.params.item_type|default('')}}");
     $("#backendbundle_search_item_type_item_designed_user").val("{{ pagination.params.item_designed_user|default('')}}");
+
+    {# Codig para mostrar y ocultar el buscador #}
+    $(".show-dropdown-search").click(function() {
+        $(".dropdown-search").toggle();
+    });
+    
+{% endblock %}
+
+{% block functions_javascript %}
+
+    var unknownErrorMessage = "{{'backend.global.unknown_error'|trans}}";
+
+    var changePriorityTitle = "{{'backend.item.change_priority'|trans}}";
+    var changePriorityLabel = "{{'backend.global.save_changes'|trans}}";
+    var changePriorityCancel = "{{'backend.global.cancel'|trans}}";
+
+    var modifyPriorityPath = "{{path('backend_project_product_backlog_change_priority',{'id':project.id})}}";
+
+    var deleteItemPath = "{{path('backend_project_product_backlog_delete',{'id':project.id})}}";
+
+    var deleteItemMessage = "{{'backend.item.removal_method_message'|trans}}<br><strong>1. {{'backend.item.cascade_delete'|trans}}: </strong>{{'backend.item.cascade_delete_message'|trans}}<br><strong>2. {{'backend.item.simple_delete'|trans}}: </strong>{{'backend.item.simple_delete_message'|trans}}";
+    var deleteItemTitle = "{{'backend.item.delete'|trans}}";
+    var cascadeDeleteLabel = "{{'backend.item.cascade_delete'|trans}}";
+    var cascadeDeleteConstant = "{{constant('BackendBundle\\Entity\\Item::DELETE_CASCADE')}}";
+
+    var simpleDeleteLabel = "{{'backend.item.simple_delete'|trans}}";
+    var simpleDeleteConstant = "{{constant('BackendBundle\\Entity\\Item::DELETE_SIMPLE')}}";
+    var cancelLabel = "{{'backend.global.cancel'|trans}}";
+
+    var editEstimationHtmlPath = "{{path('backend_project_product_backlog_html_edit_estimation',{'id':project.id})}}";
+    var editEstimationTitle = "{{'backend.item.edit_estimation'|trans}}";
+    var editEstimationLabel = "{{'backend.global.save_changes'|trans}}";
+    var editEstimationPath = "{{path('backend_project_product_backlog_edit_estimation',{'id':project.id})}}";
+
+    var changeStatusHtmlPath = "{{path('backend_project_product_backlog_html_change_status',{'id':project.id})}}";
+    var changeStatusTitle = "{{'backend.item.change_status'|trans}}";
+    var saveChangesLabel = "{{'backend.global.save_changes'|trans}}";
+    var changeStatusPath = "{{path('backend_project_product_backlog_change_status',{'id':project.id})}}";
+
+    var modifyParentPath = "{{path('backend_project_product_backlog_change_parent',{'id':project.id})}}";
+
+    var editWorkedTimeHtmlPath = "{{path('backend_project_product_backlog_html_edit_worked_time',{'id':project.id})}}";
+    var workedTimeTitle = "{{'backend.item.edit_worked_time'|trans}}";
+    var editWorkedTimePath = "{{path('backend_project_product_backlog_edit_worked_time',{'id':project.id})}}";
+
 {% endblock %}

@@ -2,13 +2,13 @@
 
 {% block content_header %}
 {#    <header class="intro-header" style="background-image: url('{{asset('bundles/frontend/img/home-bg.jpg')}}')">#}
-      <header class="intro-header" style="background-image: url('{{asset('bundles/frontend/img/scrum1.jpg')}}'); height: 500px;">
+      <header class="intro-header" style="background-image: url('{{asset('bundles/frontend/img/scrum1.jpg')}}'); height: 443px; margin-bottom: 30px; background-position-y: 50px;">
         <div class="container">
 
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <div class="site-heading">
-                        <h1 style="text-shadow: 3px 3px darkcyan;">Project Management and Scrum Software</h1>
+                    <div class="site-heading no-padding-bottom">
+                        <h1 style="text-shadow: 3px 3px darkcyan;">{{'frontend.home.slider_text'|trans}}</h1>
 {#                        <hr class="small">#}
                         <span class="subheading">&nbsp;</span>
                     </div>
@@ -28,45 +28,45 @@
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 up-block">
         <div class="post-preview">
             <h2 class="post-title">
-                Intuitive Workflow for Agile Projects
+                {{'frontend.home.title_1'|trans}}
             </h2>
             <p>
-                Agile SCRUM addresses the needs of each scrum role and facilitates the ceremonies of the scrum process by exposing simple interfaces for managing the scrum artifacts.
+                {{'frontend.home.text_1'|trans}}
             </p>
         </div>
         <hr>
         <div class="post-preview">
             <h2 class="post-title">
-                Organize your Product Backlog efficiently
+                {{'frontend.home.title_2'|trans}}
             </h2>
             <p>
-                Create User Stories, group them into higher level themes, and prioritize each story based on business value.  At any time, see an overview of your product’s ongoing progress.
+                {{'frontend.home.text_2'|trans}}
             </p>
         </div>
         <hr>
         <div class="post-preview">
             
             <h2 class="post-title">
-                Simple & Scalable
+                {{'frontend.home.title_3'|trans}}
             </h2>
             <p>
-                Agile SCRUM is the perfect tool for managing my development team. It’s quick, it’s simple, it’s scalable
+                {{'frontend.home.text_3'|trans}}
             </p>
         </div>
         <hr>
         <div class="post-preview">
             <h2 class="post-title">
-                See your daily progress, no matter where you are
+                {{'frontend.home.title_4'|trans}}
             </h2>
             <p>
-                Monitor the status of tasks on your Scrumboard in real-time.  Observe delays, impediments and progress throughout the day without having to refresh your browser.  Agilo is the ideal tool for distributed teams.
+                {{'frontend.home.text_4'|trans}}
             </p>
         </div>
         <hr>
         <!-- Pager -->
         <ul class="pager">
             <li class="next">
-                <a href="{{path('frontend_features')}}">View Features &rarr;</a>
+                <a href="{{path('frontend_features')}}">{{'frontend.features.view_features'|trans}} &rarr;</a>
             </li>
         </ul>
     </div>

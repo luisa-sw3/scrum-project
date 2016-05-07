@@ -28,6 +28,10 @@
         <!-- Bootstrap Datepicker -->
         <link href="{{asset('bundles/backend/css/bootstrap-datetimepicker.css')}}" rel="stylesheet" type="text/css">
         
+        <!-- Select2 CSS -->
+        <link href="{{asset('bundles/backend/select2/select2.css')}}" rel="stylesheet" type="text/css">
+        <link href="{{asset('bundles/backend/select2/select2-bootstrap.css')}}" rel="stylesheet" type="text/css">
+        
         <!-- Fancybox Styles -->
         <link rel="stylesheet" href="{{asset('bundles/backend/fancybox/source/jquery.fancybox.css?v=2.1.5')}}" type="text/css" media="screen" />
         <link rel="stylesheet" href="{{ asset('bundles/backend/fancybox/source/helpers/jquery.fancybox-buttons.css?v=1.0.5')}}" type="text/css" media="screen" />
@@ -43,13 +47,20 @@
         <!-- Sortable Styles -->
         <link href="{{asset('bundles/backend/css/sortable.css')}}" rel="stylesheet" type="text/css">
         
-
+        <!-- FlipClock CSS -->
+        <link href="{{asset('bundles/backend/flipclock/flipclock.css')}}" rel="stylesheet" type="text/css">
+        <link href="{{asset('bundles/backend/flipclock/flipclock-reset.css')}}" rel="stylesheet" type="text/css">
+        
+        <script src="//fast.eager.io/hxDaah_Pcn.js"></script>
+        
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
+        {% block other_styles %}
+        {% endblock %}
     </head>
 
     <body>
@@ -70,7 +81,6 @@
 
         <!-- jQuery -->
         <script src="{{ asset('bundles/backend/js/jquery.js') }}"></script>
-{#        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>#}
 
         <!-- jQuery UI-->
         <script src="{{ asset('bundles/backend/jquery-ui/jquery-ui.js') }}"></script>
@@ -96,6 +106,12 @@
         <!-- Libreria para ordenar mediante jQuery -->
         <script type="text/javascript" src="{{ asset('bundles/backend/js/jquery-sortable-min.js') }}"></script>
         
+        <!-- Select2 JS -->
+        <script type="text/javascript" src="{{ asset('bundles/backend/select2/select2.js') }}"></script>
+        
+        <!-- FlipClock JS -->
+        <script type="text/javascript" src="{{ asset('bundles/backend/flipclock/flipclock.js') }}"></script>
+        
         <!-- Fancybox JS -->
         <script type="text/javascript" src="{{ asset('bundles/backend/fancybox/lib/jquery.mousewheel-3.0.6.pack.js') }}"></script>
         <script type="text/javascript" src="{{ asset('bundles/backend/fancybox/source/jquery.fancybox.pack.js?v=2.1.5') }}"></script>
@@ -104,13 +120,10 @@
         <script type="text/javascript" src="{{ asset('bundles/backend/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7')}}"></script>
         <!-- End Fancybox JS -->
 
-        {#<script src="https://code.highcharts.com/highcharts.js"></script>#}
         <script src="{{ asset('bundles/backend/js/highcharts.js') }}"></script>
         
-        {% block other_scripts %}
-        {% endblock %}
-
         <script type="text/javascript">
+            var is_mobile_device = false;
             $(document).ready(function () {
 
                 /* Libreria Safary */
@@ -126,6 +139,31 @@
                     var content = object.attr('content');
                     object.popover({title: title, content: content, html: true, placement: "auto", trigger: "hover"});
                 });
+                
+                /* Validacion para saber si estamos en un dispositivo mobile o no */
+                if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+                    is_mobile_device = true;
+                }
+                
+                $(".navbar-header button.navbar-toggle").click(function() {
+                    if ($(".navbar-ex1-collapse").attr('aria-expanded') == 'true') {
+                        $(".side-nav span.nav-title").addClass('hidden');
+                    } else {
+                        $(".side-nav span.nav-title").removeClass('hidden');
+                    }
+                    $(".side-nav li a").css('width','225px');
+                });
+                
+                $( window ).resize(function() {
+                    var windowWidth = $( window ).width();
+                    if (windowWidth <= 753) {
+                        $(".side-nav span.nav-title").removeClass('hidden');
+                        $(".side-nav li a").css('width','225px');
+                    } else {
+                        $(".side-nav span.nav-title").addClass('hidden');
+                        $(".side-nav li a").css('width','60px');
+                    }
+                });
 
                 {% block scripts %}
                 {% endblock %}
@@ -133,5 +171,8 @@
             {% block functions_javascript %}
             {% endblock %}
         </script>
+        
+        {% block other_scripts %}
+        {% endblock %}
     </body>
 </html>

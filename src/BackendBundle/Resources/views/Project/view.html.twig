@@ -86,7 +86,7 @@
                 </div>
                 <a href="{{ path('backend_project_team', { 'id': project.id }) }}">
                     <div class="panel-footer">
-                        <span class="pull-left">{{ 'backend.user_project.project_team'|trans }}</span>
+                        <span class="pull-left">{{ 'backend.user_project.team'|trans }}</span>
                         <div class="clearfix"></div>
                     </div>
                 </a>
@@ -104,6 +104,23 @@
                 <a href="{{ path('backend_projects_edit', { 'id': project.id }) }}">
                     <div class="panel-footer">
                         <span class="pull-left">{{ 'backend.project.settings'|trans }}</span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading project-link">
+                    <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <i class="fa fa-clock-o fa-5x"></i>
+                        </div>
+                    </div>
+                </div>
+                <a href="{{ path('backend_time_tracking') }}">
+                    <div class="panel-footer">
+                        <span class="pull-left">{{ 'backend.time_tracking.time_tracking'|trans }}</span>
                         <div class="clearfix"></div>
                     </div>
                 </a>

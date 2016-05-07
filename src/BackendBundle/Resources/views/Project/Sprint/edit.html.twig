@@ -49,15 +49,15 @@
                     {{ form_widget(edit_form.estimatedDate, {'attr':{'class':'date-selector-sm'}}) }}
                     {{ form_errors(edit_form.estimatedDate) }}
                 </div>
-                <div class="form-group col-lg-3 col-md-4 col-xs-10 no-padding-left">
-                    {{ form_label(edit_form.startDate)}}
+                <div class="form-group col-lg-3 col-md-4 col-xs-12">
+                    {{ form_label(edit_form.startDate)}} <em>*</em>
                     <div id='startDate' {% if not enableDateEdit %}style="display: none;"{% endif %}></div>
                     {% if not enableDateEdit %}
                         <p>{{ sprint.startDate|date(dateFormat)}}</p>
                     {% endif %}
                 </div>
-                <div class="form-group col-lg-3 col-md-4 col-xs-10 no-padding-right">
-                    {{ form_label(edit_form.estimatedDate)}}
+                <div class="form-group col-lg-3 col-md-4 col-xs-12">
+                    {{ form_label(edit_form.estimatedDate)}} <em>*</em>
                     <div id='estimatedDate' {% if not enableDateEdit %}style="display: none;"{% endif %}></div>
                     {% if not enableDateEdit %}
                         <p>{{ sprint.estimatedDate|date(dateFormat)}}</p>

@@ -89,7 +89,7 @@ class UserProject {
     }
 
     public function __toString() {
-        return $this->getUser() . "";
+        return $this->getProject() . "";
     }
 
     /**

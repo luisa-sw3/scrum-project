@@ -152,7 +152,7 @@ class ItemAttachment {
             'docx', 'doc', 'pages', 'pdf', 'xml',
             'zip', 'csv', 'json', 'txt', 'xls', 'xlsx',
             'avi', 'm4a', 'mp4', 'mp3',
-            'bmpr', 'ttf', 'woff2'
+            'bmpr', 'ttf', 'woff2', 'mwb','vp'
         );
     }
 
