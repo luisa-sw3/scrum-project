@@ -381,6 +381,7 @@ backend:
             ect: "# Errores Corregidos en Tercer Ciclo"
             ecc: "# Errores Corregidos en Cuarto Ciclo"
         error: "No Existen Datos"
+        pdf: "Descargar PDF"
         
     attachment:
         attachments: "Archivos Adjuntos"

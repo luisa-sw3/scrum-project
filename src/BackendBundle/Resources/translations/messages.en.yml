@@ -382,6 +382,7 @@ backend:
             ect: "# Fixed Bugs in Third Cicle"
             ecc: "# Fixed Bugs in Fourth Cicle"
         error: "No Data Available"
+        pdf: "Download PDF"
         
     attachment:
         attachments: "Attachments"

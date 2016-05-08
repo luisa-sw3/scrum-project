@@ -101,10 +101,13 @@ knp_paginator:
         sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template
 
 # PDF Generator
-siphoc_pdf:
-    basepath: "%kernel.root_dir%/../web"
-    binary: "/usr/local/bin/wkhtmltopdf"
-    options:
-        'lowquality': false
-        'enable-javascript': true
-        'debug-javascript': true
+# app/config/config.yml
+knp_snappy:
+    pdf:
+        enabled:    true
+        binary:     "\"C:\\Program Files (x86)\\wkhtmltopdf\\bin\\wkhtmltopdf.exe\""
+        options:    []
+    image:
+        enabled:    true
+        binary:     "\"C:\\Program Files (x86)\\wkhtmltopdf\\bin\\wkhtmltoimage.exe\""
+        options:    []

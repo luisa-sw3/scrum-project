@@ -119,16 +119,16 @@ class ReportController extends Controller {
 
         $userId = $parameters->get('user_id');
         $html = '';
-        
-        
+
+
         $select = $this->get('translator')->trans('backend.report.sprintSelect');
         $all = $this->get('translator')->trans('backend.report.sprintAll');
         $empty = $this->get('translator')->trans('backend.report.sprint_empty_list');
 
         //si el servicio seleccionado es la opcion del select devolver html vacio
         if ($userId == 'select') {
-            
-            $html = '<option value=" ">  </option>';           
+
+            $html = '<option value=" ">  </option>';
 
             $response['result'] = '__OK__';
             $response['html'] = $html;
@@ -136,12 +136,12 @@ class ReportController extends Controller {
             $r->headers->set('Content-Type', 'application/json');
             return $r;
         }
-        
+
         //si el servicio seleccionado es todos devolver html con todos los sprints
         if ($userId == 'all') {
-            
+
             $sprints = $em->getRepository('BackendBundle:Sprint')->findByProject($project);
-            
+
             if ($sprints) {
                 $html = '<option value="' . 'select' . '"> -- ' . $select . ' --  </option>';
                 $html = $html . '<option value="' . 'all' . '">' . $all . '</option>';
@@ -198,7 +198,127 @@ class ReportController extends Controller {
 
         $userId = $_GET['user_id'];
         $sprintId = $_GET['sprint_id'];
-        
+
+        $allUsrs = $this->get('translator')->trans('backend.report.userAll');
+        $allSprints = $this->get('translator')->trans('backend.report.sprintAll');
+
+        $user = '';
+        $sprintName = '';
+
+        if ($userId != "all") {
+            $user = $em->getRepository('BackendBundle:User')->find($userId);
+        } else {
+            $user = $userId;
+        }
+
+
+        if ($sprintId !== 'all') {
+            $sprintName = $em->getRepository('BackendBundle:Sprint')->find($sprintId);
+        } else {
+            $sprintName = $sprintId;
+        }
+
+        $taskAssigned = $em->getRepository('BackendBundle:Item')->findByTypeStatusUserSprint($project, $userId, $sprintId, "3", "all");
+        $doneTask = $em->getRepository('BackendBundle:Item')->findByTypeStatusUserSprint($project, $userId, $sprintId, "3", "11");
+        $estHours = $em->getRepository('BackendBundle:Item')->totalEstHoursByTypeUserSprint($project, "all", $userId, $sprintId);
+        $totalHours = $em->getRepository('BackendBundle:Item')->totalWorkHoursByTypeUserSprint($project, "all", $userId, $sprintId);
+        $errHours = $em->getRepository('BackendBundle:Item')->totalWorkHoursByTypeUserSprint($project, "4", $userId, $sprintId);
+        $foundErr = $em->getRepository('BackendBundle:Item')->findByTypeStatusUserSprint($project, $userId, $sprintId, "4", "all");
+
+        return $this->render('BackendBundle:Project/Report:userReport.html.twig', array(
+                    'project' => $project,
+                    'userId' => $userId,
+                    'sprintId' => $sprintId,
+                    'userSelect' => $user,
+                    'sprintSelect' => $sprintName,
+                    'assignedTasks' => $taskAssigned,
+                    'doneTask' => $doneTask,
+                    'estHrs' => $estHours,
+                    'totalHrs' => $totalHours,
+                    'errHrs' => $errHours,
+                    'errFound' => $foundErr,
+                    'menu' => self::MENU
+        ));
+    }
+
+    /**
+     * Permite generar el reporte en un PDF del proyecto en cual nos encontramos
+     * @author Jorge dd/mm/aaaa
+     * @author Luisa Pereira 06/05/2016
+     * @param Request $request
+     * @param string $id id del proyecto
+     */
+    public function generateReportPDFAction($id) {
+        $em = $this->getDoctrine()->getManager();
+
+        $project = $em->getRepository('BackendBundle:Project')->find($id);
+
+        $totalItems = $em->getRepository('BackendBundle:Item')->findByTypeStatusUserSprint($project, "all", "all", "3", "all");
+        $doneTask = $em->getRepository('BackendBundle:Item')->findByTypeStatusUserSprint($project, "all", "all", "3", "11");
+        $totalHours = $em->getRepository('BackendBundle:Item')->totalWorkHoursByTypeUserSprint($project, "all", "all", "all");
+        $taskHours = $em->getRepository('BackendBundle:Item')->totalWorkHoursByTypeUserSprint($project, "3", "all", "all");
+        $canceledTasks = $em->getRepository('BackendBundle:Item')->findByTypeStatusUserSprint($project, "all", "all", "3", "9");
+        $ppTasks = $em->getRepository('BackendBundle:Item')->findByTypeStatusUserSprint($project, "all", "all", "3", "10");
+        $foundErr = $em->getRepository('BackendBundle:Item')->findByTypeStatusUserSprint($project, "all", "all", "4", "all");
+        $fixedErr = $em->getRepository('BackendBundle:Item')->findByTypeStatusUserSprint($project, "all", "all", "4", "12");
+        $errHours = $em->getRepository('BackendBundle:Item')->totalWorkHoursByTypeUserSprint($project, "4", "all", "all");
+        $totalChangeRqst = $em->getRepository('BackendBundle:Item')->findByTypeStatusUserSprint($project, "all", "all", "6", "all");
+        $doneChangeRqst = $em->getRepository('BackendBundle:Item')->findByTypeStatusUserSprint($project, "all", "all", "6", "11");
+        $crHours = $em->getRepository('BackendBundle:Item')->totalWorkHoursByTypeUserSprint($project, "6", "all", "all");
+
+        $sprints = $em->getRepository('BackendBundle:Sprint')->findByProject($project);
+        $sprintsDone = $em->getRepository('BackendBundle:Sprint')->findByStatus($project, "4");
+
+        $name = $this->get('translator')->trans('backend.report.reports');
+
+        $html = $this->render(
+                'BackendBundle:Project/Report/PDF:projectReport.html.twig', array(
+            'project' => $project,
+            'totalItems' => $totalItems,
+            'done' => $doneTask,
+            'workHours' => $totalHours,
+            'taskHours' => $taskHours,
+            'tCanceled' => $canceledTasks,
+            'tPostponed' => $ppTasks,
+            'foundErr' => $foundErr,
+            'fixedErr' => $fixedErr,
+            'errHrs' => $errHours,
+            'totalCR' => $totalChangeRqst,
+            'doneCR' => $doneChangeRqst,
+            'crHrs' => $crHours,
+            'sprints' => $sprints,
+            'doneSprints' => $sprintsDone,
+            'menu' => self::MENU
+        ));
+
+
+        return new Response(
+                $this->get('knp_snappy.pdf')->getOutputFromHtml($html, array(
+                    'orientation' => 'Landscape',
+                    'title' => $project->getName() . '_' . $name,
+                )), 200, array(
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename=' . $name . '-' . $project->getName() . '.pdf'
+                )
+        );
+    }
+
+    /**
+     * Permite generar el reporte en un PDF del proyecto por los valores seleccionados de
+     * usuario y sprint
+     * @author Jorge Cardona 17/04/2016
+     * @author Luisa Pereira 06/05/2016
+     * @param Request $request
+     * @param string $id id del proyecto
+     */
+    public function generateUserReportPDFAction($id) {
+        $em = $this->getDoctrine()->getManager();
+
+        $project = $em->getRepository('BackendBundle:Project')->find($id);
+
+        $userId = $_GET['user_id'];
+        $sprintId = $_GET['sprint_id'];
+
         $allUsrs = $this->get('translator')->trans('backend.report.userAll');
         $allSprints = $this->get('translator')->trans('backend.report.sprintAll');
 
@@ -225,20 +345,35 @@ class ReportController extends Controller {
         $errHours = $em->getRepository('BackendBundle:Item')->totalWorkHoursByTypeUserSprint($project, "4", $userId, $sprintId);
         $foundErr = $em->getRepository('BackendBundle:Item')->findByTypeStatusUserSprint($project, $userId, $sprintId, "4", "all");
 
-        return $this->render('BackendBundle:Project/Report:userReport.html.twig', array(
-                    'project' => $project,
-                    'userId' => $userId,
-                    'sprintId' => $sprintId,
-                    'userSelect' => $user,
-                    'sprintSelect' => $sprintName,
-                    'assignedTasks' => $taskAssigned,
-                    'doneTask' => $doneTask,
-                    'estHrs' => $estHours,
-                    'totalHrs' => $totalHours,
-                    'errHrs' => $errHours,
-                    'errFound' => $foundErr,
-                    'menu' => self::MENU
+        $name = $this->get('translator')->trans('backend.report.users');
+
+        $html = $this->render(
+                'BackendBundle:Project/Report/PDF:userReport.html.twig', array(
+            'project' => $project,
+            'userId' => $userId,
+            'sprintId' => $sprintId,
+            'userSelect' => $user,
+            'sprintSelect' => $sprintName,
+            'assignedTasks' => $taskAssigned,
+            'doneTask' => $doneTask,
+            'estHrs' => $estHours,
+            'totalHrs' => $totalHours,
+            'errHrs' => $errHours,
+            'errFound' => $foundErr,
+            'menu' => self::MENU
         ));
+
+
+        return new Response(
+                $this->get('knp_snappy.pdf')->getOutputFromHtml($html, array(
+                    'orientation' => 'Landscape',
+                    'encoding' => 'utf-8',
+                    'title' => $user . '-' . $project->getName(),
+                )), 200, array(
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename=' . $name . '-' . $user . '.pdf'
+                )
+        );
     }
 
 }

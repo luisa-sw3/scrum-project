@@ -115,7 +115,7 @@ class Item {
      * @ORM\Column(name="item_fixed_on_cycle", type="integer", nullable=true)
      */
     protected $fixedOnCycle;
-    
+
     /**
      * Usuario quien realiza la creación del item
      * @ORM\ManyToOne(targetEntity="User")
@@ -226,7 +226,7 @@ class Item {
     function getParent() {
         return $this->parent;
     }
-    
+
     function getFixedOnCycle() {
         return $this->fixedOnCycle;
     }
@@ -303,7 +303,6 @@ class Item {
         $this->fixedOnCycle = $fixedOnCycle;
     }
 
-    
     /**
      * Sort array of objects by string fields
      * @param array $objects Array of objects to sort.
@@ -522,8 +521,8 @@ class Item {
         }
         if ($labelClass) {
             return $class;
-        } 
-        
+        }
+
         if ($borderClass) {
             return $border;
         }
@@ -603,7 +602,5 @@ class Item {
         }
         return $iconName;
     }
-    
-    
 
 }

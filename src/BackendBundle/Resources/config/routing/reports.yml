@@ -22,3 +22,13 @@ backend_project_reports_project:
     path:     /project
     defaults: { _controller: "BackendBundle:Report:indexProject" }
     methods:  [GET, POST]
+    
+backend_project_reports_project_pdf:
+    path:     /project/pdf
+    defaults: { _controller: "BackendBundle:Report:generateReportPDF" }
+    methods:  [GET, POST]
+    
+backend_project_reports_user_sprint_pdf:
+    path:     /userReport/pdf
+    defaults: { _controller: "BackendBundle:Report:generateUserReportPDF" }
+    methods:  [GET, POST]
