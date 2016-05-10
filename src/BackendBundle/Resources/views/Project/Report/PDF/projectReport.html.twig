@@ -280,7 +280,7 @@
                     <thead>
                         <tr>
                             <th>{{'backend.report.metric.metric'|trans}}</th>
-                            <th>{{'backend.report.metric.form'|trans}}</th>
+                                {#                            <th>{{'backend.report.metric.form'|trans}}</th>#}
                             <th>{{'backend.report.metric.limit'|trans}}</th>
                             <th>{{'backend.report.data.sum'|trans}}</th>
                         </tr>
@@ -288,7 +288,7 @@
                     <tbody>
                         <tr>
                             <th title="{{'backend.report.metric.form'|trans}}: (TR/TT)*100">{{'backend.report.metric.adv'|trans}}</th>
-                            <td>(TR/TT)*100</td>
+                                {#                            <td>(TR/TT)*100</td>#}
                             <td> ~ </td>
                             {% if tt %}
                                 <td>{{ ((tr / tt) * 100) | number_format(2) }}%</td>                            
@@ -299,7 +299,7 @@
 
                         <tr>
                             <th title="{{'backend.report.metric.form'|trans}}: ((TT-TR)*TTD)/TR + ((DE-DC)*TDD)/DC">{{'backend.report.metric.avgHr'|trans}}</th>
-                            <td>((TT-TR)*TTD)/TR + ((DE-DC)*TDD)/DC</td>
+                                {#                            <td>((TT-TR)*TTD)/TR + ((DE-DC)*TDD)/DC</td>#}
                             <td>~</td>
                             {% if tr and dc %}
                                 <td>{{ (((tt - tr) * ttd) / tr + ((de - dc) * tdd) / dc) | number_format(2) }} Hrs</td>
@@ -310,7 +310,7 @@
 
                         <tr>
                             <th title="{{'backend.report.metric.form'|trans}}: (DE/TR)*100)">{{'backend.report.metric.foundDefect'|trans}}</th>
-                            <td>(DE/TR)*100)</td>
+                                {#                            <td>(DE/TR)*100)</td>#}
                             <td><={{ limDef }}%</td>
                             {% if tr %}
                                 {% if ((de / tr) * 100) <= limDef %}
@@ -327,7 +327,7 @@
 
                         <tr>
                             <th title="{{'backend.report.metric.form'|trans}}: (TC/TT)*100">{{'backend.report.metric.cancelledItem'|trans}}</th>
-                            <td>(TC/TT)*100</td>
+                                {#                            <td>(TC/TT)*100</td>#}
                             <td><={{ limCancel }}</td>
                             {% if tt %}
                                 {% if ((tc / tt) * 100) <= limCancel %}
@@ -344,7 +344,7 @@
 
                         <tr>
                             <th title="{{'backend.report.metric.form'|trans}}: (TA/TT)*100">{{'backend.report.metric.postponedItem'|trans}}</th>
-                            <td>(TA/TT)*100</td>
+                                {#                            <td>(TA/TT)*100</td>#}
                             <td><={{ limPP }}%</td>
                             {% if tt %}
                                 {% if ((ta / tt) * 100) <= limPP %}
@@ -361,7 +361,7 @@
 
                         <tr>
                             <th title="{{'backend.report.metric.form'|trans}}: TT/SP">{{'backend.report.data.pts'|trans}} (PTS)</th>
-                            <td>TT/SP</td>
+                                {#                            <td>TT/SP</td>#}
                             <td>~</td>
                             {% if sp %}
                                 <td>{{ pts | number_format(2) }}</td>
@@ -372,7 +372,7 @@
 
                         <tr>
                             <th title="{{'backend.report.metric.form'|trans}}: (TT-TR)/PTS">{{'backend.report.metric.avgSprint'|trans}}</th>
-                            <td>(TT-TR)/PTS</td>
+                                {#                            <td>(TT-TR)/PTS</td>#}
                             <td>~</td>
                             {% if pts %}
                                 <td>{{ ((tt - tr) / pts) | number_format(2) }} Sprint(s)</td>
@@ -383,7 +383,7 @@
 
                         <tr>
                             <th title="{{'backend.report.metric.form'|trans}}: ((DE-DC)*TDD)/DC">{{'backend.report.metric.estError'|trans}}</th>
-                            <td>((DE-DC)*TDD)/DC</td>
+                                {#                            <td>((DE-DC)*TDD)/DC</td>#}
                             <td>~</td>
                             {% if dc %}
                                 <td>{{ (((de - dc) * tdd) / dc) | number_format(2) }} Hora(s)</td>
@@ -394,7 +394,7 @@
 
                         <tr>
                             <th title="{{'backend.report.metric.form'|trans}}: (TDD/TTD)*100">{{'backend.report.metric.errorFix'|trans}}</th>
-                            <td>(TDD/TTD)*100</td>
+                                {#                            <td>(TDD/TTD)*100</td>#}
                             <td><={{ limFixErr }}%</td>
                             {% if ttd %}
                                 {% if ((tdd / ttd) * 100) <= limPP %}
@@ -411,7 +411,7 @@
 
                         <tr>
                             <th title="{{'backend.report.metric.form'|trans}}: (SCD/SC)*100">{{'backend.report.metric.changeReq'|trans}}</th>
-                            <td>(SCD/SC)*100</td>
+                                {#                            <td>(SCD/SC)*100</td>#}
                             <td>>={{ limSC }}%</td>
                             {% if sc %}
                                 {% if ((scd / sc) * 100) >= limSC %}

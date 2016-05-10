@@ -129,7 +129,7 @@
                     <thead>
                         <tr>
                             <th>{{'backend.report.metric.metric'|trans}}</th>
-                            <th>{{'backend.report.metric.form'|trans}}</th>
+                                {#                            <th>{{'backend.report.metric.form'|trans}}</th>#}
                             <th>{{'backend.report.metric.limit'|trans}}</th>
                             <th>{{'backend.report.data.sum'|trans}}</th>
                         </tr>
@@ -137,13 +137,13 @@
                     <tbody>
                         <tr>
                             <th title="{{'backend.report.metric.form'|trans}}: TA-TR">{{'backend.report.user.tnr'|trans}}</td>
-                            <td>TA-TR</td>
+                                {#                            <td>TA-TR</td>#}
                             <td> ~ </td>
                             <td>{{ tnr }}</td>
                         </tr>
                         <tr>
                             <th title="{{'backend.report.metric.form'|trans}}: (TR/TA)*100">{{'backend.report.metric.percentageProd'|trans}}</th>
-                            <td>(TR/TA)*100</td>
+                                {#                            <td>(TR/TA)*100</td>#}
                             <td> >={{ limProd }}% </td>
                             {% if ta %}
                                 {% if ((tr / ta) * 100) >= limProd %}
@@ -157,7 +157,7 @@
                         </tr>
                         <tr>
                             <th title="{{'backend.report.metric.form'|trans}}: TD-TE">{{'backend.report.user.dt'|trans}} (DT) </td>
-                            <td>TD-TE</td>
+                                {#                            <td>TD-TE</td>#}
                             <td> ~ </td>
                             {% if dt >= 0 %}
                                 <td class="danger">+{{ dt }} Hrs</td>
@@ -167,7 +167,7 @@
                         </tr>
                         <tr>
                             <th title="{{'backend.report.metric.form'|trans}}: (DT/TE)*100">{{'backend.report.metric.deviationEst'|trans}}</th>
-                            <td>(DT/TE)*100</td>
+                                {#                            <td>(DT/TE)*100</td>#}
                             <td> <={{ limEst }}% </td>
                             {% if te %}
                                 {% if ((dt / te) * 100) <= limEst %}
@@ -181,7 +181,7 @@
                         </tr>
                         <tr>
                             <th title="{{'backend.report.metric.form'|trans}}: DD/TR">{{'backend.report.metric.errorDens'|trans}}</th>
-                            <td> DD/TR </td>
+                                {#                            <td> DD/TR </td>#}
                             <td><={{ limDefect }}</td>
                             {% if tr %}
                                 {% if (dd / tr) <= limDefect %}
