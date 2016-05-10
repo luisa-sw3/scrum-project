@@ -125,12 +125,6 @@ class ItemRepository extends EntityRepository {
 
         $repository = $this->getEntityManager();
 
-        $consulta = " Select i FROM BackendBundle:Item i ";
-        $condicion = "";
-
-        $query = $repository->createQuery($consulta . $condicion);
-
-
         // lista de items (por tipo) de un proyecto
         if ($usrId == 'all' && $sprintId == 'all' && $status == 'all') {
             $query = $repository->createQuery(" 
